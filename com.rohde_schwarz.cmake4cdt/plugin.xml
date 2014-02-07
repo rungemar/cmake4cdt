@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.core.resources.IProject"
+            id="cmake4cdt.contribution1">
+         <menu
+               id="cmake4cdt.menu1"
+               label="CMake">
+            <separator
+                  name="group1">
+            </separator>
+         </menu>
+         <action
+               label="run CMake"
+               class="com.rohde_schwarz.cmake4cdt.popup.actions.NewAction"
+               menubarPath="cmake4cdt.menu1/group1"
+               enablesFor="1"
+               id="cmake4cdt.newAction">
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.cdt.managedbuilder.core.buildDefinitions">
+      <managedBuildRevision
+            fileVersion="4.0.0">
+      </managedBuildRevision>
+      <targetPlatform
+            archList="all"
+            binaryParser="org.eclipse.cdt.core.ELF;org.eclipse.cdt.core.GNU_ELF"
+            id="com.rohde_schwarz.cmake4cdt.targetPlatform"
+            isAbstract="false"
+            name="CMake target platform">
+      </targetPlatform>
+      <projectType
+            buildProperties="cmakeBuildProperties=buildArtefactTypeCMake"
+            id="com.rohde_schwarz.cmake4cdt.CMakeProject"
+            isAbstract="false"
+            name="CMake project (project type)">
+         <configuration
+               id="com.rohde_schwarz.cmake4cdt.debug"
+               name="debug">
+            <toolChain
+                  id="com.rohde_schwarz.cmake4cdt.toolChain.debug"
+                  isAbstract="false"
+                  name="CMake provided toolchain"
+                  superClass="com.rohde_schwarz.cmake4cdt.toolchain.base">
+            </toolChain>
+         </configuration>
+      </projectType>
+      <toolChain
+            id="com.rohde_schwarz.cmake4cdt.toolchain.base"
+            isAbstract="false"
+            superClass="cdt.managedbuild.toolchain.gnu.cross.base">
+         <builder
+               buildRunner="org.eclipse.cdt.managedbuilder.core.ExternalBuildRunner"
+               command="ls"
+               id="com.rohde_schwarz.cmake4cdt.cmakeProjectBuilder"
+               isAbstract="false"
+               isVariableCaseSensitive="false"
+               name="CMake Project Builder">
+         </builder>
+      </toolChain>
+   </extension>
+   <extension
+         id="cmakeBuildProperties"
+         name="cmakeBuildproperties"
+         point="org.eclipse.cdt.managedbuilder.core.buildProperties">
+      <propertyValue
+            id="com.rohde_schwarz.cmake4cdt.buildArtefactType.cmake"
+            name="CMake project (Property)"
+            property="buildArtefactTypeCMake">
+      </propertyValue>
+   </extension>
+   <extension
+         id="cmakeNature"
+         name="cmakeNature Name"
+         point="org.eclipse.core.resources.natures">
+      <requires-nature
+            id="com.rohde_schwarz.cmake4cdt.cmakeNature">
+      </requires-nature>
+      <builder
+            id="com.rohde_schwarz.cmake4cdt.cmakeProjectBuilder">
+      </builder>
+      <runtime>
+         <run
+               class="com.rohde_schwarz.cmake4cdt.cmakeProjectNature">
+         </run>
+      </runtime>
+   </extension>
+   <extension
+         id="cmakeProjectBuilder"
+         name="cmakeBuilderName"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            callOnEmptyDelta="true"
+            hasNature="true"
+            isConfigurable="true">
+         <run
+               class="com.rohde_schwarz.cmake4cdt.cmakeProjectBuilder">
+         </run>
+      </builder>
+   </extension>
+   <extension
+         point="org.eclipse.cdt.core.templateProcessTypes">
+      <processType
+            name="com.rohde_schwarz.cmake4cdt.newCMakeProject"
+            processRunner="com.rohde_schwarz.cmake4cdt.newCMakeProject">
+         <simple
+               name="name">
+         </simple>
+         <simple
+               external="true"
+               name="isCProject">
+         </simple>
+         <simple
+               external="true"
+               name="location"
+               nullable="true">
+         </simple>
+         <simple
+               name="artifactExtension">
+         </simple>
+      </processType>
+   </extension>
+
+</plugin>

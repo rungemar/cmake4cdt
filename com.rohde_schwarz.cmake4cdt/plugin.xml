@@ -5,8 +5,8 @@
    <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
-            objectClass="org.eclipse.core.resources.IProject"
-            id="cmake4cdt.contribution1">
+            id="cmake4cdt.contribution1"
+            objectClass="org.eclipse.core.resources.IProject">
          <menu
                id="cmake4cdt.menu1"
                label="CMake">
@@ -21,6 +21,12 @@
                enablesFor="1"
                id="cmake4cdt.newAction">
          </action>
+         <visibility>
+            <objectState
+                  name="projectNature"
+                  value="com.rohde_schwarz.cmake4cdt.cmakeNature">
+            </objectState>
+         </visibility>
       </objectContribution>
    </extension>
    <extension
@@ -80,7 +86,7 @@
          name="cmakeNature Name"
          point="org.eclipse.core.resources.natures">
       <requires-nature
-            id="com.rohde_schwarz.cmake4cdt.cmakeNature">
+            id="org.eclipse.cdt.managedbuilder.core.managedBuildNature">
       </requires-nature>
       <builder
             id="com.rohde_schwarz.cmake4cdt.cmakeProjectBuilder">
@@ -107,14 +113,10 @@
    <extension
          point="org.eclipse.cdt.core.templateProcessTypes">
       <processType
-            name="com.rohde_schwarz.cmake4cdt.newCMakeProject"
+            name="newCMakeProject"
             processRunner="com.rohde_schwarz.cmake4cdt.newCMakeProject">
          <simple
                name="name">
-         </simple>
-         <simple
-               external="true"
-               name="isCProject">
          </simple>
          <simple
                external="true"
@@ -124,7 +126,19 @@
          <simple
                name="artifactExtension">
          </simple>
+         <simple
+               external="true"
+               name="isCProject">
+         </simple>
       </processType>
+   </extension>
+   <extension
+         point="org.eclipse.cdt.core.templates">
+      <template
+            id="com.rohde_schwarz.cmake4cdt.template.emptyProject"
+            location="templates/emptyproject/template.xml"
+            projectType="com.rohde_schwarz.cmake4cdt.CMakeProject">
+      </template>
    </extension>
 
 </plugin>

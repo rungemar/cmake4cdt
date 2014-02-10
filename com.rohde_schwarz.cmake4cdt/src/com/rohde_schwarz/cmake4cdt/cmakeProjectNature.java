@@ -10,7 +10,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class cmakeProjectNature implements IProjectNature {
 
-	public static final String CMAKE_NATURE_ID = ManagedBuilderCorePlugin.getUniqueIdentifier() + ".cmakeNature";  //$NON-NLS-1$
+	public static final String CMAKE_NATURE_ID = "com.rohde_schwarz.cmake4cdt.cmakeNature";  //$NON-NLS-1$
 	private IProject project;
 	
 	public cmakeProjectNature() {

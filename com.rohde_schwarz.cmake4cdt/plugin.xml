@@ -42,10 +42,9 @@
             name="CMake target platform">
       </targetPlatform>
       <projectType
-            buildProperties="cmakeBuildProperties=buildArtefactTypeCMake"
+            buildArtefactType="com.rohde_schwarz.cmake4cdt.buildArtefactType.cmake"
             id="com.rohde_schwarz.cmake4cdt.CMakeProject"
-            isAbstract="false"
-            name="CMake project (project type)">
+            isAbstract="false">
          <configuration
                id="com.rohde_schwarz.cmake4cdt.debug"
                name="debug">
@@ -62,14 +61,30 @@
             isAbstract="false"
             superClass="cdt.managedbuild.toolchain.gnu.cross.base">
          <builder
-               buildRunner="org.eclipse.cdt.managedbuilder.core.ExternalBuildRunner"
-               command="ls"
-               id="com.rohde_schwarz.cmake4cdt.cmakeProjectBuilder"
+               id="com.rohde_schwarz.cmake4cdt.builder"
                isAbstract="false"
-               isVariableCaseSensitive="false"
-               name="CMake Project Builder">
+               isVariableCaseSensitive="false">
          </builder>
       </toolChain>
+      <tool
+            command="cmake"
+            id="com.rohde_schwarz.cmake4cdt.cmake"
+            isAbstract="false"
+            name="cmake"
+            natureFilter="both">
+         <option
+               id="com.rohde_schwarz.cmake4cdt.CMAKE_BUILD_TYPE"
+               isAbstract="false"
+               name="CMAKE_BUILD_TYPE"
+               resourceFilter="project"
+               valueType="string">
+         </option>
+         <inputType
+               id="com.rohde_schwarz.cmake4cdt.CMakeLists.txt"
+               name="CMakeLists.txt"
+               sources="CMakeLists.txt">
+         </inputType>
+      </tool>
    </extension>
    <extension
          id="cmakeBuildProperties"
@@ -78,7 +93,7 @@
       <propertyValue
             id="com.rohde_schwarz.cmake4cdt.buildArtefactType.cmake"
             name="CMake project (Property)"
-            property="buildArtefactTypeCMake">
+            property="org.eclipse.cdt.build.core.buildArtefactType">
       </propertyValue>
    </extension>
    <extension
@@ -88,14 +103,14 @@
       <requires-nature
             id="org.eclipse.cdt.managedbuilder.core.managedBuildNature">
       </requires-nature>
-      <builder
-            id="com.rohde_schwarz.cmake4cdt.cmakeProjectBuilder">
-      </builder>
       <runtime>
          <run
                class="com.rohde_schwarz.cmake4cdt.cmakeProjectNature">
          </run>
       </runtime>
+      <builder
+            id="com.rohde_schwarz.cmake4cdt.cmakeProjectBuilder">
+      </builder>
    </extension>
    <extension
          id="cmakeProjectBuilder"

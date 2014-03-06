@@ -21,5 +21,4 @@ public class cmakeProjectBuilder extends IncrementalProjectBuilder {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

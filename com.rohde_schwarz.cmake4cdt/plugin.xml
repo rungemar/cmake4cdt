@@ -9,13 +9,13 @@
             objectClass="org.eclipse.core.resources.IProject">
          <menu
                id="cmake4cdt.menu1"
-               label="CMake">
+               label="%menu.label">
             <separator
                   name="group1">
             </separator>
          </menu>
          <action
-               label="run CMake"
+               label="%action.label"
                class="com.rohde_schwarz.cmake4cdt.popup.actions.NewAction"
                menubarPath="cmake4cdt.menu1/group1"
                enablesFor="1"
@@ -30,75 +30,117 @@
       </objectContribution>
    </extension>
    <extension
+         id="cmakeBuildProperties"
+         name="%extension.name"
+         point="org.eclipse.cdt.managedbuilder.core.buildProperties">
+      <propertyValue
+            id="com.rohde_schwarz.cmake4cdt.buildArtefactType.cmake"
+            name="%propertyValue.name"
+            property="org.eclipse.cdt.build.core.buildArtefactType">
+      </propertyValue>
+      <propertyValue
+            id="com.rohde_schwarz.cmake4cdt.buildType.default"
+            name="Default"
+            property="org.eclipse.cdt.build.core.buildType">
+      </propertyValue>
+   </extension>
+   <extension
          point="org.eclipse.cdt.managedbuilder.core.buildDefinitions">
       <managedBuildRevision
             fileVersion="4.0.0">
       </managedBuildRevision>
       <targetPlatform
             archList="all"
-            binaryParser="org.eclipse.cdt.core.ELF;org.eclipse.cdt.core.GNU_ELF"
+            binaryParser="org.eclipse.cdt.core.ELF;org.eclipse.cdt.core.GNU_ELF;org.eclipse.cdt.core.MachO64;org.eclipse.cdt.core.PE;org.eclipse.cdt.core.Cygwin_PE"
             id="com.rohde_schwarz.cmake4cdt.targetPlatform"
             isAbstract="false"
-            name="CMake target platform">
+            name="%targetPlatform.name"
+            osList="all">
       </targetPlatform>
-      <projectType
-            buildArtefactType="com.rohde_schwarz.cmake4cdt.buildArtefactType.cmake"
-            id="com.rohde_schwarz.cmake4cdt.CMakeProject"
-            isAbstract="false">
-         <configuration
-               id="com.rohde_schwarz.cmake4cdt.debug"
-               name="debug">
-            <toolChain
-                  id="com.rohde_schwarz.cmake4cdt.toolChain.debug"
-                  isAbstract="false"
-                  name="CMake provided toolchain"
-                  superClass="com.rohde_schwarz.cmake4cdt.toolchain.base">
-            </toolChain>
-         </configuration>
-      </projectType>
-      <toolChain
-            id="com.rohde_schwarz.cmake4cdt.toolchain.base"
-            isAbstract="false"
-            superClass="cdt.managedbuild.toolchain.gnu.cross.base">
-         <builder
-               id="com.rohde_schwarz.cmake4cdt.builder"
-               isAbstract="false"
-               isVariableCaseSensitive="false">
-         </builder>
-      </toolChain>
       <tool
+            advancedInputCategory="false"
             command="cmake"
             id="com.rohde_schwarz.cmake4cdt.cmake"
             isAbstract="false"
-            name="cmake"
-            natureFilter="both">
+            name="%Tool.cmake"
+            natureFilter="both"
+            supportsManagedBuild="false">
          <option
                id="com.rohde_schwarz.cmake4cdt.CMAKE_BUILD_TYPE"
                isAbstract="false"
-               name="CMAKE_BUILD_TYPE"
+               name="%option.name"
                resourceFilter="project"
                valueType="string">
          </option>
          <inputType
                id="com.rohde_schwarz.cmake4cdt.CMakeLists.txt"
-               name="CMakeLists.txt"
+               sourceContentType="com.rohde_schwarz.cmake4cdt.cmakelistfile"
                sources="CMakeLists.txt">
          </inputType>
       </tool>
-   </extension>
-   <extension
-         id="cmakeBuildProperties"
-         name="cmakeBuildproperties"
-         point="org.eclipse.cdt.managedbuilder.core.buildProperties">
-      <propertyValue
-            id="com.rohde_schwarz.cmake4cdt.buildArtefactType.cmake"
-            name="CMake project (Property)"
-            property="org.eclipse.cdt.build.core.buildArtefactType">
-      </propertyValue>
+      <projectType
+            buildArtefactType="com.rohde_schwarz.cmake4cdt.buildArtefactType.cmake"
+            id="com.rohde_schwarz.cmake4cdt.CMakeProject"
+            isAbstract="false">
+         <configuration
+               buildArtefactType="com.rohde_schwarz.cmake4cdt.buildArtefactType.cmake"
+               buildProperties="com.rohde_schwarz.cmake4cdt.buildType.default"
+               id="com.rohde_schwarz.cmake4cdt.debug"
+               name="%configuration.name">
+            <toolChain
+                  id="com.rohde_schwarz.cmake4cdt.toolChain.debug"
+                  isAbstract="false"
+                  name="%toolChain.name"
+                  superClass="com.rohde_schwarz.cmake4cdt.toolchain.base">
+               <supportedProperties>
+                  <property
+                        id="org.eclipse.cdt.build.core.buildArtefactType">
+                     <value
+                           id="com.rohde_schwarz.cmake4cdt.buildArtefactType.cmake">
+                     </value>
+                  </property>
+               </supportedProperties>
+            </toolChain>
+         </configuration>
+      </projectType>
+      <toolChain
+            id="com.rohde_schwarz.cmake4cdt.toolchain.base"
+            isAbstract="false">
+         <tool
+               id="com.rohde_schwarz.cmake4cdt.gpp"
+               isAbstract="false"
+               name="g++"
+               superClass="cdt.managedbuild.tool.gnu.cpp.compiler">
+         </tool>
+         <tool
+               id="com.rohde_schwarz.cmake4cdt.gcc"
+               isAbstract="false"
+               name="gcc"
+               superClass="cdt.managedbuild.tool.gnu.c.compiler">
+         </tool>
+         <targetPlatform
+               id="com.rohde_schwarz.cmake4cdt.targetPlatform1"
+               isAbstract="false"
+               superClass="com.rohde_schwarz.cmake4cdt.targetPlatform">
+         </targetPlatform>
+         <builder
+               id="com.rohde_schwarz.cmake4cdt.builder1"
+               isAbstract="false"
+               isVariableCaseSensitive="false">
+         </builder>
+         <supportedProperties>
+            <property
+                  id="org.eclipse.cdt.build.core.buildArtefactType">
+               <value
+                     id="com.rohde_schwarz.cmake4cdt.buildArtefactType.cmake">
+               </value>
+            </property>
+         </supportedProperties>
+      </toolChain>
    </extension>
    <extension
          id="cmakeNature"
-         name="cmakeNature Name"
+         name="%extension.name.0"
          point="org.eclipse.core.resources.natures">
       <requires-nature
             id="org.eclipse.cdt.managedbuilder.core.managedBuildNature">
@@ -114,7 +156,7 @@
    </extension>
    <extension
          id="cmakeProjectBuilder"
-         name="cmakeBuilderName"
+         name="%extension.name.1"
          point="org.eclipse.core.resources.builders">
       <builder
             callOnEmptyDelta="true"
@@ -148,11 +190,33 @@
       </processType>
    </extension>
    <extension
+         name="CMake templates"
          point="org.eclipse.cdt.core.templates">
       <template
-            id="com.rohde_schwarz.cmake4cdt.template.emptyProject"
-            location="templates/emptyproject/template.xml"
-            projectType="com.rohde_schwarz.cmake4cdt.CMakeProject">
+            id="com.rohde_schwarz.cmake4cdt.templates.EmptyProject"
+            location="templates/EmptyProject/template.xml"
+            projectType="com.rohde_schwarz.cmake4cdt.buildArtefactType.cmake">
+      </template>
+   </extension>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            id="com.rohde_schwarz.cmake4cdt.CMakeContentType"
+            name="%CMakeContentType.name"
+            priority="high">
+      </content-type>
+      <file-association
+            content-type="com.rohde_schwarz.cmake4cdt.CMakeContentType"
+            file-names="CMakeLists.txt">
+      </file-association>
+   </extension>
+   <extension
+         point="org.eclipse.cdt.core.templateAssociations">
+      <template
+            id="com.rohde_schwarz.cmake4cdt.templates.EmptyProject">
+         <toolChain
+               id="com.rohde_schwarz.cmake4cdt.toolchain.base">
+         </toolChain>
       </template>
    </extension>
 

@@ -63,8 +63,7 @@
             id="com.rohde_schwarz.cmake4cdt.cmake"
             isAbstract="false"
             name="%Tool.cmake"
-            natureFilter="both"
-            supportsManagedBuild="false">
+            natureFilter="both">
          <option
                id="com.rohde_schwarz.cmake4cdt.CMAKE_BUILD_TYPE"
                isAbstract="false"
@@ -211,13 +210,44 @@
       </file-association>
    </extension>
    <extension
-         point="org.eclipse.cdt.core.templateAssociations">
-      <template
-            id="com.rohde_schwarz.cmake4cdt.templates.EmptyProject">
-         <toolChain
-               id="com.rohde_schwarz.cmake4cdt.toolchain.base">
-         </toolChain>
-      </template>
+         point="org.eclipse.core.variables.valueVariables">
+      <variable
+            description="Target architecture for buildif toolchain"
+            initializerClass="com.rohde_schwarz.cmake4cdt.ui.TargetArchInitializer"
+            name="targetArch"
+            readOnly="false"
+            supportsArgument="true">
+      </variable>
+      <variable
+            description="Target instrument"
+            initializerClass="com.rohde_schwarz.cmake4cdt.ui.TargetDeviceInitializer"
+            name="CMakeTargetDevice"
+            readOnly="false"
+            supportsArgument="true">
+      </variable>
+      <variable
+            description="DESTDIR for install target of cmake build"
+            initializerClass="com.rohde_schwarz.cmake4cdt.ui.DestdirInitializer"
+            name="BuildIF_Destdir"
+            readOnly="false"
+            supportsArgument="true">
+      </variable>
+      <variable
+            description="Filesystem absolute path to the project that is build at the moment. In contrast to the eclipse build-in project_loc variable, which points to the selected project. This is useful in case of &quot;build all&quot;, when projects get build that have not been selected before. The Value of this variable is set when Makefile is generated."
+            initializerClass="com.rohde_schwarz.cmake4cdt.ui.ProjectPathInitializer"
+            name="CMake_ProjectPath"
+            readOnly="false"
+            supportsArgument="true">
+      </variable>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.cdt.ui.preferences.CPluginPreferencePage"
+            class="com.rohde_schwarz.cmake4cdt.ui.CMakePreferencePage"
+            id="com.rohde_schwarz.cmake4cdt.ui.PreferencePage"
+            name="CMake">
+      </page>
    </extension>
 
 </plugin>

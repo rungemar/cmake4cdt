@@ -123,9 +123,11 @@
                superClass="com.rohde_schwarz.cmake4cdt.targetPlatform">
          </targetPlatform>
          <builder
-               id="com.rohde_schwarz.cmake4cdt.builder1"
+               commandLauncher="org.eclipse.cdt.core.CommandLauncher"
+               id="com.rohde_schwarz.cmake4cdt.builder"
                isAbstract="false"
-               isVariableCaseSensitive="false">
+               isVariableCaseSensitive="false"
+               name="CMake Builder">
          </builder>
          <supportedProperties>
             <property
@@ -246,6 +248,15 @@
             category="org.eclipse.cdt.ui.preferences.CPluginPreferencePage"
             class="com.rohde_schwarz.cmake4cdt.ui.CMakePreferencePage"
             id="com.rohde_schwarz.cmake4cdt.ui.PreferencePage"
+            name="CMake">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            category="org.eclipse.cdt.managedbuilder.ui.properties.Page_head_build"
+            class="com.rohde_schwarz.cmake4cdt.ui.CMakePropertyPage"
+            id="com.rohde_schwarz.cmake4cdt.propertyPage1"
             name="CMake">
       </page>
    </extension>

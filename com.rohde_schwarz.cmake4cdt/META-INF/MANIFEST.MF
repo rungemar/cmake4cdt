@@ -12,3 +12,4 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.variables
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
+Import-Package: org.eclipse.debug.ui

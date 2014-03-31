@@ -7,11 +7,16 @@ import org.eclipse.jface.preference.ListEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.jface.window.Window;
 
+import com.rohde_schwarz.cmake4cdt.Activator;
+
 public class AvailArchsEditor extends ListEditor {
 
 	public AvailArchsEditor(String pAvailArchs, String string,
 			Composite fieldEditorParent) {
 		super(pAvailArchs, string, fieldEditorParent );
+		
+		String currentArchsStr = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_CURRENT_TARGET_ARCH);
+		getList().setSelection(0);
 	}
 
 	@Override

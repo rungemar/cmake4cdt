@@ -1,5 +1,6 @@
 package com.rohde_schwarz.cmake4cdt.ui;
 
+import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
@@ -29,10 +30,8 @@ public class CMakePreferencePage extends FieldEditorPreferencePage implements
 
 	@Override
 	protected void createFieldEditors() {
-		targetDevicesEditor = new TargetDevicesEditor(PreferenceConstants.P_AVAIL_TARGET_DEVICES, "target devices: ", getFieldEditorParent()); 
-		
 		addField( new AvailArchsEditor(PreferenceConstants.P_AVAIL_TARGET_ARCHS, "Available Architectures: ", getFieldEditorParent()));
-		addField( targetDevicesEditor );
+		addField( new TargetDevicesEditor(PreferenceConstants.P_AVAIL_TARGET_DEVICES, "target devices: ", getFieldEditorParent()));
 		addField( new DestdirFieldEditor( PreferenceConstants.P_BUILDDIR, "&Build in dir:", getFieldEditorParent()));
 		addField( new DestdirFieldEditor( PreferenceConstants.P_DESTDIR, "&DESTDIR:", getFieldEditorParent()));
 	}

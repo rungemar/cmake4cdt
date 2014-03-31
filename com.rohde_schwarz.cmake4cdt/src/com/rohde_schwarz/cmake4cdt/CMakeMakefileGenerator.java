@@ -18,7 +18,6 @@ import org.eclipse.core.variables.VariablesPlugin;
 
 import com.rohde_schwarz.cmake4cdt.Activator;
 import com.rohde_schwarz.cmake4cdt.ui.CMakePropertyConstants;
-import com.rohde_schwarz.cmake4cdt.ui.CMakePropertyConstants;
 import com.rohde_schwarz.cmake4cdt.ui.PreferenceConstants;
 
 public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator {
@@ -37,8 +36,8 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 	@Override
 	public MultiStatus generateMakefiles(IResourceDelta delta)
 			throws CoreException {
-		// TODO Auto-generated method stub
-		return null;
+		MultiStatus mstatus = regenerateMakefiles();		
+		return  mstatus;
 	}
 
 	@Override
@@ -53,8 +52,8 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 		
 		// make sure, that current project location is stored in ${BuildIF_ProjectPath}
 		IPath projDir = project.getLocation();
-		IValueVariable buildifProjectDirVar = varMgr.getValueVariable("BuildIF_ProjectPath");
-		buildifProjectDirVar.setValue(projDir.toString());
+		IValueVariable cmakeProjectDirVar = varMgr.getValueVariable("CMake_ProjectPath");
+		cmakeProjectDirVar.setValue(projDir.toString());
 
 		String buildDirSetting = "";
 		if(buildDirWorkspaceSettings) {
@@ -100,21 +99,19 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 
 	@Override
 	public String getMakefileName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Makefile";
 	}
 
 	@Override
 	public void initialize(IProject project, IManagedBuildInfo info,
 			IProgressMonitor monitor) {
-		// TODO Auto-generated method stub
-
+		this.project = project;
+		this.buildInfo = info; 
 	}
 
 	@Override
 	public boolean isGeneratedResource(IResource resource) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override

@@ -141,7 +141,7 @@ public class CMakePropertyPage extends PropertyPage implements
 		IEclipsePreferences projectProperties = new ProjectScope(activeProject).getNode("com.rohde_schwarz.buildif.scope");
 		boolean value = false;
 		if (projectProperties != null) {
-			value = projectProperties.getBoolean(CMakePropertyConstants.P_IS_INSTRUMENT_SPECIFIC, false);
+			value = projectProperties.getBoolean(CMakePropertyConstants.P_IS_DEVICE_SPECIFIC, false);
 		}
 		return value;
 	}
@@ -225,7 +225,7 @@ public class CMakePropertyPage extends PropertyPage implements
 
 		if (projectProperties != null) {
 			try {
-				projectProperties.putBoolean(CMakePropertyConstants.P_IS_INSTRUMENT_SPECIFIC, deviceSpecificBtn.getSelection());
+				projectProperties.putBoolean(CMakePropertyConstants.P_IS_DEVICE_SPECIFIC, deviceSpecificBtn.getSelection());
 				projectProperties.putBoolean(CMakePropertyConstants.P_USE_WORKSPACE_BUILDDIR_SETTINGS, useWorkspaceSettings.getSelection());
 				if(!getIsWorkspaceSpecific()) {
 					// build dir is project specific

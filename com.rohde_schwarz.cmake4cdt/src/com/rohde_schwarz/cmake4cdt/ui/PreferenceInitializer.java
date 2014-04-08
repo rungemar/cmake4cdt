@@ -25,7 +25,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_NOT_INST_SPECIFIC, "");
 
 		store.setDefault(PreferenceConstants.P_BUILDDIR, "${CMake_ProjectPath}/${ConfigName}_${CMake_TargetArch}");
-		store.setDefault(PreferenceConstants.P_DESTDIR, "${env_var:HOME}/${CMake_TaregtDevice}/${ConfigName}_${CMake_TargetArch}/opt/");
+		store.setDefault(PreferenceConstants.P_DESTDIR, "${env_var:HOME}/${CMake_TargetDevice}/${ConfigName}_${CMake_TargetArch}/opt/");
 	}
 
 }

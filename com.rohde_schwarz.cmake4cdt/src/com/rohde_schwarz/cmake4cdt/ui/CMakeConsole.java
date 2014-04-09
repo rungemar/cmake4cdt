@@ -1,4 +1,4 @@
-package com.rohde_schwarz.cmake4cdt;
+package com.rohde_schwarz.cmake4cdt.ui;
 
 import org.eclipse.cdt.core.ConsoleOutputStream;
 import org.eclipse.cdt.core.resources.IConsole;

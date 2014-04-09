@@ -24,7 +24,6 @@ import org.eclipse.cdt.internal.core.BuildRunnerHelper;
 import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuilderCorePlugin;
-import org.eclipse.cdt.managedbuilder.internal.core.ManagedMakeMessages;
 import org.eclipse.cdt.managedbuilder.makegen.IManagedBuilderMakefileGenerator;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -63,7 +62,7 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 	IProject project;
 	IProgressMonitor monitor;
 	
-	public final String CMAKE_EXE = ManagedMakeMessages.getString("CMakeMakefileGenerator.0"); //$NON-NLS-1$
+	public final String CMAKE_EXE = "/usr/bin/cmake";
 
 	@Override
 	public void generateDependencies() throws CoreException {
@@ -138,7 +137,7 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 	@Override
 	public String getMakefileName() {
 		// @TODO get settings for selected CMake generator and adjust Makefile Name (e.g. in case of ninja make)
-		return ManagedMakeMessages.getString("CMakeMakefileGenerator.9"); //$NON-NLS-1$
+		return "Makefile";
 	}
 
 	@Override
@@ -163,7 +162,7 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 	@SuppressWarnings("restriction")
 	@Override
 	public MultiStatus regenerateMakefiles() throws CoreException {
-		MultiStatus mstatus = new MultiStatus(ManagedMakeMessages.getString("CMakeMakefileGenerator.10"), 0, ManagedMakeMessages.getString("CMakeMakefileGenerator.11"), null ); //$NON-NLS-1$ //$NON-NLS-2$
+		MultiStatus mstatus = new MultiStatus("com.rohde_schwarz.cmake4cdt.builder", 0, "success", null );
 
 		String currentConf = buildInfo.getConfigurationName();
 		String currentArch = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_CURRENT_TARGET_ARCH);
@@ -210,9 +209,9 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 
 			List<String> cmakeArgs = new ArrayList<String>();
 			
-			cmakeArgs.add(ManagedMakeMessages.getString("CMakeMakefileGenerator.15") + currentConf); //$NON-NLS-1$
+			cmakeArgs.add("-DCMAKE_BUILD_TYPE=" + currentConf);
 //			cmakeArgs.add("-DCMAKE_TOOLCHAIN_FILE=" + currentToolchainFile);
-			cmakeArgs.add(ManagedMakeMessages.getString("CMakeMakefileGenerator.16")); //$NON-NLS-1$
+			cmakeArgs.add("-DCMAKE_EXPORT_COMPILE_COMMANDS=On");
 
 			// add cmake extra FLAGS
 			
@@ -230,17 +229,17 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 			File buildDirFile = new File(buildDir);
 			if(buildDirFile.exists()) {
 				if(!buildDirFile.isDirectory()) {
-					throw new RuntimeException(ManagedMakeMessages.getString("CMakeMakefileGenerator.18") + buildDir + ManagedMakeMessages.getString("CMakeMakefileGenerator.19")); //$NON-NLS-1$ //$NON-NLS-2$
+					throw new RuntimeException( "The path that is to be used for the build: '" + buildDir + "' exists, but is no directory."); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
 			else {
 				boolean success = buildDirFile.mkdirs();
 				if(success = false) {
-					throw new RuntimeException(ManagedMakeMessages.getString("CMakeMakefileGenerator.20") + buildDir + "'."); //$NON-NLS-1$ //$NON-NLS-2$
+					throw new RuntimeException("Could not create build dir: '" + buildDir + "'.");
 				}
 			}
 			
-			URI workingDirectoryURI = new URI(ManagedMakeMessages.getString("CMakeMakefileGenerator.22") + buildDir); //$NON-NLS-1$
+			URI workingDirectoryURI = new URI("file://" + buildDir); //$NON-NLS-1$
 			
 			IPath cmakePath = new Path(CMAKE_EXE);
 			
@@ -252,21 +251,20 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 			buildRunnerHelper.prepareStreams(epm, consoleParsers, (org.eclipse.cdt.core.resources.IConsole) cmakeConsole, new SubProgressMonitor(monitor, 20));
 
 			buildRunnerHelper.removeOldMarkers(project, new SubProgressMonitor(monitor, 50, SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK));
-			buildRunnerHelper.greeting(IncrementalProjectBuilder.FULL_BUILD, currentConf, ManagedMakeMessages.getString("CMakeMakefileGenerator.23"), true); //$NON-NLS-1$
+			buildRunnerHelper.greeting(IncrementalProjectBuilder.FULL_BUILD, currentConf, "Running CMake ...", true); //$NON-NLS-1$
 			int state = buildRunnerHelper.build(new SubProgressMonitor(monitor, 60, SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK));
 			buildRunnerHelper.close();
 			buildRunnerHelper.goodbye();
 
 			if (state != ICommandLauncher.ILLEGAL_COMMAND) {
-				// buildRunnerHelper.refreshProject(currentConf, new SubProgressMonitor(monitor, 90, SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK));
+				buildRunnerHelper.refreshProject(currentConf, new SubProgressMonitor(monitor, 90, SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK));
 			}
 			else {
 				String msg = ""; //$NON-NLS-1$
 				throw new CoreException(new Status(IStatus.ERROR, ManagedBuilderCorePlugin.PLUGIN_ID, msg, new Exception()));
 			}
 		} catch (Exception e) {
-			String msg = ManagedMakeMessages.getFormattedString("ManagedMakeBuilder.message.error.build", //$NON-NLS-1$
-					new String[] { project.getName(), currentConf });
+			String msg = "Error runninf CMake for project: '" + project.getName() +"' in configuration '" + currentConf + "'.";
 			throw new CoreException(new Status(IStatus.ERROR, ManagedBuilderCorePlugin.PLUGIN_ID, msg, e));
 		} finally {
 			try {

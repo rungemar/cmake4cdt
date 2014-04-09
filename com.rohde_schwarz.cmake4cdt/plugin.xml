@@ -270,7 +270,7 @@
    <extension
          point="org.eclipse.cdt.core.CBuildConsole">
       <CBuildConsole
-            class="com.rohde_schwarz.cmake4cdt.CMakeConsole"
+            class="com.rohde_schwarz.cmake4cdt.ui.CMakeConsole"
             id="com.rohde_schwarz.cmake4cdt.CMakeConsole">
       </CBuildConsole>
    </extension>

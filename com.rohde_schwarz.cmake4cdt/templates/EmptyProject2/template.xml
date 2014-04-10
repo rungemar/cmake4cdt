@@ -4,7 +4,7 @@
 		id="EmptyProject2" label="%EmptyProject2.template.label" description="%EmptyProject2.template.description"
 		 help="help.html">
 
-	<process type="com.rohde_schwarz.cmake4cdt.newCMakeProject">
+	<process type="org.eclipse.cdt.cmake.newCMakeProject">
 		<simple name="name" value="$(projectName)" /> 
 		<simple name="artifactExtension" value="exe" /> 
 		<simple name="isCProject" value="false" /> 

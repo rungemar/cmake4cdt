@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>com.rohde_schwarz.cmake4cdt</name>
+	<name>org.eclipse.cdt.cmake</name>
 	<comment></comment>
 	<projects>
 	</projects>

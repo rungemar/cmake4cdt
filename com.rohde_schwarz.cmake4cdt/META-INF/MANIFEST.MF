@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
-Bundle-SymbolicName: com.rohde_schwarz.cmake4cdt;singleton:=true
+Bundle-SymbolicName: org.eclipse.cdt.cmake;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: com.rohde_schwarz.cmake4cdt.Activator
+Bundle-Activator: org.eclipse.cdt.cmake.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,

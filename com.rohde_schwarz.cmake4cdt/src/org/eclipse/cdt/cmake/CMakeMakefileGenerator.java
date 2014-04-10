@@ -1,16 +1,17 @@
-package com.rohde_schwarz.cmake4cdt;
+package org.eclipse.cdt.cmake;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import org.eclipse.cdt.cmake.Activator;
+import org.eclipse.cdt.cmake.ui.CMakePropertyConstants;
+import org.eclipse.cdt.cmake.ui.PreferenceConstants;
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.CommandLauncher;
 import org.eclipse.cdt.core.ErrorParserManager;
@@ -44,16 +45,6 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.variables.IStringVariableManager;
 import org.eclipse.core.variables.IValueVariable;
 import org.eclipse.core.variables.VariablesPlugin;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.console.ConsolePlugin;
-import org.eclipse.ui.console.IConsoleManager;
-import org.eclipse.ui.console.MessageConsole;
-import org.eclipse.ui.console.MessageConsoleStream;
-
-import com.rohde_schwarz.cmake4cdt.Activator;
-import com.rohde_schwarz.cmake4cdt.ui.CMakePropertyConstants;
-import com.rohde_schwarz.cmake4cdt.ui.PreferenceConstants;
 
 public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator {
 
@@ -80,7 +71,7 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 
 	@Override
 	public IPath getBuildWorkingDir() {
-		IEclipsePreferences projectProperties = new ProjectScope(project).getNode("com.rohde_schwarz.cmake4cdt.scope"); //$NON-NLS-1$
+		IEclipsePreferences projectProperties = new ProjectScope(project).getNode("org.eclipse.cdt.cmake.scope"); //$NON-NLS-1$
 		boolean buildDirWorkspaceSettings = true;
 		if (projectProperties != null) {
 			buildDirWorkspaceSettings = projectProperties.getBoolean(CMakePropertyConstants.P_USE_WORKSPACE_BUILDDIR_SETTINGS, true);
@@ -163,13 +154,13 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 	@SuppressWarnings("restriction")
 	@Override
 	public MultiStatus regenerateMakefiles() throws CoreException {
-		MultiStatus mstatus = new MultiStatus("com.rohde_schwarz.cmake4cdt.builder", 0, "success", null );
+		MultiStatus mstatus = new MultiStatus("org.eclipse.cdt.cmake.builder", 0, "success", null );
 
 		String currentConf = buildInfo.getConfigurationName();
 		String currentArch = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_CURRENT_TARGET_ARCH);
 		String currentInstrument = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_CURRENT_TARGET_DEVICE);
 
-		IConsole cmakeConsole = CCorePlugin.getDefault().getConsole("com.rohde_schwarz.cmake4cdt.CMakeConsole"); //$NON-NLS-1$
+		IConsole cmakeConsole = CCorePlugin.getDefault().getConsole("org.eclipse.cdt.cmake.ui.CMakeConsole"); //$NON-NLS-1$
 		cmakeConsole.start(project);
 		
 		@SuppressWarnings("restriction")
@@ -186,7 +177,7 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 			
 			String buildDir = null;
 			
-			IEclipsePreferences projectProperties = new ProjectScope(project).getNode("com.rohde_schwarz.cmake4cdt.scope"); //$NON-NLS-1$
+			IEclipsePreferences projectProperties = new ProjectScope(project).getNode("org.eclipse.cdt.cmake.scope"); //$NON-NLS-1$
 			boolean deviceSpecific = false;
 			boolean useWorkspaceBuidDirSettings = true;
 			if (projectProperties != null) {
@@ -319,7 +310,7 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 //		 out.println("Error: " + errorMsg);
 //		 out.setColor(col);
 //
-//		 MultiStatus status = new MultiStatus("com.rohde_schwarz.cmake4cdt", IStatus.ERROR, "CMake failed to generate build files. See CMake console for details.", null);
+//		 MultiStatus status = new MultiStatus("org.eclipse.cdt.cmake", IStatus.ERROR, "CMake failed to generate build files. See CMake console for details.", null);
 //		 return status;
 //	 }
 

@@ -1,16 +1,15 @@
-package com.rohde_schwarz.cmake4cdt.ui;
+package org.eclipse.cdt.cmake.ui;
 
+import org.eclipse.cdt.cmake.Activator;
+import org.eclipse.cdt.cmake.ui.AvailArchsEditor;
+import org.eclipse.cdt.cmake.ui.DestdirFieldEditor;
+import org.eclipse.cdt.cmake.ui.PreferenceConstants;
+import org.eclipse.cdt.cmake.ui.TargetDevicesEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-
-import com.rohde_schwarz.cmake4cdt.ui.AvailArchsEditor;
-import com.rohde_schwarz.cmake4cdt.ui.TargetDevicesEditor;
-import com.rohde_schwarz.cmake4cdt.ui.DestdirFieldEditor;
-import com.rohde_schwarz.cmake4cdt.ui.PreferenceConstants;
-import com.rohde_schwarz.cmake4cdt.Activator;
 
 public class CMakePreferencePage extends FieldEditorPreferencePage implements
 		IWorkbenchPreferencePage {

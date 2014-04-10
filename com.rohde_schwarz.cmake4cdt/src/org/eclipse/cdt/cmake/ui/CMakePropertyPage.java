@@ -1,7 +1,10 @@
-package com.rohde_schwarz.cmake4cdt.ui;
+package org.eclipse.cdt.cmake.ui;
 
 import java.io.File;
 
+import org.eclipse.cdt.cmake.Activator;
+import org.eclipse.cdt.cmake.ui.CMakePropertyConstants;
+import org.eclipse.cdt.cmake.ui.PreferenceConstants;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
@@ -22,10 +25,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPropertyPage;
 import org.eclipse.ui.dialogs.PropertyPage;
 import org.osgi.service.prefs.BackingStoreException;
-
-import com.rohde_schwarz.cmake4cdt.Activator;
-import com.rohde_schwarz.cmake4cdt.ui.CMakePropertyConstants;
-import com.rohde_schwarz.cmake4cdt.ui.PreferenceConstants;
 
 public class CMakePropertyPage extends PropertyPage implements
 		IWorkbenchPropertyPage {

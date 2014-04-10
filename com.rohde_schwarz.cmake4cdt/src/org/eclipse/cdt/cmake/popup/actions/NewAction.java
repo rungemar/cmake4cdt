@@ -1,4 +1,4 @@
-package com.rohde_schwarz.cmake4cdt.popup.actions;
+package org.eclipse.cdt.cmake.popup.actions;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;

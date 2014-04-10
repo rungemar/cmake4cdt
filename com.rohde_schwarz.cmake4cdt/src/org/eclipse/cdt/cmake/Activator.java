@@ -1,4 +1,4 @@
-package com.rohde_schwarz.cmake4cdt;
+package org.eclipse.cdt.cmake;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;

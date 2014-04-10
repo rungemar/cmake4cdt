@@ -1,4 +1,4 @@
-package com.rohde_schwarz.cmake4cdt.ui;
+package org.eclipse.cdt.cmake.ui;
 
 
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -7,16 +7,11 @@ import org.eclipse.jface.preference.ListEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.jface.window.Window;
 
-import com.rohde_schwarz.cmake4cdt.Activator;
+public class TargetDevicesEditor extends ListEditor {
 
-public class AvailArchsEditor extends ListEditor {
-
-	public AvailArchsEditor(String pAvailArchs, String string,
+	public TargetDevicesEditor(String pAvailTargetDevices, String string,
 			Composite fieldEditorParent) {
-		super(pAvailArchs, string, fieldEditorParent );
-		
-		String currentArchsStr = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_CURRENT_TARGET_ARCH);
-		getList().setSelection(0);
+			super(pAvailTargetDevices, string, fieldEditorParent );
 	}
 
 	@Override
@@ -43,9 +38,12 @@ public class AvailArchsEditor extends ListEditor {
 			}
 		};
 		InputDialog dialog = new InputDialog(getShell(), 
-				"Name of new architecture", 
-				"Please specify the name of the new architectire. \n" +
-				"I must a name known to buildif, e.g. arm, ppc, x86", 
+				"Name of new instrument", 
+				"Please specify the name of the new instrument. \n" +
+				"This instrument name will be used in directory \n" +
+				"names for projects that have been marked as \n" +
+				"instrument specific in projects properties and when \n" +
+				"assembling the installation path.", 
 				null, 
 				validator);
 		if(dialog.open() == Window.OK) {
@@ -61,5 +59,4 @@ public class AvailArchsEditor extends ListEditor {
 		String[] resultItems = stringList.split(";");
 		return resultItems;
 	}
-	
 }

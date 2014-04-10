@@ -5,10 +5,10 @@
    <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
-            id="cmake4cdt.contribution1"
+            id="cmake.runCMakeEntry"
             objectClass="org.eclipse.core.resources.IProject">
          <menu
-               id="cmake4cdt.menu1"
+               id="cmake.menu1"
                label="%menu.label">
             <separator
                   name="group1">
@@ -16,15 +16,15 @@
          </menu>
          <action
                label="%action.label"
-               class="com.rohde_schwarz.cmake4cdt.popup.actions.NewAction"
-               menubarPath="cmake4cdt.menu1/group1"
+               class="org.eclipse.cdt.cmake.popup.actions.NewAction"
+               menubarPath="cmake.menu1/group1"
                enablesFor="1"
-               id="cmake4cdt.newAction">
+               id="cmake.runCMakeAction">
          </action>
          <visibility>
             <objectState
                   name="projectNature"
-                  value="com.rohde_schwarz.cmake4cdt.cmakeNature">
+                  value="org.eclipse.cdt.cmake.cmakeNature">
             </objectState>
          </visibility>
       </objectContribution>
@@ -34,12 +34,12 @@
          name="%extension.name"
          point="org.eclipse.cdt.managedbuilder.core.buildProperties">
       <propertyValue
-            id="com.rohde_schwarz.cmake4cdt.buildArtefactType.cmake"
+            id="org.eclipse.cdt.cmake.buildArtefactType.cmake"
             name="%propertyValue.name"
             property="org.eclipse.cdt.build.core.buildArtefactType">
       </propertyValue>
       <propertyValue
-            id="com.rohde_schwarz.cmake4cdt.buildType.default"
+            id="org.eclipse.cdt.cmake.buildType.default"
             name="Default"
             property="org.eclipse.cdt.build.core.buildType">
       </propertyValue>
@@ -52,7 +52,7 @@
       <targetPlatform
             archList="all"
             binaryParser="org.eclipse.cdt.core.ELF;org.eclipse.cdt.core.GNU_ELF;org.eclipse.cdt.core.MachO64;org.eclipse.cdt.core.PE;org.eclipse.cdt.core.Cygwin_PE"
-            id="com.rohde_schwarz.cmake4cdt.targetPlatform"
+            id="org.eclipse.cdt.cmake.targetPlatform"
             isAbstract="false"
             name="%targetPlatform.name"
             osList="all">
@@ -60,42 +60,42 @@
       <tool
             advancedInputCategory="false"
             command="cmake"
-            id="com.rohde_schwarz.cmake4cdt.cmake"
+            id="org.eclipse.cdt.cmake.cmake"
             isAbstract="false"
             name="%Tool.cmake"
             natureFilter="both">
          <option
-               id="com.rohde_schwarz.cmake4cdt.CMAKE_BUILD_TYPE"
+               id="org.eclipse.cdt.cmake.CMAKE_BUILD_TYPE"
                isAbstract="false"
                name="%option.name"
                resourceFilter="project"
                valueType="string">
          </option>
          <inputType
-               id="com.rohde_schwarz.cmake4cdt.CMakeLists.txt"
-               sourceContentType="com.rohde_schwarz.cmake4cdt.cmakelistfile"
+               id="org.eclipse.cdt.cmake.CMakeLists.txt"
+               sourceContentType="org.eclipse.cdt.cmake.cmakelistfile"
                sources="CMakeLists.txt">
          </inputType>
       </tool>
       <projectType
-            buildArtefactType="com.rohde_schwarz.cmake4cdt.buildArtefactType.cmake"
-            id="com.rohde_schwarz.cmake4cdt.CMakeProject"
+            buildArtefactType="org.eclipse.cdt.cmake.buildArtefactType.cmake"
+            id="org.eclipse.cdt.cmake.CMakeProject"
             isAbstract="false">
          <configuration
-               buildArtefactType="com.rohde_schwarz.cmake4cdt.buildArtefactType.cmake"
-               buildProperties="com.rohde_schwarz.cmake4cdt.buildType.default"
-               id="com.rohde_schwarz.cmake4cdt.debug"
+               buildArtefactType="org.eclipse.cdt.cmake.buildArtefactType.cmake"
+               buildProperties="org.eclipse.cdt.cmake.buildType.default"
+               id="org.eclipse.cdt.cmake.debug"
                name="%configuration.name">
             <toolChain
-                  id="com.rohde_schwarz.cmake4cdt.toolChain.debug"
+                  id="org.eclipse.cdt.cmake.toolChain.debug"
                   isAbstract="false"
                   name="%toolChain.name"
-                  superClass="com.rohde_schwarz.cmake4cdt.toolchain.base">
+                  superClass="org.eclipse.cdt.cmake.toolchain.base">
                <supportedProperties>
                   <property
                         id="org.eclipse.cdt.build.core.buildArtefactType">
                      <value
-                           id="com.rohde_schwarz.cmake4cdt.buildArtefactType.cmake">
+                           id="org.eclipse.cdt.cmake.buildArtefactType.cmake">
                      </value>
                   </property>
                </supportedProperties>
@@ -103,29 +103,29 @@
          </configuration>
       </projectType>
       <toolChain
-            id="com.rohde_schwarz.cmake4cdt.toolchain.base"
+            id="org.eclipse.cdt.cmake.toolchain.base"
             isAbstract="false">
          <tool
-               id="com.rohde_schwarz.cmake4cdt.gpp"
+               id="org.eclipse.cdt.cmake.gpp"
                isAbstract="false"
                name="g++"
                superClass="cdt.managedbuild.tool.gnu.cpp.compiler">
          </tool>
          <tool
-               id="com.rohde_schwarz.cmake4cdt.gcc"
+               id="org.eclipse.cdt.cmake.gcc"
                isAbstract="false"
                name="gcc"
                superClass="cdt.managedbuild.tool.gnu.c.compiler">
          </tool>
          <targetPlatform
-               id="com.rohde_schwarz.cmake4cdt.targetPlatform1"
+               id="org.eclipse.cdt.cmake.targetPlatform1"
                isAbstract="false"
-               superClass="com.rohde_schwarz.cmake4cdt.targetPlatform">
+               superClass="org.eclipse.cdt.cmake.targetPlatform">
          </targetPlatform>
          <builder
-               buildfileGenerator="com.rohde_schwarz.cmake4cdt.CMakeMakefileGenerator"
+               buildfileGenerator="org.eclipse.cdt.cmake.CMakeMakefileGenerator"
                commandLauncher="org.eclipse.cdt.core.CommandLauncher"
-               id="com.rohde_schwarz.cmake4cdt.builder"
+               id="org.eclipse.cdt.cmake.builder"
                isAbstract="false"
                isVariableCaseSensitive="false"
                name="CMake Builder">
@@ -134,7 +134,7 @@
             <property
                   id="org.eclipse.cdt.build.core.buildArtefactType">
                <value
-                     id="com.rohde_schwarz.cmake4cdt.buildArtefactType.cmake">
+                     id="org.eclipse.cdt.cmake.buildArtefactType.cmake">
                </value>
             </property>
          </supportedProperties>
@@ -149,11 +149,11 @@
       </requires-nature>
       <runtime>
          <run
-               class="com.rohde_schwarz.cmake4cdt.cmakeProjectNature">
+               class="org.eclipse.cdt.cmake.cmakeProjectNature">
          </run>
       </runtime>
       <builder
-            id="com.rohde_schwarz.cmake4cdt.cmakeProjectBuilder">
+            id="org.eclipse.cdt.cmake.cmakeProjectBuilder">
       </builder>
    </extension>
    <extension
@@ -165,7 +165,7 @@
             hasNature="true"
             isConfigurable="true">
          <run
-               class="com.rohde_schwarz.cmake4cdt.cmakeProjectBuilder">
+               class="org.eclipse.cdt.cmake.cmakeProjectBuilder">
          </run>
       </builder>
    </extension>
@@ -173,7 +173,7 @@
          point="org.eclipse.cdt.core.templateProcessTypes">
       <processType
             name="newCMakeProject"
-            processRunner="com.rohde_schwarz.cmake4cdt.newCMakeProject">
+            processRunner="org.eclipse.cdt.cmake.newCMakeProject">
          <simple
                name="name">
          </simple>
@@ -195,20 +195,20 @@
          name="CMake templates"
          point="org.eclipse.cdt.core.templates">
       <template
-            id="com.rohde_schwarz.cmake4cdt.templates.EmptyProject"
+            id="org.eclipse.cdt.cmake.templates.EmptyProject"
             location="templates/EmptyProject/template.xml"
-            projectType="com.rohde_schwarz.cmake4cdt.buildArtefactType.cmake">
+            projectType="org.eclipse.cdt.cmake.buildArtefactType.cmake">
       </template>
    </extension>
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
-            id="com.rohde_schwarz.cmake4cdt.CMakeContentType"
+            id="org.eclipse.cdt.cmake.CMakeContentType"
             name="%CMakeContentType.name"
             priority="high">
       </content-type>
       <file-association
-            content-type="com.rohde_schwarz.cmake4cdt.CMakeContentType"
+            content-type="org.eclipse.cdt.cmake.CMakeContentType"
             file-names="CMakeLists.txt">
       </file-association>
    </extension>
@@ -216,28 +216,28 @@
          point="org.eclipse.core.variables.valueVariables">
       <variable
             description="Target architecture for CMake toolchain"
-            initializerClass="com.rohde_schwarz.cmake4cdt.ui.TargetArchInitializer"
+            initializerClass="org.eclipse.cdt.cmake.ui.TargetArchInitializer"
             name="CMake_TargetArch"
             readOnly="false"
             supportsArgument="true">
       </variable>
       <variable
             description="Target device"
-            initializerClass="com.rohde_schwarz.cmake4cdt.ui.TargetDeviceInitializer"
+            initializerClass="org.eclipse.cdt.cmake.ui.TargetDeviceInitializer"
             name="CMake_TargetDevice"
             readOnly="false"
             supportsArgument="true">
       </variable>
       <variable
             description="DESTDIR for install target of cmake build"
-            initializerClass="com.rohde_schwarz.cmake4cdt.ui.DestdirInitializer"
+            initializerClass="org.eclipse.cdt.cmake.ui.DestdirInitializer"
             name="CMake_DESTDIR"
             readOnly="false"
             supportsArgument="true">
       </variable>
       <variable
             description="Filesystem absolute path to the project that is build at the moment. In contrast to the eclipse build-in project_loc variable, which points to the selected project. This is useful in case of &quot;build all&quot;, when projects get build that have not been selected before. The Value of this variable is set when Makefile is generated."
-            initializerClass="com.rohde_schwarz.cmake4cdt.ui.ProjectPathInitializer"
+            initializerClass="org.eclipse.cdt.cmake.ui.ProjectPathInitializer"
             name="CMake_ProjectPath"
             readOnly="false"
             supportsArgument="true">
@@ -247,8 +247,8 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.cdt.ui.preferences.CPluginPreferencePage"
-            class="com.rohde_schwarz.cmake4cdt.ui.CMakePreferencePage"
-            id="com.rohde_schwarz.cmake4cdt.ui.PreferencePage"
+            class="org.eclipse.cdt.cmake.ui.CMakePreferencePage"
+            id="org.eclipse.cdt.cmake.ui.PreferencePage"
             name="CMake">
       </page>
    </extension>
@@ -256,22 +256,22 @@
          point="org.eclipse.ui.propertyPages">
       <page
             category="org.eclipse.cdt.managedbuilder.ui.properties.Page_head_build"
-            class="com.rohde_schwarz.cmake4cdt.ui.CMakePropertyPage"
-            id="com.rohde_schwarz.cmake4cdt.propertyPage1"
+            class="org.eclipse.cdt.cmake.ui.CMakePropertyPage"
+            id="org.eclipse.cdt.cmake.propertyPage1"
             name="CMake">
       </page>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="com.rohde_schwarz.cmake4cdt.ui.PreferenceInitializer">
+            class="org.eclipse.cdt.cmake.ui.PreferenceInitializer">
       </initializer>
    </extension>
    <extension
          point="org.eclipse.cdt.core.CBuildConsole">
       <CBuildConsole
-            class="com.rohde_schwarz.cmake4cdt.ui.CMakeConsole"
-            id="com.rohde_schwarz.cmake4cdt.CMakeConsole">
+            class="org.eclipse.cdt.cmake.ui.CMakeConsole"
+            id="org.eclipse.cdt.cmake.ui.CMakeConsole">
       </CBuildConsole>
    </extension>
 

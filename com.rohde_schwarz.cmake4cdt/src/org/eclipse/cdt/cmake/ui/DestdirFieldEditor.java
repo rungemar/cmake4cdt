@@ -10,7 +10,7 @@
  *     Thierry Lach - thierry.lach@bbdodetroit.com - Fix for Bug 37155
  *******************************************************************************/
 
-package com.rohde_schwarz.cmake4cdt.ui;
+package org.eclipse.cdt.cmake.ui;
 
 import java.io.File;
 

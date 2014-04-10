@@ -1,4 +1,4 @@
-package com.rohde_schwarz.cmake4cdt.ui;
+package org.eclipse.cdt.cmake.ui;
 
 public class PreferenceConstants {
 

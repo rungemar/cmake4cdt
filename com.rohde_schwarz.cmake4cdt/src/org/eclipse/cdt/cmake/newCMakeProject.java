@@ -1,4 +1,4 @@
-package com.rohde_schwarz.cmake4cdt;
+package org.eclipse.cdt.cmake;
 
 import java.util.List;
 

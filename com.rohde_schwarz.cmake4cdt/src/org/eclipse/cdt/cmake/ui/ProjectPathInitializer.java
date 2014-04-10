@@ -1,10 +1,9 @@
-package com.rohde_schwarz.cmake4cdt.ui;
+package org.eclipse.cdt.cmake.ui;
 
+import org.eclipse.cdt.cmake.Activator;
+import org.eclipse.cdt.cmake.ui.PreferenceConstants;
 import org.eclipse.core.variables.IValueVariable;
 import org.eclipse.core.variables.IValueVariableInitializer;
-
-import com.rohde_schwarz.cmake4cdt.Activator;
-import com.rohde_schwarz.cmake4cdt.ui.PreferenceConstants;
 
 public class ProjectPathInitializer implements IValueVariableInitializer {
 

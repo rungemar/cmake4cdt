@@ -1,10 +1,8 @@
-package com.rohde_schwarz.cmake4cdt.ui;
+package org.eclipse.cdt.cmake.ui;
 
+import org.eclipse.cdt.cmake.Activator;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
-
-import com.rohde_schwarz.cmake4cdt.Activator;
-
 import org.eclipse.core.variables.IStringVariable;
 import org.eclipse.core.variables.IStringVariableManager;
 import org.eclipse.core.variables.VariablesPlugin;

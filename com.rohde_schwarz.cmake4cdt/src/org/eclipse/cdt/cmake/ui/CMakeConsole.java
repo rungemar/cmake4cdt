@@ -1,4 +1,4 @@
-package com.rohde_schwarz.cmake4cdt.ui;
+package org.eclipse.cdt.cmake.ui;
 
 import org.eclipse.cdt.core.ConsoleOutputStream;
 import org.eclipse.cdt.core.resources.IConsole;
@@ -12,7 +12,7 @@ public class CMakeConsole implements IConsole {
 	IBuildConsoleManager fConsoleManager;
 
 	public CMakeConsole() {
-		fConsoleManager = CUIPlugin.getDefault().getConsoleManager("CMake console", "com.rohde_schwarz.cmake4cdt.CMakeConsole");
+		fConsoleManager = CUIPlugin.getDefault().getConsoleManager("CMake console", "org.eclipse.cdt.cmake.CMakeConsole");
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.CommandLauncher;
@@ -62,7 +63,7 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 	IProject project;
 	IProgressMonitor monitor;
 	
-	public final String CMAKE_EXE = "/usr/bin/cmake";
+	public final String CMAKE_EXE = "cmake";
 
 	@Override
 	public void generateDependencies() throws CoreException {
@@ -212,11 +213,14 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 			cmakeArgs.add("-DCMAKE_BUILD_TYPE=" + currentConf);
 //			cmakeArgs.add("-DCMAKE_TOOLCHAIN_FILE=" + currentToolchainFile);
 			cmakeArgs.add("-DCMAKE_EXPORT_COMPILE_COMMANDS=On");
+			cmakeArgs.add( project.getLocation().toString() );
+			
 
 			// add cmake extra FLAGS
 			
 			// add some cmake options
 			
+
 			IContributedEnvironment ice = CCorePlugin.getDefault().getBuildEnvironmentManager().getContributedEnvironment();
 			ICConfigurationDescription cfgDesc = CoreModel.getDefault().getProjectDescription(project).getConfigurationByName(currentConf);
 			IEnvironmentVariable[] envvars = ice.getVariables( cfgDesc );
@@ -244,7 +248,7 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 			IPath cmakePath = new Path(CMAKE_EXE);
 			
 			String[] a = new String[cmakeArgs.size()];
-			buildRunnerHelper.setLaunchParameters(launcher, cmakePath, cmakeArgs.toArray(a), workingDirectoryURI, envp);
+			buildRunnerHelper.setLaunchParameters(launcher, cmakePath, cmakeArgs.toArray(a), workingDirectoryURI, null);
 			
 			ErrorParserManager epm = new ErrorParserManager(project, workingDirectoryURI, null, null);
 			List<IConsoleParser> consoleParsers = new ArrayList<IConsoleParser>(); 
@@ -278,19 +282,7 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 		return mstatus;
 	}
 	
-//	 private IConsole findConsole(String name) {
-//	      ConsolePlugin plugin = ConsolePlugin.getDefault();
-//	      IConsoleManager conMan = plugin.getConsoleManager();
-//	      IConsole[] existing = conMan.getConsoles();
-//	      for (int i = 0; i < existing.length; i++)
-//	         if (name.equals(existing[i].getName()))
-//	            return existing[i];
-//	      //no console found, so create a new one
-//	      IConsole myConsole = new MessageConsole(name, null);
-//	      conMan.addConsoles(new IConsole[]{myConsole});
-//	      return myConsole;
-//	   }
-	 
+ 
 	 private String inputStream2String(InputStream is) {
 		 /*
 		  * To convert the InputStream to String we use the BufferedReader.readLine()

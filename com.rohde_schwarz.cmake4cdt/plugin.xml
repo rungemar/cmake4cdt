@@ -16,7 +16,7 @@
          </menu>
          <action
                label="%action.label"
-               class="org.eclipse.cdt.cmake.popup.actions.NewAction"
+               class="org.eclipse.cdt.cmake.popup.actions.RunCMakeAction"
                menubarPath="cmake.menu1/group1"
                enablesFor="1"
                id="cmake.runCMakeAction">
@@ -165,7 +165,7 @@
             hasNature="true"
             isConfigurable="true">
          <run
-               class="org.eclipse.cdt.cmake.cmakeProjectBuilder">
+               class="org.eclipse.cdt.cmake.CMakeProjectBuilder">
          </run>
       </builder>
    </extension>
@@ -235,13 +235,6 @@
             readOnly="false"
             supportsArgument="true">
       </variable>
-      <variable
-            description="Filesystem absolute path to the project that is build at the moment. In contrast to the eclipse build-in project_loc variable, which points to the selected project. This is useful in case of &quot;build all&quot;, when projects get build that have not been selected before. The Value of this variable is set when Makefile is generated."
-            initializerClass="org.eclipse.cdt.cmake.ui.ProjectPathInitializer"
-            name="CMake_ProjectPath"
-            readOnly="false"
-            supportsArgument="true">
-      </variable>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -273,6 +266,15 @@
             class="org.eclipse.cdt.cmake.ui.CMakeConsole"
             id="org.eclipse.cdt.cmake.ui.CMakeConsole">
       </CBuildConsole>
+   </extension>
+   <extension
+         point="org.eclipse.core.variables.dynamicVariables">
+      <variable
+            description="Filesystem absolute path to the project that is build at the moment. In contrast to the eclipse build-in project_loc variable, which points to the selected project. This is useful in case of &quot;build all&quot;, when projects get build that have not been selected before. The Value of this variable is set when Makefile is generated."
+            name="CMake_ProjectPath"
+            resolver="org.eclipse.cdt.cmake.ui.CMake_ProjectPathResolver"
+            supportsArgument="true">
+      </variable>
    </extension>
 
 </plugin>

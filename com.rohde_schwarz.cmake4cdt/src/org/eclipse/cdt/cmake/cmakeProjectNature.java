@@ -154,13 +154,13 @@ public class cmakeProjectNature implements IProjectNature {
 		// Make sure the CMake builder just precedes the Common Builder
 		for (int i = 0; i < commands.length; i++) {
 			ICommand command = commands[i];
-			if (command.getBuilderName().equals(cmakeProjectBuilder.BUILDER_ID)) {
+			if (command.getBuilderName().equals(CMakeProjectBuilder.BUILDER_ID)) {
 				// ignore it
 			} else {
 				if (command.getBuilderName().equals(BUILDER_ID)) {
 					// add CMake Configuration builder just before builder
 					ICommand newCommand = description.newCommand();
-					newCommand.setBuilderName(cmakeProjectBuilder.BUILDER_ID);
+					newCommand.setBuilderName(CMakeProjectBuilder.BUILDER_ID);
 					commandList.add(newCommand);
 				}
 				commandList.add(command);

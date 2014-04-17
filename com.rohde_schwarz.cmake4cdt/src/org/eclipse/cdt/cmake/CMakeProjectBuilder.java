@@ -12,17 +12,17 @@ package org.eclipse.cdt.cmake;
 
 import java.util.Map;
 
+import org.eclipse.cdt.core.resources.ACBuilder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class cmakeProjectBuilder extends IncrementalProjectBuilder {
+public class CMakeProjectBuilder extends ACBuilder {
 
-	public static String BUILDER_ID="org.eclipse.cdt.cmake.cmakeProjectBuilder";
+	public static String BUILDER_ID="org.eclipse.cdt.cmake.CMakeProjectBuilder";
 	
-	public cmakeProjectBuilder() {
-		// TODO Auto-generated constructor stub
+	public CMakeProjectBuilder() {
+		
 	}
 
 	@Override

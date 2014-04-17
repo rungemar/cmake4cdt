@@ -32,11 +32,13 @@ import org.eclipse.cdt.core.envvar.IEnvironmentVariable;
 import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.resources.IConsole;
 import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
+import org.eclipse.cdt.core.settings.model.ICProjectDescription;
 import org.eclipse.cdt.internal.core.BuildRunnerHelper;
 import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuilderCorePlugin;
 import org.eclipse.cdt.managedbuilder.makegen.IManagedBuilderMakefileGenerator;
+import org.eclipse.core.resources.IBuildConfiguration;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
@@ -81,6 +83,7 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 
 	@Override
 	public IPath getBuildWorkingDir() {
+		
 		IEclipsePreferences projectProperties = new ProjectScope(project).getNode("org.eclipse.cdt.cmake.scope"); //$NON-NLS-1$
 		boolean buildDirWorkspaceSettings = true;
 		if (projectProperties != null) {
@@ -184,8 +187,7 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 			}
 			monitor.beginTask("Invoking CMake for '" + project.getName() + "'", 100);//$NON-NLS-1$ //$NON-NLS-2$
 			
-			
-			String buildDir = null;
+			IPath buildDir = null;
 			
 			IEclipsePreferences projectProperties = new ProjectScope(project).getNode("org.eclipse.cdt.cmake.scope"); //$NON-NLS-1$
 			boolean deviceSpecific = false;
@@ -193,21 +195,16 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 			if (projectProperties != null) {
 				deviceSpecific = projectProperties.getBoolean(CMakePropertyConstants.P_IS_DEVICE_SPECIFIC, false);
 				useWorkspaceBuidDirSettings = projectProperties.getBoolean(CMakePropertyConstants.P_USE_WORKSPACE_BUILDDIR_SETTINGS, true);
-
-				buildDir = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_BUILDDIR);
-
-				if(!useWorkspaceBuidDirSettings) {
-					buildDir = projectProperties.get( CMakePropertyConstants.P_BUILD_PATH, buildDir);
-				}
-				
 			}
+			
+			buildDir = getBuildWorkingDir();
 
 			IValueVariable destdirVar = varMgr.getValueVariable("CMake_DESTDIR"); //$NON-NLS-1$
 			String destDirStr = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_DESTDIR);
 			destDirStr = varMgr.performStringSubstitution(destDirStr);
 			destdirVar.setValue( destDirStr );
 
-			buildDir = varMgr.performStringSubstitution(buildDir);
+			// buildDir = varMgr.performStringSubstitution(buildDir);
 
 			List<String> cmakeArgs = new ArrayList<String>();
 			
@@ -231,7 +228,7 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 				envp[i] = envvars[i].getName() + "=" + envvars[i].getValue(); //$NON-NLS-1$
 			}
 			
-			File buildDirFile = new File(buildDir);
+			File buildDirFile = buildDir.toFile();
 			if(buildDirFile.exists()) {
 				if(!buildDirFile.isDirectory()) {
 					throw new RuntimeException( "The path that is to be used for the build: '" + buildDir + "' exists, but is no directory."); //$NON-NLS-1$ //$NON-NLS-2$
@@ -269,7 +266,7 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 				throw new CoreException(new Status(IStatus.ERROR, ManagedBuilderCorePlugin.PLUGIN_ID, msg, new Exception()));
 			}
 		} catch (Exception e) {
-			String msg = "Error runninf CMake for project: '" + project.getName() +"' in configuration '" + currentConf + "'.";
+			String msg = "Error running CMake for project: '" + project.getName() +"' in configuration '" + currentConf + "'.";
 			throw new CoreException(new Status(IStatus.ERROR, ManagedBuilderCorePlugin.PLUGIN_ID, msg, e));
 		} finally {
 			try {

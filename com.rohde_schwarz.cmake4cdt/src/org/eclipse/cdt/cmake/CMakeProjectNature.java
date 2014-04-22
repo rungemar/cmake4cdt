@@ -29,14 +29,14 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 
-public class cmakeProjectNature implements IProjectNature {
+public class CMakeProjectNature implements IProjectNature {
 
 	public static final String CMAKE_NATURE_ID = "org.eclipse.cdt.cmake.cmakeNature";  //$NON-NLS-1$
 	public final static String BUILDER_ID = ManagedBuilderCorePlugin.getUniqueIdentifier() + ".genmakebuilder"; //$NON-NLS-1$
 
 	private IProject project;
 	
-	public cmakeProjectNature() {
+	public CMakeProjectNature() {
 		
 	}
 

@@ -78,7 +78,7 @@ public class newCMakeProject extends ProcessRunner {
 				pca.setArtifactExtension(artifactExtension);
 				info = pca.createProject(monitor, CCorePlugin.DEFAULT_INDEXER, isCProject);
 
-				cmakeProjectNature.addNature(project, monitor);
+				CMakeProjectNature.addNature(project, monitor);
 				
 				// For each IConfiguration, create a corresponding Autotools Configuration
 				IConfiguration[] cfgs = pca.getConfigs();
@@ -97,7 +97,7 @@ public class newCMakeProject extends ProcessRunner {
 
 			}
 			else {
-				cmakeProjectNature.addNature(project, monitor);
+				CMakeProjectNature.addNature(project, monitor);
 				//			throw new ProcessFailureException(Messages.getString("NewAutotoolsProject.5") + projectName); //$NON-NLS-1$
 			}
 		} catch (CoreException e) {

@@ -25,6 +25,9 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 	
+	// The "model". central storage for settings
+	private CMakeSettings m_settings = new CMakeSettings();
+	
 	/**
 	 * The constructor
 	 */
@@ -67,5 +70,12 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public static ImageDescriptor getImageDescriptor(String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	}
+
+	/**
+	 * @return
+	 */
+	public CMakeSettings getSettings() {
+		return m_settings;
 	}
 }

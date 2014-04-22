@@ -13,5 +13,11 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.cdt.ui,
+ org.eclipse.core.databinding,
+ org.eclipse.core.databinding.beans,
+ org.eclipse.core.databinding.observable.list,
+ org.eclipse.core.databinding.observable.value,
+ org.eclipse.core.databinding.property.value,
  org.eclipse.debug.ui,
+ org.eclipse.jface.databinding.swt,
  org.eclipse.ui.console

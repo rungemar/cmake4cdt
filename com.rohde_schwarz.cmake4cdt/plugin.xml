@@ -149,7 +149,7 @@
       </requires-nature>
       <runtime>
          <run
-               class="org.eclipse.cdt.cmake.cmakeProjectNature">
+               class="org.eclipse.cdt.cmake.CMakeProjectNature">
          </run>
       </runtime>
       <builder
@@ -275,6 +275,19 @@
             resolver="org.eclipse.cdt.cmake.ui.CMake_ProjectPathResolver"
             supportsArgument="true">
       </variable>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.main.toolbar">
+         <toolbar
+               id="org.eclipse.cdt.cmake.toolbar1">
+            <control
+                  class="org.eclipse.cdt.cmake.ui.ArchComboBox">
+            </control>
+         </toolbar>
+      </menuContribution>
    </extension>
 
 </plugin>

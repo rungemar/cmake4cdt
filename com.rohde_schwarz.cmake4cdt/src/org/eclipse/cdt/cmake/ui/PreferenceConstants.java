@@ -16,6 +16,8 @@ public class PreferenceConstants {
 	public static final String P_BUILDDIR = "builddirPreference";
 	public static final String P_DESTDIR = "destdirPreference";
 	public static final String P_PROJPATH = "projectPath";
+	
+	public static final String P_TOOLCHAIN_FILES = "toolchainFiles";
 
 	public static final String P_AVAIL_TARGET_ARCHS = "availTargetArchs";
 	public static final String P_CURRENT_TARGET_ARCH = "currentTargetArch";

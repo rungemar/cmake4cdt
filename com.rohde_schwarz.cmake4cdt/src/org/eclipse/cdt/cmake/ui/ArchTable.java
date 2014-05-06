@@ -27,6 +27,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -41,6 +42,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * @author runge_m
@@ -267,8 +269,8 @@ public class ArchTable extends FieldEditor {
             GridLayout layout = new GridLayout();
             layout.marginWidth = 0;
             buttonBox.setLayout(layout);
-            addButton = createPushButton(buttonBox, "ArchTableEditor.add");//$NON-NLS-1$
-            removeButton = createPushButton(buttonBox, "ArchTableEditor.remove");//$NON-NLS-1$
+            addButton = createPushButton(buttonBox, Messages.ArchTableEditor_Add);//$NON-NLS-1$
+            removeButton = createPushButton(buttonBox, Messages.ArchTableEditor_Remove);//$NON-NLS-1$
             buttonBox.addDisposeListener(new DisposeListener() {
                 public void widgetDisposed(DisposeEvent event) {
                     addButton = null;
@@ -331,7 +333,12 @@ public class ArchTable extends FieldEditor {
 	}
 
 	private void addPressed() {
-		
+		ArchToolchainPairEditor ed = new ArchToolchainPairEditor( PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell() );
+		int rc = ed.open();
+		if(rc == Window.OK) {
+			archlist.add(ed.getPair());
+			tableViewer.refresh();
+		}
 	}
 
 	private void removePressed() {

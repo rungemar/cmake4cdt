@@ -18,6 +18,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.cdt.cmake.var.ArchToolchainPair;
 import org.eclipse.core.internal.runtime.DataArea;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.swt.SWT;

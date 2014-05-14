@@ -9,7 +9,7 @@
  *     Martin Runge - initial implementation of cmake support
  *******************************************************************************/
 
-package org.eclipse.cdt.cmake.ui;
+package org.eclipse.cdt.cmake.var;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

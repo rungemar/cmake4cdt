@@ -271,8 +271,14 @@
          point="org.eclipse.core.variables.dynamicVariables">
       <variable
             description="Filesystem absolute path to the project that is build at the moment. In contrast to the eclipse build-in project_loc variable, which points to the selected project. This is useful in case of &quot;build all&quot;, when projects get build that have not been selected before. The Value of this variable is set when Makefile is generated."
-            name="CMake_ProjectPath"
-            resolver="org.eclipse.cdt.cmake.ui.CMake_ProjectPathResolver"
+            name="org.eclipse.cdt.cmake.var.projectPath"
+            resolver="org.eclipse.cdt.cmake.var.ProjectPathResolver"
+            supportsArgument="true">
+      </variable>
+      <variable
+            description="variable holds the path to a cmake toolchain file (-DCMAKE_TOOLCHAIN_FILE) for the given architecture."
+            name="org.eclipse.cdt.cmake.var.toolchainFile"
+            resolver="org.eclipse.cdt.cmake.var.ToolchainFileResolver"
             supportsArgument="true">
       </variable>
    </extension>

@@ -26,4 +26,6 @@ public class PreferenceConstants {
 	public static final String P_CURRENT_TARGET_DEVICE = "currentTargetDevice";
 	public static final String P_NOT_INST_SPECIFIC = "notInstSpecific";
 
+	public static final String P_CMAKE_TOOLCHAIN_PREFERENCE_SCOPE = "org.eclipse.cdt.cmake.preferences";
+
 }

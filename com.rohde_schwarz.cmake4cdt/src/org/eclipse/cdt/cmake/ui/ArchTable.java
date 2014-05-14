@@ -16,6 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.cdt.cmake.Activator;
+import org.eclipse.cdt.cmake.var.ArchToolchainPair;
+import org.eclipse.cdt.cmake.var.ArchToolchainPairList;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.resource.JFaceResources;
@@ -52,7 +54,7 @@ public class ArchTable extends FieldEditor {
 
 	private TableViewer tableViewer;
 	private Composite tableParent;
-	private List<ArchToolchainPair> archlist;
+	private ArchToolchainPairList atlist;
 
     /**
      * The button box containing the Add and Remove buttons;
@@ -124,18 +126,11 @@ public class ArchTable extends FieldEditor {
 	 */
 	@Override
 	protected void doLoad() {
-		if ( archlist == null) {
-			archlist = new ArrayList<ArchToolchainPair>();
+		if ( atlist == null) {
+			atlist = new ArchToolchainPairList();
 		}
-		
-		String archsAndToolchains = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TOOLCHAIN_FILES);
-
-		String[] tokens = archsAndToolchains.split(";");
-		for(int i=0; i < tokens.length - 1; ) {
-			archlist.add( new ArchToolchainPair(tokens[i], tokens[i+1]));
-			i+=2;
-		}
-		tableViewer.setInput( archlist );
+		atlist.doLoad();
+		tableViewer.setInput( atlist );
 	}
 
 	/* (non-Javadoc)
@@ -143,24 +138,11 @@ public class ArchTable extends FieldEditor {
 	 */
 	@Override
 	protected void doLoadDefault() {
-		if ( archlist == null) {
-			archlist = new ArrayList<ArchToolchainPair>();
+		if ( atlist == null) {
+			atlist = new ArchToolchainPairList();
 		}
-		
-		String archsAndToolchains = Activator.getDefault().getPreferenceStore().getDefaultString(PreferenceConstants.P_TOOLCHAIN_FILES);
-
-		String[] tokens = archsAndToolchains.split(";");
-		for(int i=0; i < tokens.length - 1; ) {
-			archlist.add( new ArchToolchainPair(tokens[i], tokens[i+1]));
-			i+=2;
-		}
-		tableViewer.setInput( archlist );
-		
-		archlist.add( new ArchToolchainPair("host", ""));
-		archlist.add( new ArchToolchainPair("x86", "/home/buildsys4/cmake/arm-toolchain.cmake"));
-		archlist.add( new ArchToolchainPair("x86", "/home/buildsys4/cmake/ppc-toolchain.cmake"));
-		archlist.add( new ArchToolchainPair("x86", "/home/buildsys4/cmake/ppc-e500v2-toolchain.cmake"));
-		archlist.add( new ArchToolchainPair("x86", "/home/buildsys4/cmake/x86-toolchain.cmake"));
+		atlist.doLoad(true);
+		tableViewer.setInput( atlist );
 	}
 
 	/* (non-Javadoc)
@@ -168,14 +150,8 @@ public class ArchTable extends FieldEditor {
 	 */
 	@Override
 	protected void doStore() {
-		if(archlist == null) return;
-		
-		String archsAndToolchains = new String();
-
-		for(int i=0; i < archlist.size(); i++ ) {
-			archsAndToolchains += archlist.get(i).getArchName() + ";" + archlist.get(i).getToolchainFile() + ";"; 
-		}
-		 Activator.getDefault().getPreferenceStore().setValue(PreferenceConstants.P_TOOLCHAIN_FILES, archsAndToolchains );
+		if(atlist == null) return;
+		atlist.doStore();
 	}
 
 	/* (non-Javadoc)
@@ -206,7 +182,7 @@ public class ArchTable extends FieldEditor {
 			
 			tableViewer.setContentProvider(ArrayContentProvider.getInstance());
 			
-//			tableViewer.setInput( archlist );
+//			tableViewer.setInput( atlist );
 		} else {
 			checkParent(table, parent);
 		}
@@ -336,14 +312,21 @@ public class ArchTable extends FieldEditor {
 		ArchToolchainPairEditor ed = new ArchToolchainPairEditor( PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell() );
 		int rc = ed.open();
 		if(rc == Window.OK) {
-			archlist.add(ed.getPair());
+			atlist.add(ed.getPair());
 			tableViewer.refresh();
 		}
 	}
 
 	private void removePressed() {
 		Table table = getTableControl();
-		table.remove(table.getSelectionIndices());
+	//	table.remove(table.getSelectionIndices());
+		
+		int [] sel = table.getSelectionIndices();
+		for(int i=0; i < sel.length; i++) {
+			// #i have already been removed by earlier runs, remove i from index 
+			atlist.remove(sel[i] - i);
+		}
+		tableViewer.refresh();
 	}
     
     /**

@@ -1,10 +1,10 @@
-package org.eclipse.cdt.cmake.ui;
+package org.eclipse.cdt.cmake.var;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.variables.IDynamicVariable;
 import org.eclipse.core.variables.IDynamicVariableResolver;
 
-public class CMake_ProjectPathResolver implements IDynamicVariableResolver {
+public class ProjectPathResolver implements IDynamicVariableResolver {
 
 	@Override
 	public String resolveValue(IDynamicVariable variable, String argument)

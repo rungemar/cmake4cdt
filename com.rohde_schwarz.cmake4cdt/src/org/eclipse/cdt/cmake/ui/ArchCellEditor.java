@@ -11,6 +11,7 @@
 
 package org.eclipse.cdt.cmake.ui;
 
+import org.eclipse.cdt.cmake.var.ArchToolchainPair;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewer;

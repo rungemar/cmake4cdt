@@ -54,6 +54,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.variables.IDynamicVariable;
 import org.eclipse.core.variables.IStringVariableManager;
 import org.eclipse.core.variables.IValueVariable;
 import org.eclipse.core.variables.VariablesPlugin;
@@ -178,7 +179,7 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 		
 		@SuppressWarnings("restriction")
 		BuildRunnerHelper buildRunnerHelper = new BuildRunnerHelper(this.project);
-		ICommandLauncher launcher = new CommandLauncher();
+		ICommandLauncher launcher = new CommandLauncherRC();
 		IStringVariableManager varMgr = VariablesPlugin.getDefault().getStringVariableManager();
 
 		try {
@@ -205,11 +206,15 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 			destdirVar.setValue( destDirStr );
 
 			// buildDir = varMgr.performStringSubstitution(buildDir);
+			String currentToolchainFile;
+			IDynamicVariable toolchainFileVar = varMgr.getDynamicVariable("org.eclipse.cdt.cmake.var.toolchainFile"); //$NON-NLS-1$
+
+			currentToolchainFile = toolchainFileVar.getValue(currentArch);
 
 			List<String> cmakeArgs = new ArrayList<String>();
 			
 			cmakeArgs.add("-DCMAKE_BUILD_TYPE=" + currentConf);
-//			cmakeArgs.add("-DCMAKE_TOOLCHAIN_FILE=" + currentToolchainFile);
+			cmakeArgs.add("-DCMAKE_TOOLCHAIN_FILE=" + currentToolchainFile);
 			cmakeArgs.add("-DCMAKE_EXPORT_COMPILE_COMMANDS=On");
 			cmakeArgs.add( project.getLocation().toString() );
 			
@@ -259,16 +264,25 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 			buildRunnerHelper.goodbye();
 
 			if (state != ICommandLauncher.ILLEGAL_COMMAND) {
-				buildRunnerHelper.refreshProject(currentConf, new SubProgressMonitor(monitor, 90, SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK));
+				if(state == ICommandLauncher.OK) {
+					buildRunnerHelper.refreshProject(currentConf, new SubProgressMonitor(monitor, 90, SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK));
+				}
+				else {
+					mstatus = new MultiStatus("org.eclipse.cdt.cmake.builder", IStatus.ERROR, "CMake failed to generate Makefile. Please see CMake Console for Details.", null );
+				}
 			}
 			else {
 				String msg = ""; //$NON-NLS-1$
 				throw new CoreException(new Status(IStatus.ERROR, ManagedBuilderCorePlugin.PLUGIN_ID, msg, new Exception()));
 			}
-		} catch (Exception e) {
+		} catch (CoreException ce) {
+			
+		} 
+		catch (Exception e) {
 			String msg = "Error running CMake for project: '" + project.getName() +"' in configuration '" + currentConf + "'.";
 			throw new CoreException(new Status(IStatus.ERROR, ManagedBuilderCorePlugin.PLUGIN_ID, msg, e));
-		} finally {
+		} 
+		finally {
 			try {
 				buildRunnerHelper.close();
 			} catch (IOException e) {

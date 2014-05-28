@@ -117,19 +117,18 @@
                name="gcc"
                superClass="cdt.managedbuild.tool.gnu.c.compiler">
          </tool>
-         <targetPlatform
-               id="org.eclipse.cdt.cmake.targetPlatform1"
-               isAbstract="false"
-               superClass="org.eclipse.cdt.cmake.targetPlatform">
-         </targetPlatform>
          <builder
                buildfileGenerator="org.eclipse.cdt.cmake.CMakeMakefileGenerator"
-               commandLauncher="org.eclipse.cdt.core.CommandLauncher"
                id="org.eclipse.cdt.cmake.builder"
                isAbstract="false"
                isVariableCaseSensitive="false"
                name="CMake Builder">
          </builder>
+         <targetPlatform
+               id="org.eclipse.cdt.cmake.targetPlatform1"
+               isAbstract="false"
+               superClass="org.eclipse.cdt.cmake.targetPlatform">
+         </targetPlatform>
          <supportedProperties>
             <property
                   id="org.eclipse.cdt.build.core.buildArtefactType">
@@ -163,7 +162,8 @@
       <builder
             callOnEmptyDelta="true"
             hasNature="true"
-            isConfigurable="true">
+            isConfigurable="true"
+            supportsConfigurations="true">
          <run
                class="org.eclipse.cdt.cmake.CMakeProjectBuilder">
          </run>

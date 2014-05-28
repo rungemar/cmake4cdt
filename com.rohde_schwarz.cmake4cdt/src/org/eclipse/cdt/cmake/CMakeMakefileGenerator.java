@@ -78,7 +78,8 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 	@Override
 	public MultiStatus generateMakefiles(IResourceDelta delta)
 			throws CoreException {
-		MultiStatus mstatus = regenerateMakefiles();		
+//		MultiStatus mstatus = regenerateMakefiles();
+		MultiStatus mstatus = new MultiStatus("org.eclipse.cdt.cmake.builder", 0, "success", null );
 		return  mstatus;
 	}
 
@@ -199,6 +200,14 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 			}
 			
 			buildDir = getBuildWorkingDir();
+			if(!buildDir.toFile().exists()) {
+				boolean retval = buildDir.toFile().mkdir();
+				if(retval == false) {
+					String msg = new String("Could not create build output dir: '" + buildDir.toOSString() + "'");
+					throw new CoreException(new Status(IStatus.ERROR, ManagedBuilderCorePlugin.PLUGIN_ID, msg, new Exception()));
+				}
+			}
+			
 
 			IValueVariable destdirVar = varMgr.getValueVariable("CMake_DESTDIR"); //$NON-NLS-1$
 			String destDirStr = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_DESTDIR);
@@ -276,7 +285,7 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 				throw new CoreException(new Status(IStatus.ERROR, ManagedBuilderCorePlugin.PLUGIN_ID, msg, new Exception()));
 			}
 		} catch (CoreException ce) {
-			
+			mstatus = new MultiStatus("org.eclipse.cdt.cmake.builder", -1, ce.getStatus().getMessage(), null );
 		} 
 		catch (Exception e) {
 			String msg = "Error running CMake for project: '" + project.getName() +"' in configuration '" + currentConf + "'.";

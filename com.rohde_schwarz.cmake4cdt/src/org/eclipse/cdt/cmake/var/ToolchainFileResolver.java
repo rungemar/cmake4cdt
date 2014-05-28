@@ -23,7 +23,7 @@ public class ToolchainFileResolver implements IDynamicVariableResolver {
 		String toolchainFile = atlist.get(argument);
 		
 		if(toolchainFile == null) {
-			Status status = new Status(Status.INFO, Activator.PLUGIN_ID, "No CMake toolchainfile specified for architecture '" + variable +"'");
+			Status status = new Status(Status.INFO, Activator.PLUGIN_ID, "No CMake toolchainfile specified for architecture '" + argument +"'");
 			throw new CoreException(status);
 		}
 

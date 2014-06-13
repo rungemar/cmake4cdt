@@ -60,22 +60,43 @@ public class CMakeProjectBuilder extends ACBuilder {
 
 	public static String BUILDER_ID="org.eclipse.cdt.cmake.CMakeProjectBuilder";
 	public final String CMAKE_EXE = "cmake";
-
-	public CMakeProjectBuilder() {
+	
+	private IProject privateProject = null;
+	private IManagedBuildInfo privateBuildInfo = null;
 		
+	public CMakeProjectBuilder() {
+		super();
+	}
+	
+	public CMakeProjectBuilder( IProject project, IManagedBuildInfo info ) {
+		super();
+		privateProject = project;
+		privateBuildInfo = info;
 	}
 
 	@Override
-	protected IProject[] build(int kind, Map<String, String> args,
+	public IProject[] build(int kind, Map<String, String> args,
 			IProgressMonitor monitor) throws CoreException {
 
-		IProject project = getProject();
+		IProject project;
+		IManagedBuildInfo buildInfo;
+		if(privateProject == null) {
+			project = getProject();
+		} else {
+			project = privateProject;
+		}
 		
-		IManagedBuildInfo buildInfo = ManagedBuildManager.getBuildInfo(getProject());
+		if(privateBuildInfo == null) {
+			buildInfo = ManagedBuildManager.getBuildInfo(project);
+		} else {
+			buildInfo = privateBuildInfo;
+		}
+		 
 		IConfiguration activeConfig = buildInfo.getDefaultConfiguration();
 		
 		MultiStatus mstatus = new MultiStatus("org.eclipse.cdt.cmake.builder", 0, "success", null );
 
+	
 		String currentConf = activeConfig.getName();
 		String currentArch = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_CURRENT_TARGET_ARCH);
 		String currentInstrument = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_CURRENT_TARGET_DEVICE);
@@ -208,7 +229,7 @@ public class CMakeProjectBuilder extends ACBuilder {
 			monitor.done();
 		}
 		
-		return getProject().getReferencedProjects();
+		return project.getReferencedProjects();
 	}
 	
 	private IPath getBuildWorkingDir(String currentConf, String currentArch) {
@@ -253,7 +274,7 @@ public class CMakeProjectBuilder extends ACBuilder {
 			}
 		}
 		else {
-			String strWithVars = projectProperties.get(CMakePropertyConstants. P_BUILD_PATH, ""); //$NON-NLS-1$
+			String strWithVars = projectProperties.get(CMakePropertyConstants.P_BUILD_PATH, ""); //$NON-NLS-1$
 
 			try {
 				buildDirSetting = varMgr.performStringSubstitution(strWithVars);

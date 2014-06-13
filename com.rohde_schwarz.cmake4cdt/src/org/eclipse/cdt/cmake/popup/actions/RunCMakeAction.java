@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.cdt.cmake.CMakeMakefileGenerator;
+import org.eclipse.cdt.cmake.CMakeProjectBuilder;
 import org.eclipse.cdt.core.model.ICContainer;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
@@ -25,6 +26,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRunnable;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -90,12 +92,12 @@ public class RunCMakeAction implements IObjectActionDelegate {
 						public void run(IProgressMonitor monitor) throws CoreException {
 							for(int i=0; i < fContainer.size(); i++) {
 								IProject project = fContainer.get(i).getProject();
-								CMakeMakefileGenerator m = new CMakeMakefileGenerator();
 								IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
+								CMakeProjectBuilder pb = new CMakeProjectBuilder(project, info);
 								CUIPlugin.getDefault().startGlobalConsole();
-								m.initialize(project, info, monitor);
+								// m.initialize(project, info, monitor);
 								try {
-									m.regenerateMakefiles();
+									pb.build(IncrementalProjectBuilder.FULL_BUILD, null, monitor);
 								} catch (CoreException e) {
 									// Try to inform user that CMake failed: Attention wrong thread for Dialogs here!
 								}

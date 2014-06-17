@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/CMakeFeature_1.0.0.beta.jar" id="CMakeFeature" version="1.0.0.beta">
+      <category name="org.eclipse.cdt.cmake4cdt"/>
+   </feature>
+   <category-def name="org.eclipse.cdt.cmake4cdt" label="CMake build support"/>
+</site>

@@ -98,6 +98,7 @@ public class newCMakeProject extends ProcessRunner {
 			}
 			else {
 				CMakeProjectNature.addNature(project, monitor);
+				ManagedBuildManager.saveBuildInfo(project, true);
 				//			throw new ProcessFailureException(Messages.getString("NewAutotoolsProject.5") + projectName); //$NON-NLS-1$
 			}
 		} catch (CoreException e) {

@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -166,9 +168,14 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 
 	}
 
-	@SuppressWarnings("restriction")
 	@Override
 	public MultiStatus regenerateMakefiles() throws CoreException {
+		MultiStatus mstatus = new MultiStatus("org.eclipse.cdt.cmake.builder", 0, "success", null );
+		return mstatus;
+	}
+	
+	@SuppressWarnings("restriction")
+	public MultiStatus runCMake() throws CoreException {
 		MultiStatus mstatus = new MultiStatus("org.eclipse.cdt.cmake.builder", 0, "success", null );
 
 		String currentConf = buildInfo.getConfigurationName();
@@ -285,11 +292,14 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 				throw new CoreException(new Status(IStatus.ERROR, ManagedBuilderCorePlugin.PLUGIN_ID, msg, new Exception()));
 			}
 		} catch (CoreException ce) {
+			logToConsole(cmakeConsole, ce.getStatus());
 			mstatus = new MultiStatus("org.eclipse.cdt.cmake.builder", -1, ce.getStatus().getMessage(), null );
 		} 
 		catch (Exception e) {
 			String msg = "Error running CMake for project: '" + project.getName() +"' in configuration '" + currentConf + "'.";
-			throw new CoreException(new Status(IStatus.ERROR, ManagedBuilderCorePlugin.PLUGIN_ID, msg, e));
+			IStatus status = new Status(IStatus.ERROR, ManagedBuilderCorePlugin.PLUGIN_ID, msg, e);
+			logToConsole(cmakeConsole, status);
+			throw new CoreException(status);
 		} 
 		finally {
 			try {
@@ -303,6 +313,28 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 		return mstatus;
 	}
 	
+	public void logToConsole(IConsole console, IStatus status) {
+		String errmsg = new String();
+		OutputStream cos;
+		try {
+			cos = console.getOutputStream();
+			StringBuffer buf = new StringBuffer(errmsg);
+			buf.append(System.getProperty("line.separator", "\n")); //$NON-NLS-1$ //$NON-NLS-2$
+			buf.append(status.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+
+			try {
+				cos.write(buf.toString().getBytes());
+				cos.flush();
+				cos.close();
+			} catch (IOException e) {
+				ResourcesPlugin.getPlugin().getLog().log(status);
+			}
+
+		} catch (CoreException e1) {
+			e1.printStackTrace();
+		}
+	}
+
  
 	 private String inputStream2String(InputStream is) {
 		 /*
@@ -330,18 +362,5 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 		 }
 		 return sb.toString();
 	 }
-	 
-//	 MultiStatus  reportError(String errorMsg) {
-//		 IConsole cmakeConsole = findConsole("CMake");
-//		 MessageConsoleStream out = cmakeConsole.newMessageStream();
-//
-//		 Color col = out.getColor();
-//		 out.setColor(new Color(Display.getCurrent(), 255, 0, 0));
-//		 out.println("Error: " + errorMsg);
-//		 out.setColor(col);
-//
-//		 MultiStatus status = new MultiStatus("org.eclipse.cdt.cmake", IStatus.ERROR, "CMake failed to generate build files. See CMake console for details.", null);
-//		 return status;
-//	 }
 
 }

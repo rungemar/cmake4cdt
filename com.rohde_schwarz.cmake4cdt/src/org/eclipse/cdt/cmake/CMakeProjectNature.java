@@ -12,6 +12,7 @@ package org.eclipse.cdt.cmake;
 
 import java.util.ArrayList;
 
+import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuilderCorePlugin;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
@@ -20,6 +21,7 @@ import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceDescription;
 import org.eclipse.core.resources.IWorkspaceRunnable;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -109,6 +111,7 @@ public class CMakeProjectNature implements IProjectNature {
 								proj.setDescription(prDescription, new NullProgressMonitor());
 							}
 							restoreAutoBuild(workspace);
+							ManagedBuildManager.saveBuildInfo(proj, true);
 						}
 						
 						protected final void turnOffAutoBuild(IWorkspace workspace) throws CoreException {
@@ -154,13 +157,17 @@ public class CMakeProjectNature implements IProjectNature {
 		// Make sure the CMake builder just precedes the Common Builder
 		for (int i = 0; i < commands.length; i++) {
 			ICommand command = commands[i];
-			if (command.getBuilderName().equals(CMakeProjectBuilder.BUILDER_ID)) {
+			if (command.getBuilderName().equals(CMakeProjectBuilderImpl.BUILDER_ID)) {
 				// ignore it
 			} else {
 				if (command.getBuilderName().equals(BUILDER_ID)) {
 					// add CMake Configuration builder just before builder
 					ICommand newCommand = description.newCommand();
-					newCommand.setBuilderName(CMakeProjectBuilder.BUILDER_ID);
+					newCommand.setBuilderName(CMakeProjectBuilderImpl.BUILDER_ID);
+					newCommand.setBuilding(IncrementalProjectBuilder.AUTO_BUILD, false);
+					newCommand.setBuilding(IncrementalProjectBuilder.CLEAN_BUILD, true);
+					newCommand.setBuilding(IncrementalProjectBuilder.FULL_BUILD, true);
+					newCommand.setBuilding(IncrementalProjectBuilder.INCREMENTAL_BUILD, true);
 					commandList.add(newCommand);
 				}
 				commandList.add(command);

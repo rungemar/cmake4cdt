@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.cdt.cmake.CMakeMakefileGenerator;
-import org.eclipse.cdt.cmake.CMakeProjectBuilder;
+import org.eclipse.cdt.cmake.CMakeProjectBuilderImpl;
 import org.eclipse.cdt.core.model.ICContainer;
 import org.eclipse.cdt.core.model.ICElement;
 import org.eclipse.cdt.core.model.ICProject;
@@ -93,7 +93,7 @@ public class RunCMakeAction implements IObjectActionDelegate {
 							for(int i=0; i < fContainer.size(); i++) {
 								IProject project = fContainer.get(i).getProject();
 								IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
-								CMakeProjectBuilder pb = new CMakeProjectBuilder(project, info);
+								CMakeProjectBuilderImpl pb = new CMakeProjectBuilderImpl(project, info);
 								CUIPlugin.getDefault().startGlobalConsole();
 								// m.initialize(project, info, monitor);
 								try {

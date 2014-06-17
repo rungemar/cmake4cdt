@@ -119,6 +119,7 @@
          </tool>
          <builder
                buildfileGenerator="org.eclipse.cdt.cmake.CMakeMakefileGenerator"
+               commandLauncher="org.eclipse.cdt.cmake.CommandLauncherRC"
                id="org.eclipse.cdt.cmake.builder"
                isAbstract="false"
                isVariableCaseSensitive="false"
@@ -152,20 +153,19 @@
          </run>
       </runtime>
       <builder
-            id="org.eclipse.cdt.cmake.cmakeProjectBuilder">
+            id="org.eclipse.cdt.cmake.CMakeProjectBuilder">
       </builder>
    </extension>
    <extension
-         id="cmakeProjectBuilder"
+         id="CMakeProjectBuilder"
          name="%extension.name.1"
          point="org.eclipse.core.resources.builders">
       <builder
             callOnEmptyDelta="true"
             hasNature="true"
-            isConfigurable="true"
-            supportsConfigurations="true">
+            isConfigurable="true">
          <run
-               class="org.eclipse.cdt.cmake.CMakeProjectBuilder">
+               class="org.eclipse.cdt.cmake.CMakeProjectBuilderImpl">
          </run>
       </builder>
    </extension>

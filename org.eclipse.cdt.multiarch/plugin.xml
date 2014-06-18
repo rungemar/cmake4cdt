@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.eclipse.cdt.multiarch.Preferences"
+            id="org.eclipse.cdt.multiarch.prefpage"
+            name="name">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.main.toolbar">
+         <toolbar
+               id="org.eclipse.cdt.multiarch.toolbar1">
+            <control
+                  class="org.eclipse.cdt.multiarch.ArchComboBox">
+            </control>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.cdt.multiarch.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+
+</plugin>

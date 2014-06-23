@@ -28,6 +28,23 @@
             class="org.eclipse.cdt.multiarch.PreferenceInitializer">
       </initializer>
    </extension>
+   <extension
+         point="org.eclipse.core.variables.valueVariables">
+      <variable
+            description="the currently selected target device to build for"
+            initializerClass="org.eclipse.cdt.multiarch.TargetDeviceInitializer"
+            name="currentTargetDevice"
+            readOnly="false"
+            supportsArgument="true">
+      </variable>
+      <variable
+            description="the currently selcted target architecture"
+            initializerClass="org.eclipse.cdt.multiarch.TargetArchInitializer"
+            name="currentTargetArch"
+            readOnly="false"
+            supportsArgument="true">
+      </variable>
+   </extension>
 
 
 </plugin>

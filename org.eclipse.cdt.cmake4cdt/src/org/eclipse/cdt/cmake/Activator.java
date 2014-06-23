@@ -27,7 +27,7 @@ public class Activator extends AbstractUIPlugin {
 	
 	// The "model". central storage for settings
 	private CMakeSettings m_settings = new CMakeSettings();
-	
+
 	/**
 	 * The constructor
 	 */

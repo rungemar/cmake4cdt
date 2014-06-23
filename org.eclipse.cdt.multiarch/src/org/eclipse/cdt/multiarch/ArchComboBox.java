@@ -31,8 +31,8 @@ public class ArchComboBox extends WorkbenchWindowControlContribution {
 	protected Control createControl(Composite parent) {
 		final Combo combo = new Combo(parent, SWT.NONE | SWT.DROP_DOWN | SWT.READ_ONLY);
 		 
-		String archsString = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_AVAIL_ARCHS);
-		String currentArchsStr = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_CURRENT_ARCH);
+		String archsString = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_AVAIL_TARGET_ARCHS);
+		String currentArchsStr = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_CURRENT_TARGET_ARCH);
 		int currentIndex = 0;
 		
 		String[] items = archsString.split(";");
@@ -50,12 +50,12 @@ public class ArchComboBox extends WorkbenchWindowControlContribution {
 		// inform Settings about changed selection
 		IWidgetValueProperty prop = WidgetProperties.selection();
 		IObservableValue widgetValue = prop.observe(combo);
-		IObservableValue modelValue = BeanProperties.value(Settings.class, "curArch" ).observe(settings);
+		IObservableValue modelValue = BeanProperties.value(Settings.class, PreferenceConstants.P_CURRENT_TARGET_ARCH ).observe(settings);
 		bindingContext.bindValue(widgetValue, modelValue);
 
 		// Change Combo's items if list of available architectures was modified in preference page.
 		IObservableList widgetList = SWTObservables.observeItems(combo);
-		IObservableList modelList = BeansObservables.observeList(settings, "availArchs");
+		IObservableList modelList = BeansObservables.observeList(settings, PreferenceConstants.P_AVAIL_TARGET_ARCHS);
 
 		bindingContext.bindList(modelList, widgetList );
 

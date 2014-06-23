@@ -8,10 +8,10 @@
  * Contributors:
  *     Martin Runge - initial implementation of cmake support
  *******************************************************************************/
-package org.eclipse.cdt.cmake.ui;
+package org.eclipse.cdt.multiarch;
 
-import org.eclipse.cdt.cmake.Activator;
-import org.eclipse.cdt.cmake.ui.PreferenceConstants;
+import org.eclipse.cdt.multiarch.Activator;
+import org.eclipse.cdt.multiarch.PreferenceConstants;
 import org.eclipse.core.variables.IValueVariable;
 import org.eclipse.core.variables.IValueVariableInitializer;
 

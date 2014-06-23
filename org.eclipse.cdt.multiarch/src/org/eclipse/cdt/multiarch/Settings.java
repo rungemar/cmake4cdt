@@ -20,10 +20,10 @@ import org.eclipse.core.variables.VariablesPlugin;
 
 public class Settings implements PropertyChangeListener {
 	
-	private String curArch;
-	private String curTargetDevice;
+	private String currentTargetArch;
+	private String currentTargetDevice;
 
-	private List<String> availArchs; 
+	private List<String> availTargetArchs; 
 	private List<String> availTargetDevices; 
 
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);	
@@ -37,48 +37,48 @@ public class Settings implements PropertyChangeListener {
 		propertyChangeSupport.removePropertyChangeListener(listener);
 	}
 
-	public String getCurArch() {
-		return curArch;
+	public String getCurrentTargetArch() {
+		return currentTargetArch;
 	}
 	
-	public void setCurArch(String curArch) {
-	    propertyChangeSupport.firePropertyChange("curArch", this.curArch, this.curArch = curArch);  
+	public void setCurrentTargetArch(String curArch) {
+	    propertyChangeSupport.firePropertyChange(PreferenceConstants.P_CURRENT_TARGET_ARCH, this.currentTargetArch, this.currentTargetArch = curArch);  
 
-	    Activator.getDefault().getPreferenceStore().setValue(PreferenceConstants.P_CURRENT_ARCH, curArch);
+	    Activator.getDefault().getPreferenceStore().setValue(PreferenceConstants.P_CURRENT_TARGET_ARCH, curArch);
 
 		IStringVariableManager varMgr = VariablesPlugin.getDefault().getStringVariableManager();
-		IValueVariable archVar = varMgr.getValueVariable("BuildIF_Arch");
+		IValueVariable archVar = varMgr.getValueVariable(PreferenceConstants.P_CURRENT_TARGET_ARCH);
 		archVar.setValue(curArch);
 	}
 
-	public String getCurTarget() {
-		return curTargetDevice;
+	public String getCurrentTargetDevice() {
+		return currentTargetDevice;
 	}
 
-	public void setCurTarget(String curTarget) {
-	    propertyChangeSupport.firePropertyChange("curTargetDevice", this.curTargetDevice, this.curTargetDevice = curTarget );
+	public void setCurrentTargetDevice(String curTarget) {
+	    propertyChangeSupport.firePropertyChange(PreferenceConstants.P_CURRENT_TARGET_DEVICE, this.currentTargetDevice, this.currentTargetDevice = curTarget );
 
-	    Activator.getDefault().getPreferenceStore().setValue(PreferenceConstants.P_CURRENT_INSTRUMENT, curTarget);
+	    Activator.getDefault().getPreferenceStore().setValue(PreferenceConstants.P_CURRENT_TARGET_DEVICE, curTarget);
 		
 		IStringVariableManager varMgr = VariablesPlugin.getDefault().getStringVariableManager();
-		IValueVariable archVar = varMgr.getValueVariable("BuildIF_Instrument");
+		IValueVariable archVar = varMgr.getValueVariable(PreferenceConstants.P_CURRENT_TARGET_DEVICE);
 		archVar.setValue(curTarget);
 	}
 	
-	public List<String> getAvailTargets() {
+	public List<String> getAvailTargetsDevices() {
 		return availTargetDevices;
 	}
 
-	public void setAvailTargets(List<String> availTargets) {
-	    propertyChangeSupport.firePropertyChange("availTargetDevices", this.availTargetDevices, this.availTargetDevices = availTargets );
+	public void setAvailTargetDevices(List<String> availTargets) {
+	    propertyChangeSupport.firePropertyChange(PreferenceConstants.P_AVAIL_TARGET_DEVICES, this.availTargetDevices, this.availTargetDevices = availTargets );
 	}
 	
-	public List<String> getAvailArchs() {
-		return availArchs;
+	public List<String> getAvailTargetArchs() {
+		return availTargetArchs;
 	}
 
-	public void setAvailArchs(List<String> availArchs) {
-	    propertyChangeSupport.firePropertyChange("availArchs", this.availArchs, this.availArchs = availArchs );
+	public void setAvailTargetArchs(List<String> availArchs) {
+	    propertyChangeSupport.firePropertyChange(PreferenceConstants.P_AVAIL_TARGET_ARCHS, this.availTargetArchs, this.availTargetArchs = availArchs );
 	}
 
 

@@ -27,7 +27,6 @@ public class Preferences extends PreferencePage implements
 	@Override
 	public void init(IWorkbench workbench) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -35,5 +34,4 @@ public class Preferences extends PreferencePage implements
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

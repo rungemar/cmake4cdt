@@ -53,6 +53,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -109,14 +110,14 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 			
 			// evil hack: ConfigName should be available as Variable
 			if(configNameVar == null) {
-				 IValueVariable cnVar = varMgr.newValueVariable("ConfigName", "Dummy variable to have a variable that holds the current configururation for use in build working dir."); //$NON-NLS-1$ //$NON-NLS-2$
+				IValueVariable cnVar = varMgr.newValueVariable("ConfigName", "Dummy variable to have a variable that holds the current configururation for use in build working dir."); //$NON-NLS-1$ //$NON-NLS-2$
 			    try {
 					varMgr.addVariables( new IValueVariable[]{cnVar} );
 				} catch (CoreException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
+			}      
 			
 			configNameVar = varMgr.getValueVariable("ConfigName"); //$NON-NLS-1$
 			configNameVar.setValue( buildInfo.getConfigurationName() );
@@ -177,10 +178,12 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 	@SuppressWarnings("restriction")
 	public MultiStatus runCMake() throws CoreException {
 		MultiStatus mstatus = new MultiStatus("org.eclipse.cdt.cmake.builder", 0, "success", null );
-
+		
 		String currentConf = buildInfo.getConfigurationName();
-		String currentArch = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_CURRENT_TARGET_ARCH);
-		String currentInstrument = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_CURRENT_TARGET_DEVICE);
+		String currentArch =  Platform.getPreferencesService().getString("org.eclipse.cdt.multiarch", PreferenceConstants.P_CURRENT_TARGET_ARCH, "native", null); 
+		//String currentArch = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_CURRENT_TARGET_ARCH);
+		String currentInstrument = Platform.getPreferencesService().getString("org.eclipse.cdt.multiarch", PreferenceConstants.P_CURRENT_TARGET_DEVICE, "host", null);
+		// String currentInstrument = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_CURRENT_TARGET_DEVICE);
 
 		IConsole cmakeConsole = CCorePlugin.getDefault().getConsole("org.eclipse.cdt.cmake.ui.CMakeConsole"); //$NON-NLS-1$
 		cmakeConsole.start(project);

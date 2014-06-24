@@ -19,6 +19,9 @@
             <control
                   class="org.eclipse.cdt.multiarch.ArchComboBox">
             </control>
+            <control
+                  class="org.eclipse.cdt.multiarch.DeviceComboBox">
+            </control>
          </toolbar>
       </menuContribution>
    </extension>

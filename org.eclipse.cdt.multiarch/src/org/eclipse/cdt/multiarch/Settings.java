@@ -65,7 +65,7 @@ public class Settings implements PropertyChangeListener {
 		archVar.setValue(curTarget);
 	}
 	
-	public List<String> getAvailTargetsDevices() {
+	public List<String> getAvailTargetDevices() {
 		return availTargetDevices;
 	}
 

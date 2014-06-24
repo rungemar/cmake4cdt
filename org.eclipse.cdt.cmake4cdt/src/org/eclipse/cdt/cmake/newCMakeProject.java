@@ -51,8 +51,8 @@ public class newCMakeProject extends ProcessRunner {
 
 		String projectName = args[0].getSimpleValue();
 		String location = args[1].getSimpleValue();
-		String artifactExtension = args[2].getSimpleValue();
-		String isCProjectValue = args[3].getSimpleValue();
+//		String artifactExtension = args[2].getSimpleValue();
+		String isCProjectValue = args[2].getSimpleValue();
 		boolean isCProject = Boolean.valueOf(isCProjectValue).booleanValue();
 				
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
@@ -75,8 +75,8 @@ public class newCMakeProject extends ProcessRunner {
 				pca.setProject(project);
 				pca.setProjectLocation(locationPath);
 				pca.setConfigs((IConfiguration[]) configs.toArray(new IConfiguration[configs.size()]));
-				pca.setArtifactExtension(artifactExtension);
-				info = pca.createProject(monitor, CCorePlugin.DEFAULT_INDEXER, isCProject);
+				//pca.setArtifactExtension(artifactExtension);
+				info = pca.createProject(monitor, CCorePlugin.DEFAULT_INDEXER, true);
 
 				CMakeProjectNature.addNature(project, monitor);
 				

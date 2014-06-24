@@ -175,7 +175,7 @@
             name="newCMakeProject"
             processRunner="org.eclipse.cdt.cmake.newCMakeProject">
          <simple
-               name="name">
+               name="projectName">
          </simple>
          <simple
                external="true"
@@ -183,11 +183,9 @@
                nullable="true">
          </simple>
          <simple
-               name="artifactExtension">
-         </simple>
-         <simple
                external="true"
-               name="isCProject">
+               name="isCProject"
+               nullable="true">
          </simple>
       </processType>
    </extension>
@@ -197,6 +195,11 @@
       <template
             id="org.eclipse.cdt.cmake.templates.EmptyProject"
             location="templates/EmptyProject/template.xml"
+            projectType="org.eclipse.cdt.cmake.buildArtefactType.cmake">
+      </template>
+      <template
+            id="org.eclipse.cdt.cmake.templates.ConsoleHelloWorld"
+            location="templates/ConsoleHelloWorld/template.xml"
             projectType="org.eclipse.cdt.cmake.buildArtefactType.cmake">
       </template>
    </extension>

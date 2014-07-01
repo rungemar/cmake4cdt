@@ -27,9 +27,21 @@ public class CMakeOutputPath {
 
 		IStringVariableManager varMgr = VariablesPlugin.getDefault().getStringVariableManager();
 
-		// make sure, that current project location is stored in ${BuildIF_ProjectPath}
+		// evil hack: CMake_ProjectPath is just a replacement for ${project_loc}, because ${project_loc} does not seem to be updated 
+		// when selecting multiple projects in project explorer and running CMake or building for all of them. 
+		// make sure, that current project location is stored in ${CMake_ProjectPath}
 		IPath projDir = project.getLocation();
 		IValueVariable cmakeProjectDirVar = varMgr.getValueVariable("CMake_ProjectPath"); //$NON-NLS-1$
+		if(cmakeProjectDirVar == null) {
+			IValueVariable cnVar = varMgr.newValueVariable("CMake_ProjectPath", "Dummy variable to have a variable that holds the current project's name."); //$NON-NLS-1$
+			try {
+				varMgr.addVariables( new IValueVariable[]{cnVar} );
+				cmakeProjectDirVar = varMgr.getValueVariable("CMake_ProjectPath"); //$NON-NLS-1$
+			} catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}      
 		cmakeProjectDirVar.setValue(projDir.toString());
 
 		String buildDirSetting = ""; //$NON-NLS-1$
@@ -43,13 +55,12 @@ public class CMakeOutputPath {
 				IValueVariable cnVar = varMgr.newValueVariable("ConfigName", "Dummy variable to have a variable that holds the current configururation for use in build working dir."); //$NON-NLS-1$ //$NON-NLS-2$
 				try {
 					varMgr.addVariables( new IValueVariable[]{cnVar} );
+					configNameVar = varMgr.getValueVariable("ConfigName"); //$NON-NLS-1$
 				} catch (CoreException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}      
-
-			configNameVar = varMgr.getValueVariable("ConfigName"); //$NON-NLS-1$
 			configNameVar.setValue( configName );
 
 			try {

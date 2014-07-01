@@ -218,20 +218,6 @@
    <extension
          point="org.eclipse.core.variables.valueVariables">
       <variable
-            description="%variable.description"
-            initializerClass="org.eclipse.cdt.cmake.ui.TargetArchInitializer"
-            name="CMake_TargetArch"
-            readOnly="false"
-            supportsArgument="true">
-      </variable>
-      <variable
-            description="%variable.description.0"
-            initializerClass="org.eclipse.cdt.cmake.ui.TargetDeviceInitializer"
-            name="CMake_TargetDevice"
-            readOnly="false"
-            supportsArgument="true">
-      </variable>
-      <variable
             description="%variable.description.1"
             initializerClass="org.eclipse.cdt.cmake.ui.DestdirInitializer"
             name="CMake_DESTDIR"

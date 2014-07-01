@@ -27,6 +27,10 @@ public class ArchToolchainPairList extends ArrayList<ArchToolchainPair> {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	public ArchToolchainPairList() {
+		Activator.getDefault().getPreferenceStore().setDefault(PreferenceConstants.P_TOOLCHAIN_FILES, "native;<none>;");
+	}
 
 	public void doLoad( boolean loadDefault ) {
 		String archsAndToolchains;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipse.cdt.cmake4cdt.feature"
+      id="org.eclipse.cdt.cmake.feature"
       label="CMake build support"
-      version="1.0.0.beta"
+      version="0.1.0.beta"
       provider-name="Rohde&amp;Schwarz">
 
    <description url="http://www.example.com/description">
@@ -33,20 +33,26 @@
       <import plugin="org.eclipse.debug.ui"/>
       <import plugin="org.eclipse.jface.databinding"/>
       <import plugin="org.eclipse.ui.console"/>
+      <import plugin="org.json"/>
+      <import plugin="org.eclipse.cdt.multiarch" version="0.1.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
          id="org.eclipse.cdt.cmake"
-         os="aix,hpux,linux,macosx,qnx,solaris"
-         ws="carbon,cocoa,gtk,motif,photon,win32,wpf"
-         arch="x86,x86_64"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.json.copyof"
+         id="org.eclipse.cdt.multiarch"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.cdt.cmake.docs"
          download-size="0"
          install-size="0"
          version="0.0.0"/>

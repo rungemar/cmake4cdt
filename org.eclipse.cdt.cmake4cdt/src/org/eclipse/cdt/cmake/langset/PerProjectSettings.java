@@ -50,7 +50,7 @@ public class PerProjectSettings {
 			configSettings = m_perConfigSettings.get(cfgDescription.getName());
 			if(configSettings == null) {
 				configSettings = new PerConfigSettings( m_project, cfgDescription );
-				m_perConfigSettings.put(projName, configSettings);
+				m_perConfigSettings.put(cfgDescription.getName(), configSettings);
 			}
 			return configSettings.getSettingEntries(cfgDescription, rc, languageId);
 			

@@ -68,15 +68,12 @@ public class RunCMakeAction implements IObjectActionDelegate {
 		shell = targetPart.getSite().getShell();
 	}
 
+	
 	/**
 	 * @see IActionDelegate#run(IAction)
 	 */
 	public void run(IAction action) {
 		
-		//IContainer container = getSelectedContainer();
-		//if (container == null)
-        //    return;
-
 		// We need to use a workspace root scheduling rule because adding MakeTargets
 		// may end up saving the project description which runs under a workspace root rule.
 		final ISchedulingRule rule = ResourcesPlugin.getWorkspace().getRoot();
@@ -92,12 +89,9 @@ public class RunCMakeAction implements IObjectActionDelegate {
 						public void run(IProgressMonitor monitor) throws CoreException {
 							for(int i=0; i < fContainer.size(); i++) {
 								IProject project = fContainer.get(i).getProject();
-								IManagedBuildInfo info = ManagedBuildManager.getBuildInfo(project);
-								CMakeProjectBuilderImpl pb = new CMakeProjectBuilderImpl(project, info);
 								CUIPlugin.getDefault().startGlobalConsole();
-								// m.initialize(project, info, monitor);
 								try {
-									pb.build(IncrementalProjectBuilder.FULL_BUILD, null, monitor);
+									project.build(IncrementalProjectBuilder.INCREMENTAL_BUILD, CMakeProjectBuilderImpl.BUILDER_ID, null, null);
 								} catch (CoreException e) {
 									// Try to inform user that CMake failed: Attention wrong thread for Dialogs here!
 								}

@@ -54,6 +54,9 @@ public class CMakeLangSetProvider extends LanguageSettingsBaseProvider
 	public List<ICLanguageSettingEntry> getSettingEntries(ICConfigurationDescription cfgDescription, IResource rc, String languageId) {
 		
 		PerProjectSettings projSettings = null;
+		if(cfgDescription == null || rc == null) {
+			return null;
+		}
 		
 		IProject project = rc.getProject();
 		IProjectDescription prjDesc;
@@ -66,7 +69,8 @@ public class CMakeLangSetProvider extends LanguageSettingsBaseProvider
 				projSettings = new PerProjectSettings(project, cfgDescription);
 				m_perProjSettings.put(projName, projSettings);
 			}
-			return projSettings.getSettingEntries(cfgDescription, rc, languageId);
+			List<ICLanguageSettingEntry> entries = projSettings.getSettingEntries(cfgDescription, rc, languageId); 
+			return entries;
 			
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block

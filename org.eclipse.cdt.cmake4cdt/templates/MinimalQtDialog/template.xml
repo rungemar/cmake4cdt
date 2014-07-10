@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<template type="org.eclipse.cdt.cmake.templates.MinimalQtDialog" 
+          version="1.0" 
+          supplier="Rohde-Schwarz.com" 
+          revision="1.0" 
+          author="Martin Runge"
+		  copyright="Copyright (c) 2011 Rohde &amp; Schwarz GmbH. All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html"
+		  id="MinimalQtDialog" 
+		  label="%MinimalQtDialog.template.label" 
+		  description="%MinimalQtDialog.template.description"
+		  help="help.html">
+    <process type="org.eclipse.cdt.cmake.newCMakeProject">
+        <simple name="projectName" value="$(projectName)"/>
+    </process>
+    <process type="org.eclipse.cdt.core.AddFiles">
+        <simple name="projectName" value="$(projectName)"/>
+        <complex-array name="files">
+            <element>
+                <simple name="source" value="CMakeLists.txt"/>
+                <simple name="target" value="CMakeLists.txt"/>
+                <simple name="replaceable" value="true"/>
+            </element>
+            <element>
+                <simple name="source" value="main.cpp"/>
+                <simple name="target" value="main.cpp"/>
+                <simple name="replaceable" value="true"/>
+            </element>
+            <element>
+                <simple name="source" value="Dialog.h"/>
+                <simple name="target" value="Dialog.h"/>
+                <simple name="replaceable" value="true"/>
+            </element>
+            <element>
+                <simple name="source" value="Dialog.cpp"/>
+                <simple name="target" value="Dialog.cpp"/>
+                <simple name="replaceable" value="true"/>
+            </element>
+        </complex-array>
+    </process>
+</template>
+

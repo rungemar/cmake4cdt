@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.cdt.cmake.feature"
       label="CMake build support"
-      version="0.1.0.beta"
+      version="0.1.1.beta"
       provider-name="Rohde&amp;Schwarz">
 
    <description url="http://www.example.com/description">
@@ -34,7 +34,6 @@
       <import plugin="org.eclipse.jface.databinding"/>
       <import plugin="org.eclipse.ui.console"/>
       <import plugin="org.json"/>
-      <import plugin="org.eclipse.cdt.multiarch" version="0.1.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

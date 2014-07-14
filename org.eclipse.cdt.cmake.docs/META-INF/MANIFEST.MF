@@ -2,5 +2,5 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Docs
 Bundle-SymbolicName: org.eclipse.cdt.cmake.docs;singleton:=true
-Bundle-Version: 0.1.0.beta
+Bundle-Version: 0.1.1.beta
 Bundle-Vendor: Rohde&Schwarz

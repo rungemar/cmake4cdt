@@ -57,26 +57,6 @@
             name="%targetPlatform.name"
             osList="all">
       </targetPlatform>
-      <tool
-            advancedInputCategory="false"
-            command="cmake"
-            id="org.eclipse.cdt.cmake.cmake"
-            isAbstract="false"
-            name="%Tool.cmake"
-            natureFilter="both">
-         <option
-               id="org.eclipse.cdt.cmake.CMAKE_BUILD_TYPE"
-               isAbstract="false"
-               name="%option.name"
-               resourceFilter="project"
-               valueType="string">
-         </option>
-         <inputType
-               id="org.eclipse.cdt.cmake.CMakeLists.txt"
-               sourceContentType="org.eclipse.cdt.cmake.cmakelistfile"
-               sources="CMakeLists.txt">
-         </inputType>
-      </tool>
       <projectType
             buildArtefactType="org.eclipse.cdt.cmake.buildArtefactType.cmake"
             id="org.eclipse.cdt.cmake.CMakeProject"
@@ -109,16 +89,42 @@
             isAbstract="false"
             languageSettingsProviders="org.eclipse.cdt.cmake.lang_set">
          <tool
-               id="org.eclipse.cdt.cmake.gpp"
+               advancedInputCategory="false"
+               command="cmake"
+               id="org.eclipse.cdt.cmake.cmake"
                isAbstract="false"
-               name="%tool.name"
-               superClass="cdt.managedbuild.tool.gnu.cpp.compiler">
-         </tool>
-         <tool
-               id="org.eclipse.cdt.cmake.gcc"
-               isAbstract="false"
-               name="%tool.name.0"
-               superClass="cdt.managedbuild.tool.gnu.c.compiler">
+               name="%Tool.cmake"
+               natureFilter="both">
+            <option
+                  id="org.eclipse.cdt.cmake.CMAKE_BUILD_TYPE"
+                  isAbstract="false"
+                  name="%option.name"
+                  resourceFilter="project"
+                  valueType="string">
+            </option>
+            <inputType
+                  id="org.eclipse.cdt.cmake.inputType.CMakeListsTxt"
+                  multipleOfType="false"
+                  sourceContentType="org.eclipse.cdt.cmake.CMakeContentType">
+            </inputType>
+            <optionCategory
+                  id="org.eclipse.cdt.cmake.debugOptions"
+                  name="Debug CMakeList.txt">
+               <enablement
+                     type="ALL">
+               </enablement>
+            </optionCategory>
+            <option
+                  category="org.eclipse.cdt.cmake.debugOptions"
+                  id="org.eclipse.cdt.cmake.option.trace"
+                  isAbstract="false"
+                  name="trace"
+                  resourceFilter="all"
+                  valueType="boolean">
+            </option>
+            <inputType
+                  id="org.eclipse.cdt.cmake.inputType2">
+            </inputType>
          </tool>
          <builder
                buildfileGenerator="org.eclipse.cdt.cmake.CMakeMakefileGenerator"

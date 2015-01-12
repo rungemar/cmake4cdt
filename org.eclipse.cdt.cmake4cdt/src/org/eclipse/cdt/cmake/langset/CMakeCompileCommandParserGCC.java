@@ -23,5 +23,9 @@ public class CMakeCompileCommandParserGCC extends GCCBuildCommandParser implemen
 		return new CompileUnitInfo(parsedResourceName, currentResource);
 	}
 	
+	public void shutdown() {
+		super.shutdown();
+	}
+	
 		
 }

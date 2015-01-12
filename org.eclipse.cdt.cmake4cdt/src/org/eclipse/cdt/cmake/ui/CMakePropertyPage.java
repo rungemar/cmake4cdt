@@ -126,14 +126,21 @@ public class CMakePropertyPage extends PropertyPage implements
 	}
 	
 	private boolean getIsWorkspaceSpecific() {
-		IResource resource = (IResource) getElement();
-		IProject activeProject = resource.getProject();
-		IEclipsePreferences projectProperties = new ProjectScope(activeProject).getNode("com.rohde_schwarz.buildif.scope");
-		boolean value = false;
-		if (projectProperties != null) {
-			value = projectProperties.getBoolean(CMakePropertyConstants.P_USE_WORKSPACE_BUILDDIR_SETTINGS, false);
+		Object input = getElement();
+		IResource resource = null;
+		if (input instanceof IResource) {
+		    resource = (IResource) getElement();
+			IProject activeProject = resource.getProject();
+			IEclipsePreferences projectProperties = new ProjectScope(activeProject).getNode("com.rohde_schwarz.buildif.scope");
+			boolean value = false;
+			if (projectProperties != null) {
+				value = projectProperties.getBoolean(CMakePropertyConstants.P_USE_WORKSPACE_BUILDDIR_SETTINGS, false);
+			}
+			return value;
 		}
-		return value;
+		else {
+			return false;
+		}
 	}
 
 	private void setIsWorkspaceSpecific(boolean isSpecific) {
@@ -145,25 +152,39 @@ public class CMakePropertyPage extends PropertyPage implements
 	}
 
 	protected boolean getIsInstrumentSpecific() {
-		IResource resource = (IResource) getElement();
-		IProject activeProject = resource.getProject();
-		IEclipsePreferences projectProperties = new ProjectScope(activeProject).getNode("com.rohde_schwarz.buildif.scope");
-		boolean value = false;
-		if (projectProperties != null) {
-			value = projectProperties.getBoolean(CMakePropertyConstants.P_IS_DEVICE_SPECIFIC, false);
+		Object input = getElement();
+		IResource resource = null;
+		if (input instanceof IResource) {
+            resource = (IResource)input;
+            IProject activeProject = resource.getProject();
+            IEclipsePreferences projectProperties = new ProjectScope(activeProject).getNode("com.rohde_schwarz.buildif.scope");
+            boolean value = false;
+			if (projectProperties != null) {
+				value = projectProperties.getBoolean(CMakePropertyConstants.P_IS_DEVICE_SPECIFIC, false);
+			}
+			return value;
 		}
-		return value;
+		else {
+			return false;
+		}
 	}
 	
 	protected String getProjectSpecificBuildDir() {
-		IResource resource = (IResource) getElement();
-		IProject activeProject = resource.getProject();
-		IEclipsePreferences projectProperties = new ProjectScope(activeProject).getNode("com.rohde_schwarz.buildif.scope");
-		String buildDirStr = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_BUILDDIR);
-		if (projectProperties != null) {
-			buildDirStr = projectProperties.get(CMakePropertyConstants.P_BUILD_PATH, buildDirStr);
+		Object input = getElement();
+		IResource resource = null;
+		if (input instanceof IResource) {
+		    resource = (IResource) getElement();
+			IProject activeProject = resource.getProject();
+			IEclipsePreferences projectProperties = new ProjectScope(activeProject).getNode("com.rohde_schwarz.buildif.scope");
+			String buildDirStr = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_BUILDDIR);
+			if (projectProperties != null) {
+				buildDirStr = projectProperties.get(CMakePropertyConstants.P_BUILD_PATH, buildDirStr);
+			}
+			return buildDirStr;
 		}
-		return buildDirStr;
+		else {
+			return new String();
+		}
 	}
 	
 	public String browsePressed() {
@@ -228,24 +249,27 @@ public class CMakePropertyPage extends PropertyPage implements
 
 	
 	public void performApply() {
-		IResource resource = (IResource) getElement();
-		IProject activeProject = resource.getProject();
-		IEclipsePreferences projectProperties = new ProjectScope(activeProject).getNode("com.rohde_schwarz.buildif.scope");
+		Object input = getElement();
+		IResource resource = null;
+		if (input instanceof IResource) {
+		    resource = (IResource) getElement();
+    		IProject activeProject = resource.getProject();
+	    	IEclipsePreferences projectProperties = new ProjectScope(activeProject).getNode("com.rohde_schwarz.buildif.scope");
 
-		if (projectProperties != null) {
-			try {
-				projectProperties.putBoolean(CMakePropertyConstants.P_IS_DEVICE_SPECIFIC, deviceSpecificBtn.getSelection());
-				projectProperties.putBoolean(CMakePropertyConstants.P_USE_WORKSPACE_BUILDDIR_SETTINGS, useWorkspaceSettings.getSelection());
-				if(!getIsWorkspaceSpecific()) {
-					// build dir is project specific
-					projectProperties.put(CMakePropertyConstants.P_BUILD_PATH, buildDirTextField.getText());
+			if (projectProperties != null) {
+				try {
+					projectProperties.putBoolean(CMakePropertyConstants.P_IS_DEVICE_SPECIFIC, deviceSpecificBtn.getSelection());
+					projectProperties.putBoolean(CMakePropertyConstants.P_USE_WORKSPACE_BUILDDIR_SETTINGS, useWorkspaceSettings.getSelection());
+					if(!getIsWorkspaceSpecific()) {
+						// build dir is project specific
+						projectProperties.put(CMakePropertyConstants.P_BUILD_PATH, buildDirTextField.getText());
+					}
+					projectProperties.flush();
 				}
-				projectProperties.flush();
-			}
-			catch(BackingStoreException beex) {
+				catch(BackingStoreException beex) {
+				}
 			}
 		}
-	
 	}
 
 	public void performDefaults() {

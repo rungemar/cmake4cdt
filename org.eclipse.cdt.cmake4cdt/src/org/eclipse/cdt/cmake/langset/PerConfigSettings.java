@@ -93,9 +93,11 @@ public class PerConfigSettings {
 		 */
 		@Override
 		public IStatus runInWorkspace(IProgressMonitor monitor)	throws CoreException {
-			IFolder fsFolder = m_project.getFolder(new Path("ForeignSources"));
-			fsFolder.create(IResource.VIRTUAL, true, null);
 			try {
+				IFolder fsFolder = m_project.getFolder(new Path("ForeignSources"));
+				if(!fsFolder.exists()) {
+					fsFolder.create(IResource.VIRTUAL, true, null);
+				}
 				for(CompileUnitInfo cuInfo: cuInfoList) {
 					File fsFileName = new File(cuInfo.getParsedResourceName());
 					IFile fsFile = fsFolder.getFile(fsFileName.getName());

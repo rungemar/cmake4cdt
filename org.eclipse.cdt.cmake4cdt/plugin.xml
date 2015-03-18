@@ -21,12 +21,12 @@
                enablesFor="1"
                id="cmake.runCMakeAction">
          </action>
-         <visibility>
+<!--         <visibility>
             <objectState
                   name="projectNature"
                   value="org.eclipse.cdt.cmake.cmakeNature">
             </objectState>
-         </visibility>
+         </visibility> -->
       </objectContribution>
    </extension>
    <extension
@@ -68,6 +68,7 @@
                languageSettingsProviders="org.eclipse.cdt.cmake.lang_set"
                name="%configuration.name">
             <toolChain
+                  archList="all"
                   id="org.eclipse.cdt.cmake.toolChain.debug"
                   isAbstract="false"
                   languageSettingsProviders="org.eclipse.cdt.cmake.lang_set"
@@ -94,7 +95,8 @@
                id="org.eclipse.cdt.cmake.cmake"
                isAbstract="false"
                name="%Tool.cmake"
-               natureFilter="both">
+               natureFilter="both"
+               supportsManagedBuild="true">
             <option
                   id="org.eclipse.cdt.cmake.CMAKE_BUILD_TYPE"
                   isAbstract="false"
@@ -145,15 +147,19 @@
             </property>
          </supportedProperties>
          <tool
-               id="org.eclipse.cdt.cmake.c.compiler"
+               command="&lt;specify in CMake toolchain file&gt;"
+               id="org.eclipse.cdt.cmake.compiler.c++"
                isAbstract="false"
-               superClass="cdt.managedbuild.tool.gnu.c.compiler"
-               supportsManagedBuild="false">
-         </tool>
-         <tool
-               id="org.eclipse.cdt.cmake.c++.compiler"
-               isAbstract="false"
-               superClass="cdt.managedbuild.tool.gnu.cpp.compiler">
+               name="C/C++ Compiler handled by CMake"
+               natureFilter="both">
+            <inputType
+                  id="org.eclipse.cdt.cmake.inputType.cpp"
+                  sources="C, cpp, c++, h, hpp, h++">
+            </inputType>
+            <inputType
+                  id="org.eclipse.cdt.cmake.inputType.c"
+                  sources="c, h">
+            </inputType>
          </tool>
       </toolChain>
    </extension>

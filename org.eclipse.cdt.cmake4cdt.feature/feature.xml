@@ -230,7 +230,6 @@ any resulting litigation.
       <import plugin="org.eclipse.debug.ui"/>
       <import plugin="org.eclipse.jface.databinding"/>
       <import plugin="org.eclipse.ui.console"/>
-      <import plugin="org.json"/>
    </requires>
 
    <plugin

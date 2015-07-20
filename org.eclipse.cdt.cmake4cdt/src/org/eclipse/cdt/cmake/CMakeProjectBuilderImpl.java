@@ -10,52 +10,26 @@
  *******************************************************************************/
 package org.eclipse.cdt.cmake;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-import org.eclipse.cdt.cmake.ui.CMakePropertyConstants;
-import org.eclipse.cdt.cmake.ui.PreferenceConstants;
 import org.eclipse.cdt.core.CCorePlugin;
-import org.eclipse.cdt.core.ErrorParserManager;
-import org.eclipse.cdt.core.ICommandLauncher;
-import org.eclipse.cdt.core.IConsoleParser;
-import org.eclipse.cdt.core.envvar.IContributedEnvironment;
-import org.eclipse.cdt.core.envvar.IEnvironmentVariable;
-import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.resources.ACBuilder;
 import org.eclipse.cdt.core.resources.IConsole;
-import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
-import org.eclipse.cdt.internal.core.BuildRunnerHelper;
 import org.eclipse.cdt.managedbuilder.core.IBuilder;
 import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
-import org.eclipse.cdt.managedbuilder.core.ManagedBuilderCorePlugin;
-import org.eclipse.core.resources.IBuildConfiguration;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
-import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.variables.IDynamicVariable;
-import org.eclipse.core.variables.IStringVariableManager;
-import org.eclipse.core.variables.IValueVariable;
-import org.eclipse.core.variables.VariablesPlugin;
 
 public class CMakeProjectBuilderImpl extends ACBuilder {
 

@@ -14,14 +14,6 @@ package org.eclipse.cdt.cmake;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.List;
-
-import org.eclipse.core.variables.IStringVariableManager;
-import org.eclipse.core.variables.IValueVariable;
-import org.eclipse.core.variables.VariablesPlugin;
-
-import org.eclipse.cdt.cmake.Activator;
-import org.eclipse.cdt.cmake.ui.PreferenceConstants;
 
 public class CMakeSettings implements PropertyChangeListener {
 

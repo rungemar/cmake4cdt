@@ -13,9 +13,6 @@ package org.eclipse.cdt.cmake.ui;
 import org.eclipse.cdt.cmake.Activator;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.core.variables.IStringVariable;
-import org.eclipse.core.variables.IStringVariableManager;
-import org.eclipse.core.variables.VariablesPlugin;
 /**
  * Class used to initialize default preference values.
  */

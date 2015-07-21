@@ -11,16 +11,8 @@
 package org.eclipse.cdt.cmake.ui;
 
 import org.eclipse.cdt.cmake.Activator;
-import org.eclipse.cdt.cmake.ui.AvailArchsEditor;
-import org.eclipse.cdt.cmake.ui.DestdirFieldEditor;
-import org.eclipse.cdt.cmake.ui.PreferenceConstants;
-import org.eclipse.cdt.cmake.ui.TargetDevicesEditor;
-import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 

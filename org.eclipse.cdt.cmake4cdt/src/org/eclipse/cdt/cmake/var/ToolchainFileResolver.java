@@ -1,17 +1,13 @@
 package org.eclipse.cdt.cmake.var;
 
 
-import java.util.ArrayList;
-
+import org.eclipse.cdt.cmake.Activator;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.variables.IDynamicVariable;
 import org.eclipse.core.variables.IDynamicVariableResolver;
 import org.eclipse.core.variables.IStringVariableManager;
-import org.eclipse.core.variables.VariablesPlugin;
-import org.eclipse.cdt.cmake.Activator;
-import org.eclipse.cdt.cmake.ui.PreferenceConstants; 
+import org.eclipse.core.variables.VariablesPlugin; 
 
 public class ToolchainFileResolver implements IDynamicVariableResolver {
 

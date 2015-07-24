@@ -32,7 +32,10 @@ import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.resources.IConsole;
 import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
 import org.eclipse.cdt.internal.core.BuildRunnerHelper;
+import org.eclipse.cdt.managedbuilder.core.IConfiguration;
 import org.eclipse.cdt.managedbuilder.core.IManagedBuildInfo;
+import org.eclipse.cdt.managedbuilder.core.ITool;
+import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuilderCorePlugin;
 import org.eclipse.cdt.managedbuilder.makegen.IManagedBuilderMakefileGenerator;
 import org.eclipse.core.resources.IProject;
@@ -65,7 +68,8 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 	IProject project;
 	IProgressMonitor monitor;
 	
-	public final String CMAKE_EXE = "cmake";
+	String CMAKE_TOOL;
+	static final String CMAKE_TOOL_ID = "org.eclipse.cdt.cmake.cmake";
 
 	@Override
 	public void generateDependencies() throws CoreException {
@@ -84,6 +88,7 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 	@Override
 	public IPath getBuildWorkingDir() {
 		return CMakeOutputPath.getPath(project, buildInfo.getConfigurationName());
+		// return new Path(buildInfo.getConfigurationName());
 	}
 
 	@Override
@@ -120,6 +125,9 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 	@SuppressWarnings("restriction")
 	public MultiStatus runCMake() throws CoreException {
 		MultiStatus mstatus = new MultiStatus("org.eclipse.cdt.cmake.builder", 0, "success", null );
+		
+//		IConfiguration = buildInfo.getDefaultConfiguration()
+//		currentCon getToolById
 		
 		String currentConf = buildInfo.getConfigurationName();
 		String currentArch =  Platform.getPreferencesService().getString("org.eclipse.cdt.multiarch", PreferenceConstants.P_CURRENT_TARGET_ARCH, "native", null); 
@@ -166,18 +174,27 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 			destDirStr = varMgr.performStringSubstitution(destDirStr);
 			destdirVar.setValue( destDirStr );
 
-			// buildDir = varMgr.performStringSubstitution(buildDir);
-			String currentToolchainFile;
-			IDynamicVariable toolchainFileVar = varMgr.getDynamicVariable("org.eclipse.cdt.cmake.var.toolchainFile"); //$NON-NLS-1$
-
-			currentToolchainFile = toolchainFileVar.getValue(currentArch);
-
+			ICConfigurationDescription cfgDesc = CoreModel.getDefault().getProjectDescription(project).getConfigurationByName(currentConf);
+			IConfiguration cfg = ManagedBuildManager.getConfigurationForDescription(cfgDesc);
+			ITool[] cmakeTools = cfg.getToolsBySuperClassId(CMAKE_TOOL_ID);
+			ITool cmakeTool = null;
+			if(cmakeTools.length > 0) {
+				cmakeTool = cmakeTools[0];
+			}
+			
 			List<String> cmakeArgs = new ArrayList<String>();
 			
-			cmakeArgs.add("-DCMAKE_BUILD_TYPE=" + currentConf);
-			if(!currentToolchainFile.equals("<none>")) {
-				cmakeArgs.add("-DCMAKE_TOOLCHAIN_FILE=" + currentToolchainFile);
+			String[] flags = cmakeTool.getToolCommandFlags(null, null);
+			
+			for(int i = 0; i < flags.length; i++) {
+				cmakeArgs.add(flags[i]);
 			}
+			
+			
+//			cmakeArgs.add("-DCMAKE_BUILD_TYPE=" + currentConf);
+//			if(!currentToolchainFile.equals("<none>")) {
+//				cmakeArgs.add("-DCMAKE_TOOLCHAIN_FILE=" + currentToolchainFile);
+//			}
 			cmakeArgs.add("-DCMAKE_EXPORT_COMPILE_COMMANDS=On");
 			cmakeArgs.add( project.getLocation().toString() );
 			
@@ -188,8 +205,8 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 			
 
 			IContributedEnvironment ice = CCorePlugin.getDefault().getBuildEnvironmentManager().getContributedEnvironment();
-			ICConfigurationDescription cfgDesc = CoreModel.getDefault().getProjectDescription(project).getConfigurationByName(currentConf);
 			IEnvironmentVariable[] envvars = ice.getVariables( cfgDesc );
+			
 			
 			String[] envp = new String[envvars.length];
 			for(int i = 0; i < envvars.length; i++ ) {
@@ -211,7 +228,7 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 			
 			URI workingDirectoryURI = new URI("file://" + buildDir); //$NON-NLS-1$
 			
-			IPath cmakePath = new Path(CMAKE_EXE);
+			IPath cmakePath = new Path( cmakeTool.getToolCommand() );
 			
 			String[] a = new String[cmakeArgs.size()];
 			buildRunnerHelper.setLaunchParameters(launcher, cmakePath, cmakeArgs.toArray(a), workingDirectoryURI, null);

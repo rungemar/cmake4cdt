@@ -29,8 +29,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_AVAIL_TARGET_DEVICES, "localhost;rasPi");
 		store.setDefault(PreferenceConstants.P_NOT_INST_SPECIFIC, "");
 
-		store.setDefault(PreferenceConstants.P_BUILDDIR, "${CMake_ProjectPath}/${ConfigName}_${currentTargetArch}");
-		store.setDefault(PreferenceConstants.P_DESTDIR, "${env_var:HOME}/${currentTargetDevice}/${ConfigName}_${currentTargetArch}/opt/");
+		store.setDefault(PreferenceConstants.P_BUILDDIR, "${CMake_ProjectPath}/${ConfigName}");
+		store.setDefault(PreferenceConstants.P_DESTDIR, "${env_var:HOME}/${currentTargetDevice}/${ConfigName}/opt/");
 	}
 
 }

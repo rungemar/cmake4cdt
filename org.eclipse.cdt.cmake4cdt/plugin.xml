@@ -92,6 +92,7 @@
          <tool
                advancedInputCategory="false"
                command="cmake"
+               commandLinePattern="${COMMAND} "
                id="org.eclipse.cdt.cmake.cmake"
                isAbstract="false"
                name="%Tool.cmake"
@@ -110,19 +111,61 @@
                   sourceContentType="org.eclipse.cdt.cmake.CMakeContentType">
             </inputType>
             <optionCategory
-                  id="org.eclipse.cdt.cmake.debugOptions"
-                  name="Debug CMakeList.txt">
+                  id="org.eclipse.cdt.cmake.options"
+                  name="CMake Options">
                <enablement
                      type="ALL">
                </enablement>
             </optionCategory>
             <option
-                  category="org.eclipse.cdt.cmake.debugOptions"
+                  category="org.eclipse.cdt.cmake.options"
                   id="org.eclipse.cdt.cmake.option.trace"
                   isAbstract="false"
                   name="trace"
                   resourceFilter="all"
                   valueType="boolean">
+            </option>
+            <option
+                  category="org.eclipse.cdt.cmake.options"
+                  defaultValue="--debug"
+                  id="org.eclipse.cdt.cmake.option.debug"
+                  isAbstract="false"
+                  name="debug"
+                  resourceFilter="all"
+                  value="false"
+                  valueType="boolean">
+            </option>
+            <option
+                  browseType="file"
+                  category="org.eclipse.cdt.cmake.options"
+                  command="-DCMAKE_TOOLCHAIN_FILE=${value}"
+                  id="org.eclipse.cdt.cmake.toolchainFile"
+                  isAbstract="false"
+                  name="toolchain to use (-DCMAKE_TOOLCHAIN_FILE)"
+                  resourceFilter="all"
+                  valueType="string">
+            </option>
+            <option
+                  category="org.eclipse.cdt.cmake.options"
+                  command="-DCMAKE_BUILD_TYPE=${value}"
+                  defaultValue="Debug"
+                  id="org.eclipse.cdt.cmake.option.buildType"
+                  isAbstract="false"
+                  name="build type (-DCMAKE_BUILD_TYPE)"
+                  resourceFilter="all"
+                  valueType="string">
+               <listOptionValue
+                     value="Debug">
+               </listOptionValue>
+               <listOptionValue
+                     value="Release">
+               </listOptionValue>
+               <listOptionValue
+                     value="RelWithDebInfo">
+               </listOptionValue>
+               <listOptionValue
+                     value="MinSizeRel">
+               </listOptionValue>
             </option>
          </tool>
          <builder

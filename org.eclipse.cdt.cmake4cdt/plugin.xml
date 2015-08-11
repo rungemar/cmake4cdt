@@ -21,12 +21,12 @@
                enablesFor="1"
                id="cmake.runCMakeAction">
          </action>
-<!--         <visibility>
+         <visibility>
             <objectState
                   name="projectNature"
                   value="org.eclipse.cdt.cmake.cmakeNature">
             </objectState>
-         </visibility> -->
+         </visibility>
       </objectContribution>
    </extension>
    <extension
@@ -96,8 +96,7 @@
                id="org.eclipse.cdt.cmake.cmake"
                isAbstract="false"
                name="%Tool.cmake"
-               natureFilter="both"
-               supportsManagedBuild="true">
+               natureFilter="both">
             <option
                   id="org.eclipse.cdt.cmake.CMAKE_BUILD_TYPE"
                   isAbstract="false"
@@ -105,11 +104,12 @@
                   resourceFilter="project"
                   valueType="string">
             </option>
-            <inputType
+<!--            <inputType
                   id="org.eclipse.cdt.cmake.inputType.CMakeListsTxt"
                   multipleOfType="false"
                   sourceContentType="org.eclipse.cdt.cmake.CMakeContentType">
             </inputType>
+-->
             <optionCategory
                   id="org.eclipse.cdt.cmake.options"
                   name="CMake Options">
@@ -181,6 +181,48 @@
                isAbstract="false"
                superClass="org.eclipse.cdt.cmake.targetPlatform">
          </targetPlatform>
+         <tool
+               command="g++"
+               errorParsers="org.eclipse.core.GCCErrorParser"
+               id="org.eclipse.cdt.cmake.compiler.c++"
+               isAbstract="false"
+               natureFilter="both">
+            <inputType
+                  dependencyContentType="org.eclipse.cdt.core.cxxHeader"
+                  id="org.eclipse.cdt.cmake.inputType.cpp"
+                  languageId="org.eclipse.cdt.core.g++"
+                  multipleOfType="false"
+                  name="cpp-input"
+                  primaryInput="true"
+                  sourceContentType="org.eclipse.cdt.core.cxxSource">
+            </inputType>
+            <outputType
+                  id="org.eclipse.cdt.cmake.output.cpp"
+                  name="obj"
+                  outputContentType="org.eclipse.cdt.core.objectFile">
+            </outputType>
+         </tool>
+         <tool
+               command="gcc"
+               errorParsers="org.eclipse.core.GCCErrorParser"
+               id="org.eclipse.cdt.cmake.compiler.c"
+               isAbstract="false"
+               natureFilter="both">
+            <inputType
+                  dependencyContentType="org.eclipse.cdt.core.cHeader"
+                  id="org.eclipse.cdt.cmake.inputType.c"
+                  languageId="org.eclipse.cdt.core.gcc"
+                  multipleOfType="false"
+                  name="c-input"
+                  primaryInput="true"
+                  sourceContentType="org.eclipse.cdt.core.cSource">
+            </inputType>
+            <outputType
+                  id="org.eclipse.cdt.cmake.outputType2"
+                  name="obj"
+                  outputContentType="org.eclipse.cdt.core.objectFile">
+            </outputType>
+         </tool>
          <supportedProperties>
             <property
                   id="org.eclipse.cdt.build.core.buildArtefactType">
@@ -189,30 +231,16 @@
                </value>
             </property>
          </supportedProperties>
-         <tool
-               command="&lt;specify in CMake toolchain file&gt;"
-               id="org.eclipse.cdt.cmake.compiler.c++"
-               isAbstract="false"
-               name="C/C++ Compiler handled by CMake"
-               natureFilter="both">
-            <inputType
-                  id="org.eclipse.cdt.cmake.inputType.cpp"
-                  sources="C, cpp, c++, h, hpp, h++">
-            </inputType>
-            <inputType
-                  id="org.eclipse.cdt.cmake.inputType.c"
-                  sources="c, h">
-            </inputType>
-         </tool>
       </toolChain>
    </extension>
    <extension
          id="cmakeNature"
          name="%extension.name.0"
          point="org.eclipse.core.resources.natures">
-      <requires-nature
+<!--     <requires-nature
             id="org.eclipse.cdt.managedbuilder.core.managedBuildNature">
       </requires-nature>
+-->
       <runtime>
          <run
                class="org.eclipse.cdt.cmake.CMakeProjectNature">
@@ -266,12 +294,12 @@
       <template
             id="org.eclipse.cdt.cmake.templates.ConsoleHelloWorld"
             location="templates/ConsoleHelloWorld/template.xml"
-            projectType="org.eclipse.cdt.cmake.buildArtefactType.cmake">
+            projectType="org.eclipse.cdt.cmake.CMakeProject">
       </template>
       <template
             id="org.eclipse.cdt.cmake.templates.MinimalQtDialog"
             location="templates/MinimalQtDialog/template.xml"
-            projectType="org.eclipse.cdt.cmake.buildArtefactType.cmake">
+            projectType="org.eclipse.cdt.cmake.CMakeProject">
       </template>
    </extension>
    <extension
@@ -354,7 +382,33 @@
             id="org.eclipse.cdt.cmake.lang_set"
             name="CMake language settings provider"
             prefer-non-shared="false">
+         <language-scope
+               id="org.eclipse.cdt.core.g++">
+         </language-scope>
+         <language-scope
+               id="org.eclipse.cdt.core.gcc">
+         </language-scope>
       </provider>
    </extension>
-
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="org.eclipse.cdt.ui.newCWizards"
+            class="org.eclipse.cdt.cmake.ui.wizards.NewProject"
+            finalPerspective="org.eclipse.cdt.ui.CPerspective"
+            icon="icons/cmake.png"
+            id="org.eclipse.cdt.cmake.wizards.newProject"
+            name="CMake C/C++ project"
+            project="true">
+      </wizard>
+   </extension>
+   <!--
+   <extension
+         point="org.eclipse.cdt.ui.CDTWizard">
+      <wizard
+            class="org.eclipse.cdt.cmake.ui.wizards.NewProjectWizard"
+            name="CMake Project Wizard">
+      </wizard>
+   </extension>
+-->
 </plugin>

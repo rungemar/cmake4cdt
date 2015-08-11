@@ -19,6 +19,7 @@ import org.eclipse.osgi.util.NLS;
  */
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.cdt.cmake.ui.messages"; //$NON-NLS-1$
+	public static String CMakeProjectGenerator_0 = null;
 	public static String ArchToolchainPairEditor_Arch;
 	public static String ArchToolchainPairEditor_Browse;
 	public static String ArchToolchainPairEditor_NewArchToolchainFilePair;

@@ -11,12 +11,17 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.cdt.core,
  org.eclipse.core.variables,
  org.eclipse.swt,
- org.eclipse.cdt.multiarch
+ org.eclipse.cdt.multiarch,
+ org.eclipse.ui.ide
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Import-Package: org.eclipse.cdt.multiarch,
+Import-Package: org.eclipse.cdt.cmake,
+ org.eclipse.cdt.internal.autotools.ui.wizards,
+ org.eclipse.cdt.managedbuilder.ui.wizards,
+ org.eclipse.cdt.multiarch,
  org.eclipse.cdt.ui,
  org.eclipse.cdt.ui.language.settings.providers,
+ org.eclipse.cdt.ui.wizards,
  org.eclipse.core.databinding,
  org.eclipse.core.databinding.beans,
  org.eclipse.core.databinding.observable.list,
@@ -30,3 +35,5 @@ Export-Package: org.eclipse.cdt.cmake,
  org.eclipse.cdt.cmake.popup.actions,
  org.eclipse.cdt.cmake.ui,
  org.eclipse.cdt.cmake.var
+Bundle-ClassPath: libs/freemarker-2.3.22.jar,
+ .

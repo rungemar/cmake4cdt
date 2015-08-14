@@ -148,9 +148,8 @@ public class CMakeProjectGenerator {
 		org.eclipse.cdt.managedbuilder.internal.core.Configuration newConfig = new org.eclipse.cdt.managedbuilder.internal.core.Configuration(
 				managedProject, (ToolChain) cmakeToolChain, configId, "debug");
 		IToolChain newToolChain = newConfig.getToolChain();
-		// IOption newOption = newToolChain.getOptionBySuperClassId(BOARD_OPTION_ID);
-		// ManagedBuildManager.setOption(newConfig, newToolChain, newOption, board.getId());
 
+		
 		CConfigurationData data = newConfig.getConfigurationData();
 		return cprojDesc.createConfiguration(ManagedBuildManager.CFG_DATA_PROVIDER_ID, data);
 	}

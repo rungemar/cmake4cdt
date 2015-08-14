@@ -11,16 +11,14 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.cdt.core,
  org.eclipse.core.variables,
  org.eclipse.swt,
- org.eclipse.cdt.multiarch,
  org.eclipse.ui.ide
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.cdt.cmake,
- org.eclipse.cdt.internal.autotools.ui.wizards,
- org.eclipse.cdt.managedbuilder.ui.wizards,
- org.eclipse.cdt.multiarch,
+  org.eclipse.cdt.managedbuilder.ui.wizards,
  org.eclipse.cdt.ui,
  org.eclipse.cdt.ui.language.settings.providers,
+ org.eclipse.cdt.ui.newui,
  org.eclipse.cdt.ui.wizards,
  org.eclipse.core.databinding,
  org.eclipse.core.databinding.beans,

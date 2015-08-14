@@ -69,7 +69,7 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 	IProgressMonitor monitor;
 	
 	String CMAKE_TOOL;
-	static final String CMAKE_TOOL_ID = "org.eclipse.cdt.cmake.cmake";
+	public static final String CMAKE_TOOL_ID = "org.eclipse.cdt.cmake.cmake";
 
 	@Override
 	public void generateDependencies() throws CoreException {

@@ -29,7 +29,7 @@
          </visibility>
       </objectContribution>
    </extension>
-   <extension
+<!--   <extension
          id="cmakeBuildProperties"
          name="%extension.name"
          point="org.eclipse.cdt.managedbuilder.core.buildProperties">
@@ -43,7 +43,7 @@
             name="%propertyValue.name.0"
             property="org.eclipse.cdt.build.core.buildType">
       </propertyValue>
-   </extension>
+   </extension>-->
    <extension
          point="org.eclipse.cdt.managedbuilder.core.buildDefinitions">
       <managedBuildRevision
@@ -66,7 +66,7 @@
                buildProperties="org.eclipse.cdt.cmake.buildType.default"
                id="org.eclipse.cdt.cmake.debug"
                languageSettingsProviders="org.eclipse.cdt.cmake.lang_set"
-               name="%configuration.name">
+               name="%configuration.name.debug">
             <toolChain
                   archList="all"
                   id="org.eclipse.cdt.cmake.toolChain.debug"
@@ -90,20 +90,12 @@
             isAbstract="false"
             languageSettingsProviders="org.eclipse.cdt.cmake.lang_set">
          <tool
-               advancedInputCategory="false"
                command="cmake"
                commandLinePattern="${COMMAND} "
                id="org.eclipse.cdt.cmake.cmake"
                isAbstract="false"
                name="%Tool.cmake"
                natureFilter="both">
-            <option
-                  id="org.eclipse.cdt.cmake.CMAKE_BUILD_TYPE"
-                  isAbstract="false"
-                  name="%option.name"
-                  resourceFilter="project"
-                  valueType="string">
-            </option>
 <!--            <inputType
                   id="org.eclipse.cdt.cmake.inputType.CMakeListsTxt"
                   multipleOfType="false"
@@ -119,6 +111,7 @@
             </optionCategory>
             <option
                   category="org.eclipse.cdt.cmake.options"
+                  defaultValue="false"
                   id="org.eclipse.cdt.cmake.option.trace"
                   isAbstract="false"
                   name="trace"
@@ -127,19 +120,18 @@
             </option>
             <option
                   category="org.eclipse.cdt.cmake.options"
-                  defaultValue="--debug"
+                  defaultValue="false"
                   id="org.eclipse.cdt.cmake.option.debug"
                   isAbstract="false"
                   name="debug"
                   resourceFilter="all"
-                  value="false"
                   valueType="boolean">
             </option>
             <option
                   browseType="file"
                   category="org.eclipse.cdt.cmake.options"
                   command="-DCMAKE_TOOLCHAIN_FILE=${value}"
-                  id="org.eclipse.cdt.cmake.toolchainFile"
+                  id="org.eclipse.cdt.cmake.option.toolchainFile"
                   isAbstract="false"
                   name="toolchain to use (-DCMAKE_TOOLCHAIN_FILE)"
                   resourceFilter="all"
@@ -186,7 +178,8 @@
                errorParsers="org.eclipse.core.GCCErrorParser"
                id="org.eclipse.cdt.cmake.compiler.c++"
                isAbstract="false"
-               natureFilter="both">
+               natureFilter="both"
+               superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
             <inputType
                   dependencyContentType="org.eclipse.cdt.core.cxxHeader"
                   id="org.eclipse.cdt.cmake.inputType.cpp"
@@ -207,7 +200,8 @@
                errorParsers="org.eclipse.core.GCCErrorParser"
                id="org.eclipse.cdt.cmake.compiler.c"
                isAbstract="false"
-               natureFilter="both">
+               natureFilter="both"
+               superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
             <inputType
                   dependencyContentType="org.eclipse.cdt.core.cHeader"
                   id="org.eclipse.cdt.cmake.inputType.c"
@@ -263,7 +257,7 @@
          </run>
       </builder>
    </extension>
-   <extension
+<!--   <extension
          point="org.eclipse.cdt.core.templateProcessTypes">
       <processType
             name="newCMakeProject"
@@ -282,8 +276,8 @@
                nullable="true">
          </simple>
       </processType>
-   </extension>
-   <extension
+   </extension> -->
+<!--   <extension
          name="%extension.name.2"
          point="org.eclipse.cdt.core.templates">
       <template
@@ -301,7 +295,7 @@
             location="templates/MinimalQtDialog/template.xml"
             projectType="org.eclipse.cdt.cmake.CMakeProject">
       </template>
-   </extension>
+   </extension> -->
    <extension
          point="org.eclipse.core.contenttype.contentTypes">
       <content-type
@@ -339,7 +333,7 @@
             category="org.eclipse.cdt.managedbuilder.ui.properties.Page_head_build"
             class="org.eclipse.cdt.cmake.ui.CMakePropertyPage"
             id="org.eclipse.cdt.cmake.propertyPage1"
-            name="%page.name.0">
+            name="%page.name">
          <enabledWhen>
             <instanceof
                   value="org.eclipse.core.resources.IResource">
@@ -401,6 +395,15 @@
             name="CMake C/C++ project"
             project="true">
       </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.cdt.ui.cPropertyTab">
+      <tab
+            class="org.eclipse.cdt.cmake.ui.CPropertyTab"
+            icon="icons/cmake.png"
+            name="%page.name.0"
+            parent="org.eclipse.cdt.cmake.ui.CMakePropertyPage">
+      </tab>
    </extension>
    <!--
    <extension

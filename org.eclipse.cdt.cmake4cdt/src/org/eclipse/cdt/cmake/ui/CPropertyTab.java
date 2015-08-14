@@ -76,7 +76,7 @@ public class CPropertyTab extends AbstractCPropertyTab {
 		cmakeBuildTypeLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
 		cmakeBuildTypeLabel.setText("Build type (-DCMAKE_BUILD_TYPE):");
 		
-		String[] buildTypes = {"debug", "release"};
+		String[] buildTypes = {"Debug", "Release", "RelWithDebInfo", "MinSizeRel"};
 		cmakeBuildTypeCombo = new Combo(usercomp, SWT.READ_ONLY);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = 2;
@@ -229,12 +229,14 @@ public class CPropertyTab extends AbstractCPropertyTab {
 
 			IOption builyTypeOption = cmakeTool.getOptionBySuperClassId(CMAKE_OPTION_BUILDTYPE);
 			m_buildType = builyTypeOption.getStringValue();
-			if(m_buildType.equals("debug")) {
-				cmakeBuildTypeCombo.select(0);
-			}
-			else {
-				cmakeBuildTypeCombo.select(1);
-			}
+			switch(m_buildType) 
+			{
+			case "Debug":          cmakeBuildTypeCombo.select(0);
+			case "Release":        cmakeBuildTypeCombo.select(1);
+			case "RelWithDebInfo": cmakeBuildTypeCombo.select(2);
+			case "MinSizeRel":     cmakeBuildTypeCombo.select(3);
+			default:               cmakeBuildTypeCombo.select(0);
+			}					
 			
 			IOption debugOption = cmakeTool.getOptionBySuperClassId(CMAKE_OPTION_DEBUG);
 			m_debug = debugOption.getBooleanValue();

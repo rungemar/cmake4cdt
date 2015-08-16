@@ -18,6 +18,7 @@ import java.io.OutputStreamWriter;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.Writer;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
@@ -113,7 +114,11 @@ public class CMakeProjectGenerator {
 		try {
 			Configuration fmConfig = new Configuration(Configuration.VERSION_2_3_22);
 			URL templateDirURL = FileLocator.find(Activator.getContext().getBundle(), new Path("/templates/ConsoleHelloWorld"), null); //$NON-NLS-1$
-			fmConfig.setDirectoryForTemplateLoading(new File(FileLocator.toFileURL(templateDirURL).toURI()));
+
+			// workaroud bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=145096  (spaces in URL not escaped for URI)
+			URL tmpURL = FileLocator.toFileURL(templateDirURL);
+			URI tmpURI = new URI(tmpURL.getProtocol(), tmpURL.getPath(), null);
+			fmConfig.setDirectoryForTemplateLoading(new File(tmpURI));
 
 			final Map<String, Object> fmModel = new HashMap<>();
 			fmModel.put("projectName", project.getName()); //$NON-NLS-1$

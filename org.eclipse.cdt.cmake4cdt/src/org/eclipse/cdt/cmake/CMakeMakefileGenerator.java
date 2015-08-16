@@ -226,7 +226,7 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 				}
 			}
 			
-			URI workingDirectoryURI = new URI("file://" + buildDir); //$NON-NLS-1$
+			URI workingDirectoryURI = new URI(null, null, buildDir.toString(), null ); //$NON-NLS-1$
 			
 			IPath cmakePath = new Path( cmakeTool.getToolCommand() );
 			

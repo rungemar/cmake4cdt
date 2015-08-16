@@ -88,7 +88,8 @@
       <toolChain
             id="org.eclipse.cdt.cmake.toolchain.base"
             isAbstract="false"
-            languageSettingsProviders="org.eclipse.cdt.cmake.lang_set">
+            languageSettingsProviders="org.eclipse.cdt.cmake.lang_set"
+            osList="all">
          <tool
                command="cmake"
                commandLinePattern="${COMMAND} "

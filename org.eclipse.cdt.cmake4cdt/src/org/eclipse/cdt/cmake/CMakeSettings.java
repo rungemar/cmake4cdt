@@ -15,13 +15,12 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+import org.eclipse.core.runtime.IPath;
+
 public class CMakeSettings implements PropertyChangeListener {
 
-//	private String curTargetArch;
-//	private String curTargetDevice;
-
-//	private List<String> availTargetArchs; 
-//	private List<String> availTargetDevices; 
+	// private IPath cmakeExe;
+	// private String cmakeGenerator;
 
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);	
 

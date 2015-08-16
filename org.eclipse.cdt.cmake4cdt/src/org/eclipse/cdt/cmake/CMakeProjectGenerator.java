@@ -29,13 +29,16 @@ import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
 import org.eclipse.cdt.core.settings.model.ICProjectDescription;
 import org.eclipse.cdt.core.settings.model.extension.CConfigurationData;
+import org.eclipse.core.internal.events.BuildCommand;
 import org.eclipse.core.resources.ICommand;
+import org.eclipse.cdt.managedbuilder.core.IBuilder;
 import org.eclipse.cdt.managedbuilder.core.IOption;
 import org.eclipse.cdt.managedbuilder.core.IToolChain;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.internal.core.ManagedBuildInfo;
 import org.eclipse.cdt.managedbuilder.internal.core.ManagedProject;
 import org.eclipse.cdt.managedbuilder.internal.core.ToolChain;
+import org.eclipse.cdt.utils.Platform;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -107,6 +110,8 @@ public class CMakeProjectGenerator {
 		cmakeBuilder.setBuilderName(CMAKE_BUILDER_ID);
 		cmakeBuilder.setBuilding(IncrementalProjectBuilder.FULL_BUILD, true);
 		System.arraycopy(oldBuilders, 0, newBuilders, 1, oldBuilders.length);
+		
+	
 		projDesc.setBuildSpec(newBuilders);
 		project.setDescription(projDesc, monitor);
 
@@ -153,6 +158,18 @@ public class CMakeProjectGenerator {
 		org.eclipse.cdt.managedbuilder.internal.core.Configuration newConfig = new org.eclipse.cdt.managedbuilder.internal.core.Configuration(
 				managedProject, (ToolChain) cmakeToolChain, configId, "debug");
 		IToolChain newToolChain = newConfig.getToolChain();
+
+		switch (Platform.getOS()) 
+		{
+			case "win32": {
+				newConfig.getEditableBuilder().setCommand("mingw32-make.exe");
+				break;
+			}
+			default: {
+				newConfig.getEditableBuilder().setCommand("make");
+				break;
+			}
+		}
 
 		
 		CConfigurationData data = newConfig.getConfigurationData();

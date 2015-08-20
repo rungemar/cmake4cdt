@@ -15,8 +15,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-import org.eclipse.core.runtime.IPath;
-
 public class CMakeSettings implements PropertyChangeListener {
 
 	// private IPath cmakeExe;

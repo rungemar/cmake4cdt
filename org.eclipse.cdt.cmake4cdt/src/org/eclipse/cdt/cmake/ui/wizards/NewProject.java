@@ -75,6 +75,7 @@ public class NewProject extends BasicNewProjectResourceWizard {
 				try {
 					final CMakeProjectGenerator generator = new CMakeProjectGenerator(getNewProject());
 					generator.setupProject(monitor);
+					generator.extractHelloWorldTemplate(monitor);
 //					getWorkbench().getDisplay().asyncExec(new Runnable() {
 //
 //						@Override

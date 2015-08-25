@@ -18,6 +18,7 @@ import java.io.OutputStreamWriter;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.Writer;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -29,6 +30,7 @@ import org.eclipse.cdt.core.CCorePlugin;
 import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
 import org.eclipse.cdt.core.settings.model.ICProjectDescription;
 import org.eclipse.cdt.core.settings.model.extension.CConfigurationData;
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.internal.events.BuildCommand;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.cdt.managedbuilder.core.IBuilder;
@@ -42,7 +44,10 @@ import org.eclipse.cdt.utils.Platform;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResourceStatus;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -50,6 +55,18 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.wizard.IWizardContainer;
+import org.eclipse.osgi.util.NLS;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.ide.undo.CreateProjectOperation;
+import org.eclipse.ui.ide.undo.WorkspaceUndoUtil;
+import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
+import org.eclipse.ui.internal.ide.StatusUtil;
+import org.eclipse.ui.internal.wizards.newresource.ResourceMessages;
+import org.eclipse.ui.statushandlers.StatusAdapter;
+import org.eclipse.ui.statushandlers.StatusManager;
 
 import freemarker.core.ParseException;
 import freemarker.template.Configuration;
@@ -67,6 +84,8 @@ public class CMakeProjectGenerator {
 	public static final String CMAKE_TOOLCHAIN_ID = "org.eclipse.cdt.cmake.toolChain.debug";
 	public static final String CMAKE_BUILDER_ID = "org.eclipse.cdt.cmake.CMakeProjectBuilder";
 	private IProject project;
+	
+    private IWizardContainer container = null;
 	/**
 	 * @param newProject
 	 */
@@ -114,7 +133,10 @@ public class CMakeProjectGenerator {
 	
 		projDesc.setBuildSpec(newBuilders);
 		project.setDescription(projDesc, monitor);
+		
+	}
 
+	public void extractHelloWorldTemplate(IProgressMonitor monitor) throws CoreException {
 		// Generate files
 		try {
 			Configuration fmConfig = new Configuration(Configuration.VERSION_2_3_22);
@@ -142,9 +164,7 @@ public class CMakeProjectGenerator {
     		throw new CoreException(new Status(IStatus.ERROR, Activator.getId(), e.getLocalizedMessage(), e));
 		}
 
-		
 	}
-
 
 	/**
 	 * @param cprojDesc
@@ -229,6 +249,81 @@ public class CMakeProjectGenerator {
 	public IFile getSourceFile() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * @param shell 
+	 * @return 
+	 * 
+	 */
+	public IProject createProject(IWizard parent, URI locationURI) {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		final IWizard containerRef = parent;
+		final IProjectDescription description = workspace.newProjectDescription(project.getName());
+		description.setLocationURI(locationURI);
+
+		// create the new project operation
+		IRunnableWithProgress op = new IRunnableWithProgress() {
+			@Override
+			public void run(IProgressMonitor monitor)
+					throws InvocationTargetException {
+				CreateProjectOperation op = new CreateProjectOperation(description, ResourceMessages.NewProject_windowTitle);
+				try {
+					// see bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=219901
+					// directly execute the operation so that the undo state is
+					// not preserved.  Making this undoable resulted in too many
+					// accidental file deletions.
+					op.execute(monitor, WorkspaceUndoUtil.getUIInfoAdapter(containerRef.getContainer().getShell()));
+				} catch (ExecutionException e) {
+					throw new InvocationTargetException(e);
+				}
+			}
+		};
+
+		// run the new project creation operation
+		try {
+			parent.getContainer().run(true, true, op);
+		} catch (InterruptedException e) {
+			return null;
+		} catch (InvocationTargetException e) {
+			Throwable t = e.getTargetException();
+			if (t instanceof ExecutionException
+					&& t.getCause() instanceof CoreException) {
+				CoreException cause = (CoreException) t.getCause();
+				StatusAdapter status;
+				if (cause.getStatus().getCode() == IResourceStatus.CASE_VARIANT_EXISTS) {
+					status = new StatusAdapter(
+							StatusUtil
+									.newStatus(
+											IStatus.WARNING,
+											NLS
+													.bind(
+															ResourceMessages.NewProject_caseVariantExistsError,
+															project.getName()),
+											cause));
+				} else {
+					status = new StatusAdapter(StatusUtil.newStatus(cause
+							.getStatus().getSeverity(),
+							ResourceMessages.NewProject_errorMessage, cause));
+				}
+				status.setProperty(StatusAdapter.TITLE_PROPERTY,
+						ResourceMessages.NewProject_errorMessage);
+				StatusManager.getManager().handle(status, StatusManager.BLOCK);
+			} else {
+				StatusAdapter status = new StatusAdapter(new Status(
+						IStatus.WARNING, IDEWorkbenchPlugin.IDE_WORKBENCH, 0,
+						NLS.bind(ResourceMessages.NewProject_internalError, t
+								.getMessage()), t));
+				status.setProperty(StatusAdapter.TITLE_PROPERTY,
+						ResourceMessages.NewProject_errorMessage);
+				StatusManager.getManager().handle(status,
+						StatusManager.LOG | StatusManager.BLOCK);
+			}
+			return null;
+		}
+
+		return project;
+		
 	}
 	
 	

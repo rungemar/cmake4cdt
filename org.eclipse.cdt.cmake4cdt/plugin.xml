@@ -74,14 +74,6 @@
                   languageSettingsProviders="org.eclipse.cdt.cmake.lang_set"
                   name="%toolChain.name"
                   superClass="org.eclipse.cdt.cmake.toolchain.base">
-               <supportedProperties>
-                  <property
-                        id="org.eclipse.cdt.build.core.buildArtefactType">
-                     <value
-                           id="org.eclipse.cdt.cmake.buildArtefactType.cmake">
-                     </value>
-                  </property>
-               </supportedProperties>
             </toolChain>
          </configuration>
       </projectType>
@@ -218,14 +210,6 @@
                   outputContentType="org.eclipse.cdt.core.objectFile">
             </outputType>
          </tool>
-         <supportedProperties>
-            <property
-                  id="org.eclipse.cdt.build.core.buildArtefactType">
-               <value
-                     id="org.eclipse.cdt.cmake.buildArtefactType.cmake">
-               </value>
-            </property>
-         </supportedProperties>
       </toolChain>
    </extension>
    <extension
@@ -405,6 +389,21 @@
             name="%page.name.0"
             parent="org.eclipse.cdt.cmake.ui.CMakePropertyPage">
       </tab>
+   </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <wizard
+            category="org.eclipse.cdt.ui.importWizardCategory"
+            class="org.eclipse.cdt.cmake.ui.wizards.ImportCMakeWizard"
+            icon="icons/cmake.png"
+            id="org.eclipse.cdt.cmake.ui.wizards.ImportCMakeWizard"
+            name="Import existing CMake project into Eclipse">
+         <description>
+            Import an existing CMake project into eclipse.
+
+The file CMakeLists.txt must exist, the Eclipse project structures (.project and .cproject files) will be created.
+         </description>
+      </wizard>
    </extension>
    <!--
    <extension

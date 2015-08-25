@@ -240,13 +240,6 @@ any resulting litigation.
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.cdt.multiarch"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.cdt.cmake.docs"
          download-size="0"
          install-size="0"

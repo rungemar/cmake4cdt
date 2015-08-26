@@ -85,7 +85,7 @@ public class CMakeProjectBuilderImpl extends ACBuilder {
 		
 			IPath buildDir = mfgen.getBuildWorkingDir();
 			activeConfig.getEditableBuilder().setBuildPath(buildDir.toString());
-			ManagedBuildManager.saveBuildInfo(project, true);
+			// ManagedBuildManager.saveBuildInfo(project, true);
 			mstatus = mfgen.runCMake();
 		}
 		catch(CoreException ce) {
@@ -101,61 +101,6 @@ public class CMakeProjectBuilderImpl extends ACBuilder {
 		return project.getReferencedProjects();
 	}
 	
-//	private IPath getBuildWorkingDir(String currentConf, String currentArch) {
-//		
-//		IEclipsePreferences projectProperties = new ProjectScope(getProject()).getNode("org.eclipse.cdt.cmake.scope"); //$NON-NLS-1$
-//		boolean buildDirWorkspaceSettings = true;
-//		if (projectProperties != null) {
-//			buildDirWorkspaceSettings = projectProperties.getBoolean(CMakePropertyConstants.P_USE_WORKSPACE_BUILDDIR_SETTINGS, true);
-//		}
-//		
-//		IStringVariableManager varMgr = VariablesPlugin.getDefault().getStringVariableManager();
-//		
-//		// make sure, that current project location is stored in ${BuildIF_ProjectPath}
-//		IPath projDir = getProject().getLocation();
-//		IValueVariable cmakeProjectDirVar = varMgr.getValueVariable("CMake_ProjectPath"); //$NON-NLS-1$
-//		cmakeProjectDirVar.setValue(projDir.toString());
-//
-//		String buildDirSetting = ""; //$NON-NLS-1$
-//		if(buildDirWorkspaceSettings) {
-//			String strWithVars = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_BUILDDIR);
-//			
-//			IValueVariable configNameVar = varMgr.getValueVariable("ConfigName"); //$NON-NLS-1$
-//			
-//			// evil hack: ConfigName should be available as Variable
-//			if(configNameVar == null) {
-//				 IValueVariable cnVar = varMgr.newValueVariable("ConfigName", "Dummy variable to have a variable that holds the current configururation for use in build working dir."); //$NON-NLS-1$ //$NON-NLS-2$
-//			    try {
-//					varMgr.addVariables( new IValueVariable[]{cnVar} );
-//				} catch (CoreException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//			}
-//			
-//			configNameVar.setValue( currentConf );
-//			
-//			try {
-//				buildDirSetting = varMgr.performStringSubstitution(strWithVars);
-//			} catch (CoreException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//		else {
-//			String strWithVars = projectProperties.get(CMakePropertyConstants.P_BUILD_PATH, ""); //$NON-NLS-1$
-//
-//			try {
-//				buildDirSetting = varMgr.performStringSubstitution(strWithVars);
-//			} catch (CoreException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//		
-//		IPath buildDir = new Path(buildDirSetting);
-//		return buildDir;
-//	}
 	
 	protected boolean shouldBuild(int kind, IManagedBuildInfo info) {
 		IConfiguration cfg = info.getDefaultConfiguration();

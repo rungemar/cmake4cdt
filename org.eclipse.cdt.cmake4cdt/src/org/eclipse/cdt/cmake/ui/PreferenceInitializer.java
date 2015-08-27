@@ -25,10 +25,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	public void initializeDefaultPreferences() {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(PreferenceConstants.P_AVAIL_TARGET_ARCHS, "arm;ppc;x86;native");
-		store.setDefault(PreferenceConstants.P_AVAIL_TARGET_DEVICES, "localhost;rasPi");
-		store.setDefault(PreferenceConstants.P_NOT_INST_SPECIFIC, "");
-
+		store.setDefault(PreferenceConstants.P_CMAKE_VIA_PATH, true);
+		store.setDefault(PreferenceConstants.P_CMAKE_EXE, "cmake");
 		store.setDefault(PreferenceConstants.P_BUILDDIR, "${CMake_ProjectPath}/${ConfigName}");
 		store.setDefault(PreferenceConstants.P_DESTDIR, "${env_var:HOME}/target/${ConfigName}/opt/");
 	}

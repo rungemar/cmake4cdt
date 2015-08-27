@@ -67,7 +67,6 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 	IProject project;
 	IProgressMonitor monitor;
 	
-	String CMAKE_TOOL;
 	public static final String CMAKE_TOOL_ID = "org.eclipse.cdt.cmake.cmake";
 
 	@Override
@@ -237,7 +236,15 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 			
 			URI workingDirectoryURI = new URI(null, null, buildDir.toString(), null ); //$NON-NLS-1$
 			
-			IPath cmakePath = new Path( cmakeTool.getToolCommand() );
+			String cmakeExe = null;
+			boolean cmakeViaPath = Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_CMAKE_VIA_PATH);
+			if(cmakeViaPath == true) {
+				cmakeExe = "cmake";
+			}
+			else {
+				cmakeExe = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_CMAKE_EXE);
+			}
+			IPath cmakePath = new Path( cmakeExe );
 			
 			String[] a = new String[cmakeArgs.size()];
 			buildRunnerHelper.setLaunchParameters(launcher, cmakePath, cmakeArgs.toArray(a), workingDirectoryURI, null);

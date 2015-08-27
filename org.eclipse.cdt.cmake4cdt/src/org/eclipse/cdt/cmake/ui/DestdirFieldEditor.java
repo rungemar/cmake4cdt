@@ -252,6 +252,10 @@ public class DestdirFieldEditor extends StringFieldEditor {
         if (browseButton != null) {
             browseButton.setEnabled(enabled);
         }
+        if (variablesButton != null) {
+        	variablesButton.setEnabled(enabled);
+        }
+
     }
     
     /**
@@ -288,6 +292,6 @@ public class DestdirFieldEditor extends StringFieldEditor {
     public void setFilterPath(File path) {
     	filterPath = path;
     }
-
+    
 
 }

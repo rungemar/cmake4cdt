@@ -78,11 +78,10 @@ public class CMakeProjectBuilderImpl extends ACBuilder {
 		try {
 			mfgen.initialize(project, buildInfo, monitor);
 			IConfiguration activeConfig = buildInfo.getDefaultConfiguration();
-	
 			// String currentConf = activeConfig.getName();
 			// String currentArch = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_CURRENT_TARGET_ARCH);
 			// String currentInstrument = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_CURRENT_TARGET_DEVICE);
-		
+
 			IPath buildDir = mfgen.getBuildWorkingDir();
 			activeConfig.getEditableBuilder().setBuildPath(buildDir.toString());
 			// ManagedBuildManager.saveBuildInfo(project, true);

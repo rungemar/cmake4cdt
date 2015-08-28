@@ -29,5 +29,6 @@ public class PreferenceConstants {
 	public static final String P_CMAKE_TOOLCHAIN_PREFERENCE_SCOPE = "org.eclipse.cdt.cmake.preferences";
 	public static final String P_CMAKE_EXE = "cmakePathPreference";
 	public static final String P_CMAKE_VIA_PATH = "cmakeViaPathPreference";
+	public static final String P_CMAKE_GENERATOR = "CMakeGenerator";
 
 }

@@ -194,13 +194,10 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 //				cmakeArgs.add("-DCMAKE_TOOLCHAIN_FILE=" + currentToolchainFile);
 //			}
 
-			String os = Platform.getOS();
-			switch(os) {
-				case "win32": {
-					cmakeArgs.add("-G");
-					cmakeArgs.add("MinGW Makefiles");
-				}
-			}
+			String generator = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_CMAKE_GENERATOR);
+			cmakeArgs.add("-G");
+			cmakeArgs.add(generator);
+			
 
 			cmakeArgs.add("-DCMAKE_EXPORT_COMPILE_COMMANDS=On");
 			cmakeArgs.add( project.getLocation().toString() );

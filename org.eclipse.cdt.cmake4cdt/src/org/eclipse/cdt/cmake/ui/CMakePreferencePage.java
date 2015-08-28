@@ -14,21 +14,38 @@ package org.eclipse.cdt.cmake.ui;
 import java.io.File;
 
 import org.eclipse.cdt.cmake.Activator;
+import org.eclipse.cdt.cmake.CMakeInfo;
+import org.eclipse.cdt.cmake.CMakeInfoRetriever;
+import org.eclipse.cdt.cmake.IAcceptsCMakeInfo;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class CMakePreferencePage extends FieldEditorPreferencePage implements
-		IWorkbenchPreferencePage {
+		IWorkbenchPreferencePage, IAcceptsCMakeInfo {
+
 
 	private BooleanFieldEditor cmakeViaPathEditor = null;
 	private DestdirFieldEditor cmakePathEditor = null;
+
+	private Label  cmakeVersionLabel2 = null;
+	private ComboFieldEditor cmakeGeneratorsEditor = null;
+	
+	private CMakeInfoRetriever cmakeInfoRetriever;
 	
 	public CMakePreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Workspace wide settings for CMake. These values can be overridden per project in the project properties.\n");
+		
+		cmakeInfoRetriever = new CMakeInfoRetriever(this);
 	}
 
 	@Override
@@ -62,15 +79,32 @@ public class CMakePreferencePage extends FieldEditorPreferencePage implements
 		}; 
 		
 		addField( cmakePathEditor );
+		
+		Label cmakeVersionLabel1 = new Label(getFieldEditorParent(), SWT.NONE);
+		GridData gd = new GridData();
+		cmakeVersionLabel1.setLayoutData(gd);
+		cmakeVersionLabel1.setText("CMake version:");
+		
+		cmakeVersionLabel2 = new Label(getFieldEditorParent(), SWT.NONE);
+		gd = new GridData(SWT.LEFT, SWT.CENTER, true, false);
+		gd.horizontalSpan = cmakePathEditor.getNumberOfControls() - 1;
+		cmakeVersionLabel2.setLayoutData(gd);
+		cmakeVersionLabel2.setText("<CMake version>");
+
+		cmakeGeneratorsEditor = new ComboFieldEditor(PreferenceConstants.P_CMAKE_GENERATOR, "Generator (-G):", CMakeInfo.getKnownGenerators(), getFieldEditorParent());
+		
+		addField(cmakeGeneratorsEditor);
 		addField( new DestdirFieldEditor( PreferenceConstants.P_BUILDDIR, "&Build in dir:", getFieldEditorParent()));
 		addField( new DestdirFieldEditor( PreferenceConstants.P_DESTDIR, "&DESTDIR:", getFieldEditorParent()));
-		
-		adjustVisibility(getPreferenceStore().getBoolean(PreferenceConstants.P_CMAKE_VIA_PATH));
 	}
 
-	/**
-	 * 
-	 */
+	protected void initialize() {
+		super.initialize();
+
+		adjustVisibility(getPreferenceStore().getBoolean(PreferenceConstants.P_CMAKE_VIA_PATH));
+		validateForm();
+	}
+
 	protected void adjustVisibility(boolean newValue) {
     	if(newValue == true) {
     		cmakePathEditor.setEnabled(false, getFieldEditorParent());
@@ -86,16 +120,32 @@ public class CMakePreferencePage extends FieldEditorPreferencePage implements
 		boolean cmakeViaPath = cmakeViaPathEditor.getBooleanValue();
 		if(cmakeViaPath) {
 			isValid = true;
+			String currentCMakePath = "cmake";
+			IPath p = new Path(currentCMakePath);
+			cmakeInfoRetriever.tryExecCMake(p);
 		}
 		else {
 			String currentCMakePath = cmakePathEditor.getStringValue();
-			File f = new File(currentCMakePath);
-			
+			IPath p = new Path(currentCMakePath);
+			File f = p.toFile();
 			if(f.canExecute()) {
-				isValid = true;
-				/// TODO: add more tests here
+				cmakeInfoRetriever.tryExecCMake(p);
 			}
 		}
 		setValid(isValid);
 	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.cdt.cmake.IAcceptsCMakeInfo#setCMakeInfo(org.eclipse.cdt.cmake.CMakeInfo)
+	 */
+	@Override
+	public void setCMakeInfo(CMakeInfo info) {
+		cmakeVersionLabel2.setText(info.getCMakeVersion() );
+		String generators[] = info.keySet().toArray(new String[info.size()]);
+	}
+	
+	
+	
+	
+	
 }

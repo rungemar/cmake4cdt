@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.eclipse.cdt.cmake.feature_0.1.3.beta.jar" id="org.eclipse.cdt.cmake.feature" version="0.1.3.beta"/>
+   <feature url="features/org.eclipse.cdt.cmake.feature_0.1.4.beta.jar" id="org.eclipse.cdt.cmake.feature" version="0.1.4.beta">
+      <category name="org.eclipse.cdt.cmake"/>
+   </feature>
    <category-def name="org.eclipse.cdt.cmake" label="CMake support">
       <description>
          This feature is about CMake build support. CMakeLists.txt must still be adopted manually.

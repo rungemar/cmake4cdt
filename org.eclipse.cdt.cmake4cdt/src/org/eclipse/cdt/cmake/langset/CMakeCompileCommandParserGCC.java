@@ -24,8 +24,18 @@ public class CMakeCompileCommandParserGCC extends GCCBuildCommandParser implemen
 	}
 	
 	public void shutdown() {
+		cleanup();
 		super.shutdown();
 	}
+
+	/**
+	 * 
+	 */
+	private void cleanup() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 		
 }

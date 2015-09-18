@@ -359,8 +359,7 @@
       <provider
             class="org.eclipse.cdt.cmake.langset.CMakeLangSetProvider"
             id="org.eclipse.cdt.cmake.lang_set"
-            name="CMake language settings provider"
-            prefer-non-shared="false">
+            name="CMake language settings provider">
          <language-scope
                id="org.eclipse.cdt.core.g++">
          </language-scope>

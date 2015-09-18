@@ -78,41 +78,6 @@ public class PerConfigSettings {
 		return m_cfgDesc;
 	}
 	
-	class AddForeignSourcesWorkspaceJob extends WorkspaceJob {
-
-		private List<CompileUnitInfo> cuInfoList;
-
-		/**
-		 * @param name
-		 */
-		public AddForeignSourcesWorkspaceJob(String name, List<CompileUnitInfo> cuInfos) {
-			super(name);
-			cuInfoList = cuInfos;
-		}
-
-		/* (non-Javadoc)
-		 * @see org.eclipse.core.resources.WorkspaceJob#runInWorkspace(org.eclipse.core.runtime.IProgressMonitor)
-		 */
-		@Override
-		public IStatus runInWorkspace(IProgressMonitor monitor)	throws CoreException {
-			try {
-				IFolder fsFolder = m_project.getFolder(new Path("ForeignSources"));
-				if(!fsFolder.exists()) {
-					fsFolder.create(IResource.VIRTUAL, true, null);
-				}
-				for(CompileUnitInfo cuInfo: cuInfoList) {
-					File fsFileName = new File(cuInfo.getParsedResourceName());
-					IFile fsFile = fsFolder.getFile(fsFileName.getName());
-					IPath linkTarget = new Path(cuInfo.getParsedResourceName());
-					fsFile.createLink(linkTarget, IResource.REPLACE, null);
-				}
-			} catch (CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return Status.OK_STATUS;
-		}
-	}
 	
 	public void parseCMakeCompileCommands() {
 		
@@ -153,8 +118,8 @@ public class PerConfigSettings {
 		}
 		finally {
 			if(!foreignSources.isEmpty()) {
-				Job job = new AddForeignSourcesWorkspaceJob("Creating \"Foreign Sources\" folders", foreignSources); 
-				job.schedule();
+//				Job job = new AddForeignSourcesWorkspaceJob("Creating \"Foreign Sources\" folders", foreignSources); 
+//				job.schedule();
 			}
 		}
 	}
@@ -169,38 +134,39 @@ public class PerConfigSettings {
 	protected void detectCompiler()  {
 		
 	}
-	
-	class CMakeCompileCmdsCwdTracker implements IWorkingDirectoryTracker {
 
-		private URI workingDirectoryURI;
-		/**
-		 * @param workingDirectoryURI the workingDirectoryURI to set
-		 */
-		public void setWorkingDirectoryURI(URI workingDirectoryURI) {
-			this.workingDirectoryURI = workingDirectoryURI;
-			if (!this.workingDirectoryURI.isAbsolute()) {
-				System.out.println(this.workingDirectoryURI.toString());
-			}
-		}
-		
-		public void setWorkingDirectoryURI(String workingDirectory) {
-			try {
-				this.workingDirectoryURI = new URI( "file", workingDirectory, null);
-				if (!this.workingDirectoryURI.isAbsolute()) {
-					System.out.println(this.workingDirectoryURI.toString());
-				}
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			}
-		}
-
-		/* (non-Javadoc)
-		 * @see org.eclipse.cdt.core.language.settings.providers.IWorkingDirectoryTracker#getWorkingDirectoryURI()
-		 */
-		@Override
-		public URI getWorkingDirectoryURI() {
-			return this.workingDirectoryURI; 
-		}
-	}
+	// moved to own file
+//	class CMakeCompileCmdsCwdTracker implements IWorkingDirectoryTracker {
+//
+//		private URI workingDirectoryURI;
+//		/**
+//		 * @param workingDirectoryURI the workingDirectoryURI to set
+//		 */
+//		public void setWorkingDirectoryURI(URI workingDirectoryURI) {
+//			this.workingDirectoryURI = workingDirectoryURI;
+//			if (!this.workingDirectoryURI.isAbsolute()) {
+//				System.out.println(this.workingDirectoryURI.toString());
+//			}
+//		}
+//		
+//		public void setWorkingDirectoryURI(String workingDirectory) {
+//			try {
+//				this.workingDirectoryURI = new URI( "file", workingDirectory, null);
+//				if (!this.workingDirectoryURI.isAbsolute()) {
+//					System.out.println(this.workingDirectoryURI.toString());
+//				}
+//			} catch (URISyntaxException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//
+//		/* (non-Javadoc)
+//		 * @see org.eclipse.cdt.core.language.settings.providers.IWorkingDirectoryTracker#getWorkingDirectoryURI()
+//		 */
+//		@Override
+//		public URI getWorkingDirectoryURI() {
+//			return this.workingDirectoryURI; 
+//		}
+//	}
 
 }

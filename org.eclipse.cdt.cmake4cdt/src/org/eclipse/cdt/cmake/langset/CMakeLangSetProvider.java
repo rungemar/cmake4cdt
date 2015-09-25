@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.prefs.BackingStoreException;
 
 import org.eclipse.cdt.cmake.CMakeOutputPath;
 import org.eclipse.cdt.cmake.langset.IBuildCommandParserEx.CompileUnitInfo;
@@ -42,6 +43,8 @@ public class CMakeLangSetProvider extends LanguageSettingsBaseProvider
 		implements ILanguageSettingsProvider {
 
 	static final String COMPILE_CMDS_FILENAME = "compile_commands.json"; 
+	IBuildCommandParserEx m_commandParser = null;
+	
 	
 	public CMakeLangSetProvider() {
 	}
@@ -55,67 +58,75 @@ public class CMakeLangSetProvider extends LanguageSettingsBaseProvider
 	public CMakeLangSetProvider(String id, String name, List<String> languages,
 			List<ICLanguageSettingEntry> entries) {
 		super(id, name, languages, entries);
-		// TODO Auto-generated constructor stub
 	}
 
 	public CMakeLangSetProvider(String id, String name, List<String> languages,
 			List<ICLanguageSettingEntry> entries, Map<String, String> properties) {
 		super(id, name, languages, entries, properties);
-		// TODO Auto-generated constructor stub
 	}
 
 	public List<ICLanguageSettingEntry> getSettingEntries(ICConfigurationDescription cfgDescription, IResource rc, String languageId) {
-		
-//		PerProjectSettings projSettings = null;
+
+		//		PerProjectSettings projSettings = null;
 		if(cfgDescription == null || rc == null) {
 			return null;
 		}
-		
+
 		IProject project = rc.getProject();
 		IProjectDescription prjDesc;
+		
+		IPath outputPath = CMakeOutputPath.getPath(project, cfgDescription.getName());
+		String filename = outputPath.append(COMPILE_CMDS_FILENAME).toString();
+		
+		List<ICLanguageSettingEntry> entries = null;
+
 		try {
-			IBuildCommandParserEx commandParser = null;
-			CMakeCompileCmdsCwdTracker cwdTracker = new CMakeCompileCmdsCwdTracker();
-			IPath outputPath = CMakeOutputPath.getPath(project, cfgDescription.getName());
-			String filename = outputPath.append(COMPILE_CMDS_FILENAME).toString();
-			
 			// try to figure out which compiler was used. Assume gcc for now
-			CompileCmdsHandler cmdHdl = new CompileCmdsHandler(filename);
-			if(cmdHdl.hasChanged()) {
+			CompileCmdsHandler cmdHdl = new CompileCmdsHandler(project, filename);
+			if(m_commandParser == null || cmdHdl.hasChanged(false)) {  // just check if it has changed
+				CMakeCompileCmdsCwdTracker cwdTracker = new CMakeCompileCmdsCwdTracker();
+
 				cmdHdl.parseCMakeCompileCommands();
-			
-				// 		m_commandParser = new GCCBuildCommandParser();
+
 				if(cmdHdl.hasSourcesOutsideProject()) {
 					Job job = new AddForeignSourcesWorkspaceJob("Creating \"Foreign Sources\" folders", project, cmdHdl.getSourcesOutsideProject()); 
 					job.schedule();
 				}
-			}
 
-			// cmdHdl.detectCompiler();
-			commandParser = new CMakeCompileCommandParserGCC();
-			commandParser.startup(cfgDescription, cwdTracker);
-			// commandParser.setResourceScope(ResourceScope.PROJECT);
-			
-			for(CompileUnitInfo cu: cmdHdl.getSources()) {
-				commandParser.processLine(cu.getCmdLine());
+				if(m_commandParser == null) {
+					cmdHdl.detectCompiler();
+					m_commandParser = new CMakeCompileCommandParserGCC();
+				}
+				m_commandParser.startup(cfgDescription, cwdTracker);
+				// commandParser.setResourceScope(ResourceScope.PROJECT);
+
+				for(CompileUnitInfo cu: cmdHdl.getSources()) {
+					m_commandParser.processLine(cu.getCmdLine());
+				}
+
+				m_commandParser.shutdown();
+				
+				// modified file was processed, mark it as unmodified (save the current timestamp)
+				cmdHdl.hasChanged(true);
 				
 			}
-			
-			commandParser.shutdown();
-		
-			List<ICLanguageSettingEntry> entries = new ArrayList<ICLanguageSettingEntry>();
 
-			// List<ICLanguageSettingEntry> entries = commandParser.getSettingEntries(cfgDescription, rc, languageId);
-			return entries;
-			
-		} catch (CoreException e) {
+			entries = m_commandParser.getSettingEntries(cfgDescription, rc, languageId);
+		} 
+		catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (org.osgi.service.prefs.BackingStoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		finally {
+			 
+		}
+		return entries;
 	}
-	
-	
+
+
 	class AddForeignSourcesWorkspaceJob extends WorkspaceJob {
 
 		private List<CompileUnitInfo> cuInfoList = null;

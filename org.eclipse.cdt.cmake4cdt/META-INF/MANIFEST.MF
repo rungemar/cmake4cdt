@@ -13,7 +13,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.swt,
  org.eclipse.ui.ide,
  org.eclipse.cdt.managedbuilder.ui,
- org.eclipse.jface
+ org.eclipse.jface,
+ org.eclipse.equinox.preferences
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.cdt.cmake,

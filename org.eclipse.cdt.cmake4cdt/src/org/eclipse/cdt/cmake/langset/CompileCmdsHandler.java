@@ -11,17 +11,29 @@
 
 package org.eclipse.cdt.cmake.langset;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.cdt.cmake.Activator;
 import org.eclipse.cdt.cmake.langset.IBuildCommandParserEx.CompileUnitInfo;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Plugin;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * @author runge_m
@@ -29,11 +41,13 @@ import org.json.JSONTokener;
  */
 public class CompileCmdsHandler {
 
-	private String filename;
+	private IProject project = null;
+	private String filename = null;
 	private List<CompileUnitInfo> foreignSources = new ArrayList<CompileUnitInfo>();
 	private List<CompileUnitInfo> sources = new ArrayList<CompileUnitInfo>();
-	
-	CompileCmdsHandler(String filename) {
+
+	CompileCmdsHandler(IProject project, String filename) {
+		this.project = project;
 		this.filename = filename;
 	}
 	
@@ -100,10 +114,30 @@ public class CompileCmdsHandler {
 
 	/**
 	 * @return
+	 * @throws BackingStoreException 
 	 */
-	public boolean hasChanged() {
-		// TODO Auto-generated method stub
-		return true;
+	public boolean hasChanged(boolean resetModifiedTimestamp) throws BackingStoreException  {
+
+		ProjectScope ps = new ProjectScope(project);
+		IEclipsePreferences prefs = ps.getNode( Activator.getId() );
+		
+		String key = this.filename;
+		Long value = prefs.getLong(key, 0);
+		
+		File f = new File(this.filename);
+		Long current_ts = f.lastModified();
+		
+		if(resetModifiedTimestamp) {
+			prefs.putLong(key, current_ts);
+			prefs.flush();
+		}
+		
+		if(value.equals(current_ts)) {
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 
 	/**

@@ -65,13 +65,12 @@
                buildArtefactType="org.eclipse.cdt.cmake.buildArtefactType.cmake"
                buildProperties="org.eclipse.cdt.cmake.buildType.default"
                id="org.eclipse.cdt.cmake.debug"
-               languageSettingsProviders="org.eclipse.cdt.cmake.lang_set"
+               languageSettingsProviders="org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetector;org.eclipse.cdt.cmake.lang_set"
                name="%configuration.name.debug">
             <toolChain
                   archList="all"
                   id="org.eclipse.cdt.cmake.toolChain.debug"
                   isAbstract="false"
-                  languageSettingsProviders="org.eclipse.cdt.cmake.lang_set"
                   name="%toolChain.name"
                   superClass="org.eclipse.cdt.cmake.toolchain.base">
             </toolChain>
@@ -80,7 +79,7 @@
       <toolChain
             id="org.eclipse.cdt.cmake.toolchain.base"
             isAbstract="false"
-            languageSettingsProviders="org.eclipse.cdt.cmake.lang_set"
+            languageSettingsProviders="org.eclipse.cdt.cmake.lang_set;org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetector"
             osList="all">
          <tool
                command="cmake"
@@ -360,6 +359,18 @@
             class="org.eclipse.cdt.cmake.langset.CMakeLangSetProvider"
             id="org.eclipse.cdt.cmake.lang_set"
             name="CMake language settings provider">
+         <language-scope
+               id="org.eclipse.cdt.core.g++">
+         </language-scope>
+         <language-scope
+               id="org.eclipse.cdt.core.gcc">
+         </language-scope>
+      </provider>
+      <provider
+            class="org.eclipse.cdt.cmake.langset.CMakeBuiltInSettingsProvider"
+            id="org.eclipse.cdt.cmake.built-in.lang_set"
+            name="CMake used Compiler Built-in Settings"
+            prefer-non-shared="false">
          <language-scope
                id="org.eclipse.cdt.core.g++">
          </language-scope>

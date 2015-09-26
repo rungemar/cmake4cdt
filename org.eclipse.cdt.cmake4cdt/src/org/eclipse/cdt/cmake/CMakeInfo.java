@@ -29,13 +29,13 @@ public class CMakeInfo extends HashMap<String,String> {
 	
 	private static final String knownGenerators[][] = {
 		//{"Borland Makefiles", "Generates Borland makefiles."},
-		{"NMake Makefiles",   "Generates NMake makefiles.", Platform.OS_WIN32},
-		{"NMake Makefiles JOM", "Generates JOM makefiles.", Platform.OS_WIN32},
+		{ICMakeCommandConstants.GENERATOR_NMAKE_MAKEFILES,   "Generates NMake makefiles.", Platform.OS_WIN32},
+		{ICMakeCommandConstants.GENERATOR_NMAKE_MAKEFILES_JOM, "Generates JOM makefiles.", Platform.OS_WIN32},
 		//{"Watcom WMake", "Generates Watcom WMake makefiles.", Platform.OS_WIN32},
-		{"MSYS Makefiles", "Generates MSYS makefiles.", Platform.OS_WIN32},
-		{"MinGW Makefiles", "Generates a make file for use with mingw32-make.", Platform.OS_WIN32},
-		{"Unix Makefiles", "Generates standard UNIX makefiles.", Platform.OS_LINUX+","+Platform.OS_WIN32+","+Platform.OS_MACOSX+"unix"},
-		{"Ninja", "Generates build.ninja files (experimental).", Platform.OS_LINUX+","+Platform.OS_WIN32+","+Platform.OS_MACOSX},
+		{ICMakeCommandConstants.GENERATOR_MSYS_MAKEFILES, "Generates MSYS makefiles.", Platform.OS_WIN32},
+		{ICMakeCommandConstants.GENERATOR_MINGW_MAKEFILES, "Generates a make file for use with mingw32-make.", Platform.OS_WIN32},
+		{ICMakeCommandConstants.GENERATOR_UNIX_MAKEFILES, "Generates standard UNIX makefiles.", Platform.OS_LINUX+","+Platform.OS_WIN32+","+Platform.OS_MACOSX+"unix"},
+		{ICMakeCommandConstants.GENERATOR_NINJA, "Generates build.ninja files (experimental).", Platform.OS_LINUX+","+Platform.OS_WIN32+","+Platform.OS_MACOSX},
 		{"", "", ""}
 	};
 	

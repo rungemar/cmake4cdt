@@ -11,6 +11,7 @@
 package org.eclipse.cdt.cmake.ui;
 
 import org.eclipse.cdt.cmake.Activator;
+import org.eclipse.cdt.cmake.ICMakeCommandConstants;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 /**
@@ -29,6 +30,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_CMAKE_EXE, "cmake");
 		store.setDefault(PreferenceConstants.P_BUILDDIR, "${CMake_ProjectPath}/${ConfigName}");
 		store.setDefault(PreferenceConstants.P_DESTDIR, "${env_var:HOME}/target/${ConfigName}/opt/");
+		store.setDefault(PreferenceConstants.P_CMAKE_GENERATOR, ICMakeCommandConstants.GENERATOR_UNIX_MAKEFILES);
 	}
 
 }

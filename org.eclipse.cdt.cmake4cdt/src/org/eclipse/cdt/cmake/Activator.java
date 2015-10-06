@@ -10,6 +10,9 @@
  *******************************************************************************/
 package org.eclipse.cdt.cmake;
 
+import org.eclipse.cdt.core.model.CModelException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -80,5 +83,43 @@ public class Activator extends AbstractUIPlugin {
 	public static String getId() {
 		// TODO Auto-generated method stub
 		return PLUGIN_ID;
+	}
+
+	/**
+	 * @noreference This method is not intended to be referenced by clients.
+	 */
+	public static void log(String message, Throwable e) {
+		Throwable nestedException;
+		if (e instanceof CModelException
+				&& (nestedException = ((CModelException) e).getException()) != null) {
+			e = nestedException;
+		}
+		log(createStatus(message, e));
+	}
+
+	/**
+	 * @noreference This method is not intended to be referenced by clients.
+	 */
+	public static void log(Throwable e) {
+		String msg= e.getMessage();
+		if (msg == null) {
+			log("Error", e); //$NON-NLS-1$
+		} else {
+			log("Error: " + msg, e); //$NON-NLS-1$
+		}
+	}
+
+	/**
+	 * @noreference This method is not intended to be referenced by clients.
+	 */
+	public static IStatus createStatus(String msg, Throwable e) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, msg, e);
+	}
+
+	/**
+	 * @noreference This method is not intended to be referenced by clients.
+	 */
+	public static void log(IStatus status) {
+		getDefault().getLog().log(status);
 	}
 }

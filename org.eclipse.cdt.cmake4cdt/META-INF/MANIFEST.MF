@@ -14,7 +14,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide,
  org.eclipse.cdt.managedbuilder.ui,
  org.eclipse.jface,
- org.eclipse.equinox.preferences
+ org.eclipse.core.filesystem,
+ org.eclipse.cdt.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: org.eclipse.cdt.cmake,

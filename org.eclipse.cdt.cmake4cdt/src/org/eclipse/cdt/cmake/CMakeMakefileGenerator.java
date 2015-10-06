@@ -38,6 +38,7 @@ import org.eclipse.cdt.managedbuilder.core.ITool;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuilderCorePlugin;
 import org.eclipse.cdt.managedbuilder.makegen.IManagedBuilderMakefileGenerator;
+import org.eclipse.core.filesystem.URIUtil;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
@@ -200,7 +201,8 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 			
 
 			cmakeArgs.add("-DCMAKE_EXPORT_COMPILE_COMMANDS=On");
-			cmakeArgs.add( project.getLocation().toString() );
+			IPath pathToSource = project.getLocation();
+			cmakeArgs.add(pathToSource.toOSString());
 			
 			
 			
@@ -246,7 +248,14 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 			String[] a = new String[cmakeArgs.size()];
 			buildRunnerHelper.setLaunchParameters(launcher, cmakePath, cmakeArgs.toArray(a), workingDirectoryURI, null);
 			
-			ErrorParserManager epm = new ErrorParserManager(project, workingDirectoryURI, null, null);
+			// Dummy builder only used for marker generation
+			CMakeProjectBuilderImpl markerGenerator = new CMakeProjectBuilderImpl() {
+				{
+					setCurrentProject(project);
+				}
+			};
+
+			ErrorParserManager epm = new ErrorParserManager(project, URIUtil.toURI(pathToSource), markerGenerator, new String[] { CMakeErrorParserStdErr.ID, CMakeErrorParserStdOut.ID });
 			List<IConsoleParser> consoleParsers = new ArrayList<IConsoleParser>(); 
 			buildRunnerHelper.prepareStreams(epm, consoleParsers, (org.eclipse.cdt.core.resources.IConsole) cmakeConsole, new SubProgressMonitor(monitor, 20));
 

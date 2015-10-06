@@ -415,6 +415,26 @@ The file CMakeLists.txt must exist, the Eclipse project structures (.project and
          </description>
       </wizard>
    </extension>
+   <extension
+         id="CMakeErrorParserStderr"
+         name="%CMakeErrorParseStderr.name"
+         point="org.eclipse.cdt.core.ErrorParser">
+      <errorparser
+            class="org.eclipse.cdt.cmake.CMakeErrorParserStdErr"
+            id="org.eclipse.cdt.cmake.errorParserStderr"
+            name="%CMakeErrorParseStderr.name">
+      </errorparser>
+   </extension>
+   <extension
+         id="CMakeErrorParserStdout"
+         name="%CMakeErrorParseStdout.name"
+         point="org.eclipse.cdt.core.ErrorParser">
+      <errorparser
+            class="org.eclipse.cdt.cmake.CMakeErrorParserStdOut"
+            id="org.eclipse.cdt.cmake.errorParserStdout"
+            name="%CMakeErrorParseStdout.name">
+      </errorparser>
+   </extension>
    <!--
    <extension
          point="org.eclipse.cdt.ui.CDTWizard">

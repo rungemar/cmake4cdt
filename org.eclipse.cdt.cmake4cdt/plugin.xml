@@ -81,6 +81,19 @@
             isAbstract="false"
             languageSettingsProviders="org.eclipse.cdt.cmake.lang_set;org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetector"
             osList="all">
+         <optionCategory
+               id="org.eclipse.cdt.cmake.compiler.options"
+               name="Compiler options internal use">
+         </optionCategory>
+         <option
+               category="org.eclipse.cdt.cmake.compiler.options"
+               id="org.eclipse.cdt.cmake.cross.prefix"
+               isAbstract="false"
+               name="Prefix Arch Tuple"
+               resourceFilter="all"
+               value="defaultval"
+               valueType="string">
+         </option>
          <tool
                command="cmake"
                commandLinePattern="${COMMAND} "
@@ -171,7 +184,7 @@
                id="org.eclipse.cdt.cmake.compiler.c++"
                isAbstract="false"
                natureFilter="both"
-               superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
+               superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler">
             <inputType
                   dependencyContentType="org.eclipse.cdt.core.cxxHeader"
                   id="org.eclipse.cdt.cmake.inputType.cpp"
@@ -186,6 +199,13 @@
                   name="obj"
                   outputContentType="org.eclipse.cdt.core.objectFile">
             </outputType>
+            <option
+                  id="org.eclipse.cdt.cmake.c++.prefix"
+                  isAbstract="false"
+                  name="prefix"
+                  resourceFilter="all"
+                  valueType="string">
+            </option>
          </tool>
          <tool
                command="gcc"
@@ -193,7 +213,7 @@
                id="org.eclipse.cdt.cmake.compiler.c"
                isAbstract="false"
                natureFilter="both"
-               superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
+               superClass="cdt.managedbuild.tool.gnu.cross.c.compiler">
             <inputType
                   dependencyContentType="org.eclipse.cdt.core.cHeader"
                   id="org.eclipse.cdt.cmake.inputType.c"
@@ -366,17 +386,14 @@
                id="org.eclipse.cdt.core.gcc">
          </language-scope>
       </provider>
-      <provider
-            class="org.eclipse.cdt.cmake.langset.CMakeBuiltInSettingsProvider"
-            id="org.eclipse.cdt.cmake.built-in.lang_set"
-            name="CMake used Compiler Built-in Settings"
-            prefer-non-shared="false">
-         <language-scope
-               id="org.eclipse.cdt.core.g++">
-         </language-scope>
-         <language-scope
-               id="org.eclipse.cdt.core.gcc">
-         </language-scope>
+            <provider
+            class="org.eclipse.cdt.cmake.langset.CrossGCCBuiltinSpecsDetector"
+            id="org.eclipse.cdt.cmake.langset.CrossGCCBuiltinSpecsDetector"
+            name="CMakeCrossGCCBuiltinSpecsDetector"
+            parameter="${COMMAND} ${FLAGS} -E -P -v -dD &quot;${INPUTS}&quot;"
+            prefer-non-shared="true">
+         <language-scope id="org.eclipse.cdt.core.gcc"/>
+         <language-scope id="org.eclipse.cdt.core.g++"/>
       </provider>
    </extension>
    <extension

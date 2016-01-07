@@ -10,6 +10,7 @@
  *******************************************************************************/
 package org.eclipse.cdt.cmake;
 
+import org.eclipse.cdt.cmake.langset.CMakeLangSetProvider;
 import org.eclipse.cdt.core.model.CModelException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -29,6 +30,24 @@ public class Activator extends AbstractUIPlugin {
 	
 	// The "model". central storage for settings
 	private CMakeSettings m_settings = new CMakeSettings();
+	
+	private CMakeLangSetProvider langSetProvider = null;
+
+	/**
+	 * @return the langSetProvider
+	 */
+	public CMakeLangSetProvider getLangSetProvider() {
+		return langSetProvider;
+	}
+
+
+	/**
+	 * @param langSetProvider the langSetProvider to set
+	 */
+	public void setLangSetProvider(CMakeLangSetProvider langSetProvider) {
+		this.langSetProvider = langSetProvider;
+	}
+
 
 	/**
 	 * The constructor

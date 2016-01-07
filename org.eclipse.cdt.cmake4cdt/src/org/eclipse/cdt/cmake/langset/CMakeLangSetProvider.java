@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.prefs.BackingStoreException;
 
+import org.eclipse.cdt.cmake.Activator;
 import org.eclipse.cdt.cmake.CMakeOutputPath;
 import org.eclipse.cdt.cmake.langset.IBuildCommandParserEx.CompileUnitInfo;
 import org.eclipse.cdt.core.language.settings.providers.ILanguageSettingsProvider;
@@ -47,22 +48,30 @@ public class CMakeLangSetProvider extends LanguageSettingsBaseProvider
 	
 	
 	public CMakeLangSetProvider() {
+		init();
 	}
 
 
 	public CMakeLangSetProvider(String id, String name) {
 		super(id, name);
-		// TODO Auto-generated constructor stub
+		init();
 	}
 
 	public CMakeLangSetProvider(String id, String name, List<String> languages,
 			List<ICLanguageSettingEntry> entries) {
 		super(id, name, languages, entries);
+		init();
 	}
 
 	public CMakeLangSetProvider(String id, String name, List<String> languages,
 			List<ICLanguageSettingEntry> entries, Map<String, String> properties) {
 		super(id, name, languages, entries, properties);
+		init();
+	}
+	
+	private void init() {
+		Activator.getDefault().setLangSetProvider(this);
+		m_commandParser = new CMakeCompileCommandParserGCC();
 	}
 
 	public List<ICLanguageSettingEntry> getSettingEntries(ICConfigurationDescription cfgDescription, IResource rc, String languageId) {
@@ -71,59 +80,59 @@ public class CMakeLangSetProvider extends LanguageSettingsBaseProvider
 		if(cfgDescription == null || rc == null) {
 			return null;
 		}
+	
+		List<ICLanguageSettingEntry> entries = null;
+		entries = m_commandParser.getSettingEntries(cfgDescription, rc, languageId);
+		return entries;
+	}
+	
+	public void parseCompileComands(ICConfigurationDescription cfgDescription, IProject project ) {
 
-		IProject project = rc.getProject();
-		IProjectDescription prjDesc;
-		
 		IPath outputPath = CMakeOutputPath.getPath(project, cfgDescription.getName());
 		String filename = outputPath.append(COMPILE_CMDS_FILENAME).toString();
-		
-		List<ICLanguageSettingEntry> entries = null;
-
 		try {
-			// try to figure out which compiler was used. Assume gcc for now
-			CompileCmdsHandler cmdHdl = new CompileCmdsHandler(project, filename);
+			CompileCmdsHandler cmdHdl = new CompileCmdsHandler(cfgDescription, project, filename);
+		
 			if(m_commandParser == null || cmdHdl.hasChanged(false)) {  // just check if it has changed
 				CMakeCompileCmdsCwdTracker cwdTracker = new CMakeCompileCmdsCwdTracker();
-
+	
 				cmdHdl.parseCMakeCompileCommands();
-
+	
 				if(cmdHdl.hasSourcesOutsideProject()) {
 					Job job = new AddForeignSourcesWorkspaceJob("Creating \"Foreign Sources\" folders", project, cmdHdl.getSourcesOutsideProject()); 
 					job.schedule();
 				}
+	
+//				if(m_commandParser == null) {
+//					cmdHdl.detectCompiler();
+//				}
 
-				if(m_commandParser == null) {
-					cmdHdl.detectCompiler();
-					m_commandParser = new CMakeCompileCommandParserGCC();
-				}
 				m_commandParser.startup(cfgDescription, cwdTracker);
 				// commandParser.setResourceScope(ResourceScope.PROJECT);
-
+	
 				for(CompileUnitInfo cu: cmdHdl.getSources()) {
 					m_commandParser.processLine(cu.getCmdLine());
 				}
-
+	
 				m_commandParser.shutdown();
 				
+				
+				cmdHdl.detectCompiler( );
 				// modified file was processed, mark it as unmodified (save the current timestamp)
 				cmdHdl.hasChanged(true);
 				
 			}
-
-			entries = m_commandParser.getSettingEntries(cfgDescription, rc, languageId);
 		} 
 		catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (org.osgi.service.prefs.BackingStoreException e) {
+		}catch (org.osgi.service.prefs.BackingStoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally {
 			 
 		}
-		return entries;
 	}
 
 

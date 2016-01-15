@@ -86,8 +86,7 @@ public class CMakeLangSetProvider extends LanguageSettingsBaseProvider
 		return entries;
 	}
 	
-	public void parseCompileComands(ICConfigurationDescription cfgDescription, IProject project ) {
-
+	public void parseCompileComands(IProject project, ICConfigurationDescription cfgDescription ) {
 		IPath outputPath = CMakeOutputPath.getPath(project, cfgDescription.getName());
 		String filename = outputPath.append(COMPILE_CMDS_FILENAME).toString();
 		try {

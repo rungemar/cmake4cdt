@@ -18,27 +18,43 @@ package org.eclipse.cdt.cmake;
  */
 public class CXCompInfo {
 	
+	private String projectName;
 	private String configName;
 	private String xCompExe;
 	private String xCompPath;
 	private String xCompCmd;
+	private String xCompFlags;
 
+	
+	public String getxCompFlags() {
+		return xCompFlags;
+	}
+	public void setxCompFlags(String xCompFlags) {
+		this.xCompFlags = xCompFlags;
+	}
 
+	
 	public String getxCompExe() {
 		return xCompExe;
 	}
 	public void setxCompExe(String xCompExe) {
 		this.xCompExe = xCompExe;
 	}
-
-	public CXCompInfo(String configName) {
+	
+	public CXCompInfo(String projectName, String configName) {
+		this.projectName = projectName;
 		this.configName = configName;
+	}
+
+	public String getProjectName() {
+		return projectName;
 	}
 
 	public String getConfigName() {
 		return configName;
 	}
 
+	
 	public String getxCompCmd() {
 		return xCompCmd;
 	}
@@ -53,5 +69,4 @@ public class CXCompInfo {
 	public void setxCompPath(String compilerPath) {
 		this.xCompPath = compilerPath;
 	}
-
 }

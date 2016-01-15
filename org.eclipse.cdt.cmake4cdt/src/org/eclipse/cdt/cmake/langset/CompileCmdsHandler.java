@@ -123,21 +123,56 @@ public class CompileCmdsHandler {
 	
 	protected void detectCompiler()  {
 
-		for(CompileUnitInfo cui: sources) {
-			String cmd = cui.getCmdLine();
-			String[] parts = cmd.split(" ");
-			for(String part: parts) {
-				
-				if(part.endsWith("gcc") || part.endsWith("g++") || part.endsWith("c++") ) {
-					// this is the compiler part
-					setXCompInfo( part );
+		CompileUnitInfo cui = sources.get(0);
+
+		String compilerCommand = "";
+		String flags = "";
+		String sysrootPath = "";
+		boolean nextPartIsSysrootPath = false;
+
+		String cmd = cui.getCmdLine();
+		String[] parts = cmd.split(" ");
+		for(String part: parts) {
+			
+			if(part.endsWith("gcc") || part.endsWith("g++") || part.endsWith("c++") ) {
+				// this is the compiler part
+				compilerCommand = part ;
+				continue;
+			}
+			if(part.startsWith("--sysroot")) {
+				if(part.startsWith("--sysroot=")) {
+					// path in included part 
+					/// TODO: handle path with whitespaces which would be continues in next part 
+					sysrootPath = part.substring("--sysroot=".length());
 				}
+				else {
+					// path is in next part 
+					/// TODO: handle path with whitespaces which would be continues in next part 
+					nextPartIsSysrootPath = true;					
+				}
+				continue;
+			}
+			if(nextPartIsSysrootPath == true) {
+				sysrootPath = part;
+				nextPartIsSysrootPath = false;
 			}
 		}
-		// setCompilerTool( compilerCommand );
+		
+	
+//		// Pattern sysrootRegexp = Pattern.compile("\\-\\-sysroot[\\s=]([\\\"']?)(.*)\\1");
+//		Pattern sysrootRegexp = Pattern.compile("\\-\\-sysroot[=\\s]([\\\"'])(.*)\\1");
+//		Matcher sysrootMatcher = sysrootRegexp.matcher(cmd);
+//	    // check all occurance
+//	    if(sysrootMatcher.find()) {
+//	    	flags += " " + sysrootMatcher.group(2); 
+//	    }
+	    
+		flags += "--sysroot " + sysrootPath;
+
+	    setXCompInfo( compilerCommand, flags );
 	}
 
-	private void setXCompInfo( String compilerCommand ) {
+	private void setXCompInfo( String compilerCommand, String flags) {
 		CMakeSettings cms = Activator.getDefault().getSettings();
 		String buildConfigName = cfgdesc.getName();
 
@@ -146,15 +181,17 @@ public class CompileCmdsHandler {
 		String compExe = compCmd.getFileName().toString();
 		
 		
-		CXCompInfo xci =  cms.getXCompInfo( buildConfigName );
+		CXCompInfo xci =  cms.getXCompInfo( project.getName(), buildConfigName );
 		
 		if (xci == null) {
-			xci = new CXCompInfo(buildConfigName);
+			xci = new CXCompInfo(project.getName(), buildConfigName);
 		}
 		
 		xci.setxCompCmd(compilerCommand );
 		xci.setxCompExe( compExe );
 		xci.setxCompPath( compDir );
+		
+		xci.setxCompFlags( flags );
 		
 		cms.setXCompInfo( xci );
 	}

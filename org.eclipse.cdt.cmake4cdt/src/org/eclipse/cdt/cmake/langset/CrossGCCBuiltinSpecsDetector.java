@@ -16,6 +16,9 @@ package org.eclipse.cdt.cmake.langset;
 import org.eclipse.cdt.cmake.Activator;
 import org.eclipse.cdt.cmake.CMakeSettings;
 import org.eclipse.cdt.cmake.CXCompInfo;
+import org.eclipse.cdt.core.model.CoreModel;
+import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
+import org.eclipse.cdt.core.settings.model.ICProjectDescription;
 import org.eclipse.cdt.managedbuilder.language.settings.providers.GCCBuiltinSpecsDetector;
 
 public class CrossGCCBuiltinSpecsDetector extends GCCBuiltinSpecsDetector {
@@ -28,7 +31,13 @@ public class CrossGCCBuiltinSpecsDetector extends GCCBuiltinSpecsDetector {
 		if (currentCfgDescription != null) {
 			String buildConfigName = currentCfgDescription.getName();
 			CMakeSettings cms = Activator.getDefault().getSettings();
-			CXCompInfo xci = cms.getXCompInfo(buildConfigName);
+			CXCompInfo xci = cms.getXCompInfo(this.currentProject.getName(), buildConfigName);
+			if( xci == null) {
+				// no compiler info for current project / configuration -> try to parse it out of compile_commands.jaon
+				CMakeLangSetProvider lsp = Activator.getDefault().getLangSetProvider();
+				lsp.parseCompileComands(this.currentProject, this.currentCfgDescription );
+				xci = cms.getXCompInfo(this.currentProject.getName(), buildConfigName);
+			}
 			if( xci != null) {
 				cmd =  xci.getxCompCmd();
 			}
@@ -38,6 +47,24 @@ public class CrossGCCBuiltinSpecsDetector extends GCCBuiltinSpecsDetector {
 	
 	@Override
 	protected String getToolOptions(String languageId) {
-		return "--sysroot=/opt/lpkit/1.8-0.1.0-0.1-pentium3/sysroots/pentium3-lpkit-linux";
+		String sysroot = null;
+		String flags = "";
+		
+		if (currentCfgDescription != null) {
+			String buildConfigName = currentCfgDescription.getName();
+			CMakeSettings cms = Activator.getDefault().getSettings();
+			CXCompInfo xci = cms.getXCompInfo(this.currentProject.getName(), buildConfigName);
+			if( xci == null) {
+				// no compiler info for current project / configuration -> try to parse it out of compile_commands.jaon
+				CMakeLangSetProvider lsp = Activator.getDefault().getLangSetProvider();
+				lsp.parseCompileComands(this.currentProject, this.currentCfgDescription );
+				xci = cms.getXCompInfo(this.currentProject.getName(), buildConfigName);
+			}
+			if( xci != null) {
+				flags = xci.getxCompFlags();
+			}
+		}
+
+		return flags;
 	}
 }

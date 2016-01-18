@@ -14,12 +14,34 @@ package org.eclipse.cdt.cmake;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.HashMap;
 
-public class CMakeSettings implements PropertyChangeListener {
+public class CMakeSettings implements PropertyChangeListener { 
 
-	// private IPath cmakeExe;
-	// private String cmakeGenerator;
+	private HashMap<String, CXCompInfo> mXCompInfos = new HashMap<String, CXCompInfo>();
 
+//	public CMakeSettings() { 
+
+
+//		mXCompInfos = new HashMap<String, CXCompInfo>();
+//	}
+	
+	public CXCompInfo getXCompInfo(String projectName, String buildConfig) {
+		if(mXCompInfos.containsKey(genKey(projectName, buildConfig) )) {
+			return mXCompInfos.get(genKey(projectName, buildConfig));
+		}
+		else return null;
+	}
+	
+	public void setXCompInfo(CXCompInfo xci) {
+		mXCompInfos.put(xci.getConfigName(), xci);
+	}
+	
+	String genKey(String projectName, String buildConfig) {
+		String key = projectName + "/" + buildConfig;
+		return key;
+	}
+	
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);	
 
 	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
@@ -36,7 +58,6 @@ public class CMakeSettings implements PropertyChangeListener {
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
 		// TODO Auto-generated method stub
-
 	}
 
 }

@@ -20,6 +20,7 @@ import org.eclipse.cdt.core.model.CoreModel;
 import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
 import org.eclipse.cdt.core.settings.model.ICProjectDescription;
 import org.eclipse.cdt.managedbuilder.language.settings.providers.GCCBuiltinSpecsDetector;
+import org.eclipse.core.resources.IProject;
 
 public class CrossGCCBuiltinSpecsDetector extends GCCBuiltinSpecsDetector {
 
@@ -29,9 +30,13 @@ public class CrossGCCBuiltinSpecsDetector extends GCCBuiltinSpecsDetector {
 		String cmd = super.getCompilerCommand(languageId);
 		
 		if (currentCfgDescription != null) {
+			CXCompInfo xci = null;
 			String buildConfigName = currentCfgDescription.getName();
 			CMakeSettings cms = Activator.getDefault().getSettings();
-			CXCompInfo xci = cms.getXCompInfo(this.currentProject.getName(), buildConfigName);
+			IProject proj = this.currentProject;
+			if(proj != null) {
+				xci = cms.getXCompInfo(this.currentProject.getName(), buildConfigName);
+			}
 			if( xci == null) {
 				// no compiler info for current project / configuration -> try to parse it out of compile_commands.jaon
 				CMakeLangSetProvider lsp = Activator.getDefault().getLangSetProvider();

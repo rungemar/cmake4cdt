@@ -35,13 +35,13 @@ public class CrossGCCBuiltinSpecsDetector extends GCCBuiltinSpecsDetector {
 			CMakeSettings cms = Activator.getDefault().getSettings();
 			IProject proj = this.currentProject;
 			if(proj != null) {
-				xci = cms.getXCompInfo(this.currentProject.getName(), buildConfigName);
-			}
-			if( xci == null) {
-				// no compiler info for current project / configuration -> try to parse it out of compile_commands.jaon
-				CMakeLangSetProvider lsp = Activator.getDefault().getLangSetProvider();
-				lsp.parseCompileComands(this.currentProject, this.currentCfgDescription );
-				xci = cms.getXCompInfo(this.currentProject.getName(), buildConfigName);
+				xci = cms.getXCompInfo(proj.getName(), buildConfigName);
+				if( xci == null) {
+					// no compiler info for current project / configuration -> try to parse it out of compile_commands.jaon
+					CMakeLangSetProvider lsp = Activator.getDefault().getLangSetProvider();
+					lsp.parseCompileComands(proj, this.currentCfgDescription );
+					xci = cms.getXCompInfo(proj.getName(), buildConfigName);
+				}
 			}
 			if( xci != null) {
 				cmd =  xci.getxCompCmd();
@@ -56,14 +56,18 @@ public class CrossGCCBuiltinSpecsDetector extends GCCBuiltinSpecsDetector {
 		String flags = "";
 		
 		if (currentCfgDescription != null) {
+			CXCompInfo xci = null;
 			String buildConfigName = currentCfgDescription.getName();
 			CMakeSettings cms = Activator.getDefault().getSettings();
-			CXCompInfo xci = cms.getXCompInfo(this.currentProject.getName(), buildConfigName);
-			if( xci == null) {
-				// no compiler info for current project / configuration -> try to parse it out of compile_commands.jaon
-				CMakeLangSetProvider lsp = Activator.getDefault().getLangSetProvider();
-				lsp.parseCompileComands(this.currentProject, this.currentCfgDescription );
-				xci = cms.getXCompInfo(this.currentProject.getName(), buildConfigName);
+			IProject proj = this.currentProject;
+			if(proj != null) {
+				xci = cms.getXCompInfo(proj.getName(), buildConfigName);
+				if( xci == null) {
+					// no compiler info for current project / configuration -> try to parse it out of compile_commands.jaon
+					CMakeLangSetProvider lsp = Activator.getDefault().getLangSetProvider();
+					lsp.parseCompileComands(proj, this.currentCfgDescription );
+					xci = cms.getXCompInfo(proj.getName(), buildConfigName);
+				}
 			}
 			if( xci != null) {
 				flags = xci.getxCompFlags();

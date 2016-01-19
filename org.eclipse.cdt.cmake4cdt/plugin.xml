@@ -65,7 +65,6 @@
                buildArtefactType="org.eclipse.cdt.cmake.buildArtefactType.cmake"
                buildProperties="org.eclipse.cdt.cmake.buildType.default"
                id="org.eclipse.cdt.cmake.debug"
-               languageSettingsProviders="org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetector;org.eclipse.cdt.cmake.lang_set"
                name="%configuration.name.debug">
             <toolChain
                   archList="all"
@@ -77,9 +76,10 @@
          </configuration>
       </projectType>
       <toolChain
+            errorParsers="org.eclipse.cdt.cmake.errorParserStderr;org.eclipse.cdt.cmake.errorParserStdout;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GmakeErrorParser"
             id="org.eclipse.cdt.cmake.toolchain.base"
             isAbstract="false"
-            languageSettingsProviders="org.eclipse.cdt.cmake.lang_set;org.eclipse.cdt.managedbuilder.core.GCCBuiltinSpecsDetector"
+            languageSettingsProviders="org.eclipse.cdt.cmake.lang_set;org.eclipse.cdt.cmake.langset.CrossGCCBuiltinSpecsDetector"
             osList="all">
          <optionCategory
                id="org.eclipse.cdt.cmake.compiler.options"

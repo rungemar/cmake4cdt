@@ -39,6 +39,8 @@ import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuilderCorePlugin;
 import org.eclipse.cdt.managedbuilder.makegen.IManagedBuilderMakefileGenerator;
 import org.eclipse.core.filesystem.URIUtil;
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
@@ -166,6 +168,15 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 					throw new CoreException(new Status(IStatus.ERROR, ManagedBuilderCorePlugin.PLUGIN_ID, msg, new Exception()));
 				}
 			}
+			
+			IContainer outDirContainer = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(buildDir);
+			if( outDirContainer instanceof IFolder) {
+				IFolder outFolder = (IFolder)outDirContainer;
+				if(!outFolder.isDerived()) {
+					outFolder.setDerived(true, null);
+				}
+			}
+			
 			
 
 			IValueVariable destdirVar = varMgr.getValueVariable("CMake_DESTDIR"); //$NON-NLS-1$

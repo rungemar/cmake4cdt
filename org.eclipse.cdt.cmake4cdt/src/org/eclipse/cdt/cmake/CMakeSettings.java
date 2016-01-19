@@ -20,12 +20,6 @@ public class CMakeSettings implements PropertyChangeListener {
 
 	private HashMap<String, CXCompInfo> mXCompInfos = new HashMap<String, CXCompInfo>();
 
-//	public CMakeSettings() { 
-
-
-//		mXCompInfos = new HashMap<String, CXCompInfo>();
-//	}
-	
 	public CXCompInfo getXCompInfo(String projectName, String buildConfig) {
 		if(mXCompInfos.containsKey(genKey(projectName, buildConfig) )) {
 			return mXCompInfos.get(genKey(projectName, buildConfig));

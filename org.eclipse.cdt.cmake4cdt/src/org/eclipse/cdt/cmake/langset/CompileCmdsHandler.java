@@ -123,6 +123,10 @@ public class CompileCmdsHandler {
 	
 	protected void detectCompiler()  {
 
+		if(sources.size() < 1 ) {
+			return;
+		}
+		
 		CompileUnitInfo cui = sources.get(0);
 
 		String compilerCommand = "";
@@ -134,7 +138,7 @@ public class CompileCmdsHandler {
 		String[] parts = cmd.split(" ");
 		for(String part: parts) {
 			
-			if(part.endsWith("gcc") || part.endsWith("g++") || part.endsWith("c++") ) {
+			if(part.endsWith("gcc") || part.endsWith("g++") || part.endsWith("c++") || part.endsWith("cc") ) {
 				// this is the compiler part
 				compilerCommand = part ;
 				continue;

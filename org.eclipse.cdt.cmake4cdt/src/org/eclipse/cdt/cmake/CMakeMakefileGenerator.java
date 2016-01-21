@@ -161,21 +161,27 @@ public class CMakeMakefileGenerator implements IManagedBuilderMakefileGenerator 
 			}
 			
 			buildDir = getBuildWorkingDir();
-			if(!buildDir.toFile().exists()) {
-				boolean retval = buildDir.toFile().mkdir();
-				if(retval == false) {
-					String msg = new String("Could not create build output dir: '" + buildDir.toOSString() + "'");
-					throw new CoreException(new Status(IStatus.ERROR, ManagedBuilderCorePlugin.PLUGIN_ID, msg, new Exception()));
-				}
-			}
 			
 			IContainer outDirContainer = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(buildDir);
 			if( outDirContainer instanceof IFolder) {
 				IFolder outFolder = (IFolder)outDirContainer;
+				if (!outFolder.exists()) { 
+					outFolder.create(IResource.NONE, true, monitor);
+				}
+				
 				if(!outFolder.isDerived()) {
-					outFolder.setDerived(true, null);
+					outFolder.setDerived(true, monitor);
 				}
 			}
+			
+//			if(!buildDir.toFile().exists()) {
+//				boolean retval = buildDir.toFile().mkdir();
+//				if(retval == false) {
+//					String msg = new String("Could not create build output dir: '" + buildDir.toOSString() + "'");
+//					throw new CoreException(new Status(IStatus.ERROR, ManagedBuilderCorePlugin.PLUGIN_ID, msg, new Exception()));
+//				}
+//			}
+//			
 			
 			
 

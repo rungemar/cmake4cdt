@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.cdt.cmake.feature"
       label="CMake build support"
-      version="0.1.5.beta"
+      version="0.1.6.beta"
       provider-name="Rohde&amp;Schwarz">
 
    <description url="http://www.example.com/description">

@@ -28,7 +28,7 @@ public class CMakeSettings implements PropertyChangeListener {
 	}
 	
 	public void setXCompInfo(CXCompInfo xci) {
-		mXCompInfos.put(xci.getConfigName(), xci);
+		mXCompInfos.put(genKey(xci.getProjectName(), xci.getConfigName()), xci);
 	}
 	
 	String genKey(String projectName, String buildConfig) {

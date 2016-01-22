@@ -170,8 +170,9 @@ public class CompileCmdsHandler {
 //	    if(sysrootMatcher.find()) {
 //	    	flags += " " + sysrootMatcher.group(2); 
 //	    }
-	    
-		flags += "--sysroot " + sysrootPath;
+	    if(!sysrootPath.isEmpty()) {
+	    	flags += "--sysroot " + sysrootPath;
+	    }
 
 	    setXCompInfo( compilerCommand, flags );
 	}
@@ -198,6 +199,21 @@ public class CompileCmdsHandler {
 		xci.setxCompFlags( flags );
 		
 		cms.setXCompInfo( xci );
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isCachedInSettings() {
+		CMakeSettings cms = Activator.getDefault().getSettings();
+		CXCompInfo xci =  cms.getXCompInfo( project.getName(), cfgdesc.getName() );
+		
+		if( xci == null) {
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 	
 	private void setCompilerTool( String compilerCommand ) {
@@ -244,8 +260,6 @@ public class CompileCmdsHandler {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
-		
 	}
 
 	private ITool getCCompilerTool() {
@@ -316,4 +330,5 @@ public class CompileCmdsHandler {
 	public List<CompileUnitInfo> getSourcesOutsideProject() {
 		return foreignSources;
 	}
+
 }

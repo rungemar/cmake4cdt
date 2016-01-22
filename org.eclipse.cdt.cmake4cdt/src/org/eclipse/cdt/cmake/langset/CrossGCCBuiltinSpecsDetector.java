@@ -34,6 +34,9 @@ public class CrossGCCBuiltinSpecsDetector extends GCCBuiltinSpecsDetector {
 			String buildConfigName = currentCfgDescription.getName();
 			CMakeSettings cms = Activator.getDefault().getSettings();
 			IProject proj = this.currentProject;
+			if(proj == null) {
+				proj = currentCfgDescription.getProjectDescription().getProject();
+			}
 			if(proj != null) {
 				xci = cms.getXCompInfo(proj.getName(), buildConfigName);
 				if( xci == null) {
@@ -60,6 +63,9 @@ public class CrossGCCBuiltinSpecsDetector extends GCCBuiltinSpecsDetector {
 			String buildConfigName = currentCfgDescription.getName();
 			CMakeSettings cms = Activator.getDefault().getSettings();
 			IProject proj = this.currentProject;
+			if(proj == null) {
+				proj = currentCfgDescription.getProjectDescription().getProject();
+			}
 			if(proj != null) {
 				xci = cms.getXCompInfo(proj.getName(), buildConfigName);
 				if( xci == null) {

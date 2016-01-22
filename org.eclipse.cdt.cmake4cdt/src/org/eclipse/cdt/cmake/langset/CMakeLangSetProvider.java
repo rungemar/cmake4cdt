@@ -92,7 +92,7 @@ public class CMakeLangSetProvider extends LanguageSettingsBaseProvider
 		try {
 			CompileCmdsHandler cmdHdl = new CompileCmdsHandler(cfgDescription, project, filename);
 		
-			if(m_commandParser == null || cmdHdl.hasChanged(false)) {  // just check if it has changed
+			if( cmdHdl.hasChanged(false) || !cmdHdl.isCachedInSettings() ) {  
 				CMakeCompileCmdsCwdTracker cwdTracker = new CMakeCompileCmdsCwdTracker();
 	
 				cmdHdl.parseCMakeCompileCommands();
@@ -113,13 +113,12 @@ public class CMakeLangSetProvider extends LanguageSettingsBaseProvider
 					m_commandParser.processLine(cu.getCmdLine());
 				}
 	
-				m_commandParser.shutdown();
-				
-				
 				cmdHdl.detectCompiler( );
 				// modified file was processed, mark it as unmodified (save the current timestamp)
 				cmdHdl.hasChanged(true);
-				
+
+				// shutdown triggers some action that might access the compile command, so detect it before 
+				m_commandParser.shutdown();
 			}
 		} 
 		catch (CoreException e) {

@@ -58,11 +58,9 @@
             osList="all">
       </targetPlatform>
       <projectType
-            buildArtefactType="org.eclipse.cdt.cmake.buildArtefactType.cmake"
             id="org.eclipse.cdt.cmake.CMakeProject"
             isAbstract="false">
          <configuration
-               buildArtefactType="org.eclipse.cdt.cmake.buildArtefactType.cmake"
                buildProperties="org.eclipse.cdt.cmake.buildType.default"
                id="org.eclipse.cdt.cmake.debug"
                name="%configuration.name.debug">
@@ -255,7 +253,8 @@
       <builder
             callOnEmptyDelta="true"
             hasNature="true"
-            isConfigurable="true">
+            isConfigurable="true"
+            supportsConfigurations="true">
          <run
                class="org.eclipse.cdt.cmake.CMakeProjectBuilderImpl">
          </run>

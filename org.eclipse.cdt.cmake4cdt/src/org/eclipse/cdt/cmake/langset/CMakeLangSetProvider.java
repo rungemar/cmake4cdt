@@ -87,49 +87,33 @@ public class CMakeLangSetProvider extends LanguageSettingsBaseProvider
 	}
 	
 	public void parseCompileComands(IProject project, ICConfigurationDescription cfgDescription ) {
-		IPath outputPath = CMakeOutputPath.getPath(project, cfgDescription.getName());
-		String filename = outputPath.append(COMPILE_CMDS_FILENAME).toString();
-		try {
-			CompileCmdsHandler cmdHdl = new CompileCmdsHandler(cfgDescription, project, filename);
 		
-			if( cmdHdl.hasChanged(false) || !cmdHdl.isCachedInSettings() ) {  
+		CompileCmdsHandler cmdHdl = Activator.getDefault().getSettings().getCompileCmds(project, cfgDescription.getName());
+		if(cmdHdl != null) {
+			try {
 				CMakeCompileCmdsCwdTracker cwdTracker = new CMakeCompileCmdsCwdTracker();
-	
-				cmdHdl.parseCMakeCompileCommands();
 	
 				if(cmdHdl.hasSourcesOutsideProject()) {
 					Job job = new AddForeignSourcesWorkspaceJob("Creating \"Foreign Sources\" folders", project, cmdHdl.getSourcesOutsideProject()); 
 					job.schedule();
 				}
 	
-//				if(m_commandParser == null) {
-//					cmdHdl.detectCompiler();
-//				}
-
 				m_commandParser.startup(cfgDescription, cwdTracker);
 				// commandParser.setResourceScope(ResourceScope.PROJECT);
 	
 				for(CompileUnitInfo cu: cmdHdl.getSources()) {
 					m_commandParser.processLine(cu.getCmdLine());
 				}
-	
-				cmdHdl.detectCompiler( );
-				// modified file was processed, mark it as unmodified (save the current timestamp)
-				cmdHdl.hasChanged(true);
-
 				// shutdown triggers some action that might access the compile command, so detect it before 
 				m_commandParser.shutdown();
+			} 
+			catch (CoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} 
-		catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}catch (org.osgi.service.prefs.BackingStoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		finally {
-			 
+			finally {
+				 
+			}
 		}
 	}
 

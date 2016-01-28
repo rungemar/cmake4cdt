@@ -14,24 +14,78 @@ package org.eclipse.cdt.cmake;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
+
+import org.eclipse.cdt.cmake.langset.CompileCmdsHandler;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
+import org.json.JSONException;
+import org.osgi.service.prefs.BackingStoreException;
 
 public class CMakeSettings implements PropertyChangeListener { 
 
-	private HashMap<String, CXCompInfo> mXCompInfos = new HashMap<String, CXCompInfo>();
+	private HashMap<String, CompileCmdsHandler> mCompCmds = new HashMap<String, CompileCmdsHandler>();
+	
+	public CompileCmdsHandler getCompileCmds(IProject project, String configName) {
+		String projectName = project.getName();
+		CompileCmdsHandler cmdHdl = null;
 
-	public CXCompInfo getXCompInfo(String projectName, String buildConfig) {
-		if(mXCompInfos.containsKey(genKey(projectName, buildConfig) )) {
-			return mXCompInfos.get(genKey(projectName, buildConfig));
+		try {
+			if(!mCompCmds.containsKey(genKey(projectName, configName) )) {
+				// for this project + build config compile_command.json was not evaluated yet 
+				IPath outputPath = CMakeOutputPath.getPath(project, configName);
+				String filename = outputPath.append(CompileCmdsHandler.COMPILE_CMDS_FILENAME).toString();
+	
+				try {
+					cmdHdl = new CompileCmdsHandler(project, configName, filename);
+					// only setCompileCmds() if the file compile_command.json was there an could be parsed 
+					cmdHdl.parseCMakeCompileCommands();
+					cmdHdl.hasChanged(true);
+					setCompileCmds(cmdHdl);
+				}
+				catch(FileNotFoundException fex) {
+					System.out.printf("Could not open json file: %s", fex.getMessage());
+				}
+				catch(JSONException jex) {
+					System.out.printf("JSONException: %s", jex.getMessage());
+				}
+				finally {
+					
+				}
+			}
+			else {
+				// compile_command.json was evaluated before -> check if it has changed since then
+				cmdHdl = mCompCmds.get(genKey(projectName, configName));
+				if(cmdHdl.hasChanged(false)) {
+					try {
+						cmdHdl.parseCMakeCompileCommands();
+						cmdHdl.hasChanged(true);
+						setCompileCmds(cmdHdl);
+					}
+					catch(FileNotFoundException fex) {
+						System.out.printf("Could not open json file: %s", fex.getMessage());
+					}
+					catch(JSONException jex) {
+						System.out.printf("JSONException: %s", jex.getMessage());
+					}
+					finally {
+						
+					}
+				}
+			}
 		}
-		else return null;
+		catch(BackingStoreException be) {
+			be.printStackTrace();
+		}
+		return mCompCmds.get(genKey(projectName, configName));
 	}
 	
-	public void setXCompInfo(CXCompInfo xci) {
-		mXCompInfos.put(genKey(xci.getProjectName(), xci.getConfigName()), xci);
+	private void setCompileCmds(CompileCmdsHandler ccmds) {
+		mCompCmds.put(genKey(ccmds.getProjectName(), ccmds.getConfigName()), ccmds);
 	}
-	
-	String genKey(String projectName, String buildConfig) {
+
+	private String genKey(String projectName, String buildConfig) {
 		String key = projectName + "/" + buildConfig;
 		return key;
 	}

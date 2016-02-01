@@ -11,8 +11,15 @@
 package org.eclipse.cdt.cmake.ui;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 
 import org.eclipse.cdt.cmake.CMakeMakefileGenerator;
+import org.eclipse.cdt.cmake.CMakeOutputPath;
 import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
 import org.eclipse.cdt.core.settings.model.ICResourceDescription;
 import org.eclipse.cdt.managedbuilder.core.BuildException;
@@ -23,6 +30,13 @@ import org.eclipse.cdt.managedbuilder.core.ITool;
 import org.eclipse.cdt.managedbuilder.core.ManagedBuildManager;
 import org.eclipse.cdt.ui.newui.AbstractCPropertyTab;
 import org.eclipse.cdt.ui.newui.ICPropertyProvider;
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -49,11 +63,13 @@ public class CPropertyTab extends AbstractCPropertyTab {
 
 	private Combo cmakeBuildTypeCombo;
 	private Text  cmakeToolchainFileTextField;
+	private Text  additionalCMakeArgsLabelTextField;
 	private Button traceBtn;
 	private Button debugBtn;
 	
 	private ICConfigurationDescription cfgd = null;
 	private String  m_toolchainFile = null;
+	private String  m_addArgs = null;
 	private String  m_buildType = null;
 	private boolean m_trace = false;
 	private boolean m_debug = false;
@@ -119,6 +135,21 @@ public class CPropertyTab extends AbstractCPropertyTab {
 				if (newValue != null) {
 					cmakeToolchainFileTextField.setText(newValue);
 				}
+			}
+		});
+
+		Label additionalCMakeArgsLabel = new Label(usercomp, SWT.NONE);
+		additionalCMakeArgsLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
+		additionalCMakeArgsLabel.setText("Additional CMake arguments:");
+		
+		additionalCMakeArgsLabelTextField = new Text(usercomp, SWT.BORDER);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		additionalCMakeArgsLabelTextField.setLayoutData(gd);
+		additionalCMakeArgsLabelTextField.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				m_addArgs = additionalCMakeArgsLabelTextField.getText();
 			}
 		});
 
@@ -255,6 +286,11 @@ public class CPropertyTab extends AbstractCPropertyTab {
 	}
 	
 	private void setToolSettings()  {
+		
+		
+//		if( settingsChanged() ) {
+			rmOutputDir();
+//		}
 		ITool cmakeTool = getCMakeTool();
 		
 		try {
@@ -301,6 +337,23 @@ public class CPropertyTab extends AbstractCPropertyTab {
 			cmakeTool = cmakeTools[0];
 		}
 		return cmakeTool;
+	}
+	
+	private void rmOutputDir() {
+		IPath outputPath = CMakeOutputPath.getPath(cfgd.getProjectDescription().getProject(), cfgd.getName());
+
+		try {
+			IContainer outDirContainer = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(outputPath);
+			if(outDirContainer.exists()) {
+				if( outDirContainer instanceof IFolder) {
+					IFolder outFolder = (IFolder)outDirContainer;
+					outFolder.delete(true, new NullProgressMonitor());
+				}
+			}
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private String browsePressed() {

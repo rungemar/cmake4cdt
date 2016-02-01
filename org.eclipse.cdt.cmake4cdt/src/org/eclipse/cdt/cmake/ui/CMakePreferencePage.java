@@ -13,14 +13,18 @@ package org.eclipse.cdt.cmake.ui;
 
 import java.io.File;
 
+
 import org.eclipse.cdt.cmake.Activator;
 import org.eclipse.cdt.cmake.CMakeInfo;
 import org.eclipse.cdt.cmake.CMakeInfoRetriever;
+import org.eclipse.cdt.cmake.CMakeOutputPath;
 import org.eclipse.cdt.cmake.IAcceptsCMakeInfo;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
+import org.eclipse.jface.preference.ListEditor;
+import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -46,6 +50,17 @@ public class CMakePreferencePage extends FieldEditorPreferencePage implements
 		setDescription("Workspace wide settings for CMake. These values can be overridden per project in the project properties.\n");
 		
 		cmakeInfoRetriever = new CMakeInfoRetriever(this);
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.preference.FieldEditorPreferencePage#performOk()
+	 */
+	@Override
+	public boolean performOk() {
+		//TODO get project and build condif
+		//CMakeOutputPath.getPath(project, configName);
+		
+		return super.performOk();
 	}
 
 	@Override
@@ -94,6 +109,8 @@ public class CMakePreferencePage extends FieldEditorPreferencePage implements
 		cmakeGeneratorsEditor = new ComboFieldEditor(PreferenceConstants.P_CMAKE_GENERATOR, "Generator (-G):", CMakeInfo.getKnownGenerators(), getFieldEditorParent());
 		
 		addField(cmakeGeneratorsEditor);
+		addField( new StringFieldEditor("addArgs", "Additional CMake arguments", getFieldEditorParent()) );
+
 		addField( new DestdirFieldEditor( PreferenceConstants.P_BUILDDIR, "&Build in dir:", getFieldEditorParent()));
 		addField( new DestdirFieldEditor( PreferenceConstants.P_DESTDIR, "&DESTDIR:", getFieldEditorParent()));
 	}

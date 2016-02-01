@@ -80,6 +80,8 @@ public class CMakeProjectGenerator {
  
 	public static final String CMAKE_TOOLCHAIN_ID = "org.eclipse.cdt.cmake.toolChain.debug";
 	public static final String CMAKE_BUILDER_ID = "org.eclipse.cdt.cmake.CMakeProjectBuilder";
+	public static final String GEN_MAKE_BUILDER_ID = "org.eclipse.cdt.managedbuilder.core.genmakebuilder";
+	
 	private IProject project;
 	
     private IWizardContainer container = null;
@@ -114,23 +116,32 @@ public class CMakeProjectGenerator {
 		info.setManagedProject(mProj);
 
 		createBuildConfigurations(cprojDesc);
-		CCorePlugin.getDefault().setProjectDescription(project, cprojDesc, true, monitor);
 
 		// Add CMake builder
 		projDesc = project.getDescription();
 		ICommand[] oldBuilders = projDesc.getBuildSpec();
-		ICommand[] newBuilders = new ICommand[oldBuilders.length + 1];
+		ICommand[] newBuilders = new ICommand[oldBuilders.length + 2];
 		ICommand cmakeBuilder = projDesc.newCommand();
-		newBuilders[0] = cmakeBuilder;
 		
 		cmakeBuilder.setBuilderName(CMAKE_BUILDER_ID);
 		cmakeBuilder.setBuilding(IncrementalProjectBuilder.FULL_BUILD, true);
-		System.arraycopy(oldBuilders, 0, newBuilders, 1, oldBuilders.length);
+		cmakeBuilder.setBuilding(IncrementalProjectBuilder.INCREMENTAL_BUILD, true);
+		cmakeBuilder.setBuilding(IncrementalProjectBuilder.CLEAN_BUILD, true);
+		newBuilders[0] = cmakeBuilder;
 		
-	
+		ICommand makeBuilder = projDesc.newCommand();
+		makeBuilder.setBuilderName(GEN_MAKE_BUILDER_ID);
+		makeBuilder.setBuilding(IncrementalProjectBuilder.FULL_BUILD, true);
+		makeBuilder.setBuilding(IncrementalProjectBuilder.INCREMENTAL_BUILD, true);
+		makeBuilder.setBuilding(IncrementalProjectBuilder.CLEAN_BUILD, true);
+		newBuilders[1] = makeBuilder;
+		
+		System.arraycopy(oldBuilders, 0, newBuilders, 2, oldBuilders.length);
+		
 		projDesc.setBuildSpec(newBuilders);
-		project.setDescription(projDesc, monitor);
-		
+		project.setDescription(projDesc, monitor);		
+
+		CCorePlugin.getDefault().setProjectDescription(project, cprojDesc, true, monitor);
 	}
 
 	public void extractHelloWorldTemplate(IProgressMonitor monitor) throws CoreException {
@@ -139,7 +150,7 @@ public class CMakeProjectGenerator {
 			Configuration fmConfig = new Configuration(Configuration.VERSION_2_3_22);
 			URL templateDirURL = FileLocator.find(Activator.getContext().getBundle(), new Path("/templates/ConsoleHelloWorld"), null); //$NON-NLS-1$
 
-			// workaroud bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=145096  (spaces in URL not escaped for URI)
+			// workaround bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=145096  (spaces in URL not escaped for URI)
 			URL tmpURL = FileLocator.toFileURL(templateDirURL);
 			URI tmpURI = new URI(tmpURL.getProtocol(), tmpURL.getPath(), null);
 			fmConfig.setDirectoryForTemplateLoading(new File(tmpURI));

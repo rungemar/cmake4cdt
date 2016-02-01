@@ -46,4 +46,6 @@ public class CMakeConsole implements IConsole {
 		return fConsoleManager.getConsole(project).getErrorStream();
 	}
 
+
+	
 }

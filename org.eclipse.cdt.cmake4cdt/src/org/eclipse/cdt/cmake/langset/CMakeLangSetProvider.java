@@ -18,6 +18,7 @@ import java.util.prefs.BackingStoreException;
 
 import org.eclipse.cdt.cmake.Activator;
 import org.eclipse.cdt.cmake.CMakeOutputPath;
+import org.eclipse.cdt.cmake.CMakeSettings;
 import org.eclipse.cdt.cmake.langset.IBuildCommandParserEx.CompileUnitInfo;
 import org.eclipse.cdt.core.language.settings.providers.ILanguageSettingsProvider;
 import org.eclipse.cdt.core.language.settings.providers.LanguageSettingsBaseProvider;
@@ -80,15 +81,31 @@ public class CMakeLangSetProvider extends LanguageSettingsBaseProvider
 		if(cfgDescription == null || rc == null) {
 			return null;
 		}
+		
+		IProject proj = rc.getProject();
+		CMakeSettings cms = Activator.getDefault().getSettings();
+		if(proj != null) {
+			CompileCmdsHandler cmdHdl = cms.getCompileCmds(proj, cfgDescription.getName());
+			if(cmdHdl != null) {
+				try {
+					if(cmdHdl.hasChanged(false)) {
+						parseCompileComands(proj, cfgDescription, cmdHdl );
+					}
+				} catch (org.osgi.service.prefs.BackingStoreException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
 	
 		List<ICLanguageSettingEntry> entries = null;
 		entries = m_commandParser.getSettingEntries(cfgDescription, rc, languageId);
 		return entries;
 	}
 	
-	public void parseCompileComands(IProject project, ICConfigurationDescription cfgDescription ) {
+	public void parseCompileComands( IProject project, ICConfigurationDescription cfgDescription, CompileCmdsHandler cmdHdl ) {
 		
-		CompileCmdsHandler cmdHdl = Activator.getDefault().getSettings().getCompileCmds(project, cfgDescription.getName());
 		if(cmdHdl != null) {
 			try {
 				CMakeCompileCmdsCwdTracker cwdTracker = new CMakeCompileCmdsCwdTracker();

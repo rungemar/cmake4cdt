@@ -301,7 +301,7 @@ public class CompileCmdsHandler {
 			prefs.flush();
 		}
 		
-		if(value.equals(current_ts)) {
+		if(value.longValue() == current_ts.longValue()) {
 			return false;
 		}
 		else {

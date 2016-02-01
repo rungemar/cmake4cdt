@@ -15,10 +15,6 @@ package org.eclipse.cdt.cmake.langset;
 
 import org.eclipse.cdt.cmake.Activator;
 import org.eclipse.cdt.cmake.CMakeSettings;
-import org.eclipse.cdt.cmake.CXCompInfo;
-import org.eclipse.cdt.core.model.CoreModel;
-import org.eclipse.cdt.core.settings.model.ICConfigurationDescription;
-import org.eclipse.cdt.core.settings.model.ICProjectDescription;
 import org.eclipse.cdt.managedbuilder.language.settings.providers.GCCBuiltinSpecsDetector;
 import org.eclipse.core.resources.IProject;
 
@@ -49,7 +45,6 @@ public class CrossGCCBuiltinSpecsDetector extends GCCBuiltinSpecsDetector {
 	
 	@Override
 	protected String getToolOptions(String languageId) {
-		String sysroot = null;
 		String flags = "";
 		
 		if (currentCfgDescription != null) {

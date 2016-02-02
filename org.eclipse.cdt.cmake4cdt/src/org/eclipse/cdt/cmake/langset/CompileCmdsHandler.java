@@ -61,6 +61,19 @@ public class CompileCmdsHandler {
 		this.filename = filename;
 	}
 	
+	/**
+	 * @return the filename
+	 */
+	public String getFilename() {
+		return filename;
+	}
+	
+	public Long getFileModTime() {
+		File f = new File(this.filename);
+		Long current_ts = f.lastModified();
+		return current_ts;
+	}
+
 	public String getProjectName() {
 		return this.project.getName();
 	}
@@ -91,14 +104,12 @@ public class CompileCmdsHandler {
 		this.xCompCmd = xCompCmd;
 	}
 
-
 	public String getxCompPath() {
 		return xCompPath;
 	}
 	public void setxCompPath(String compilerPath) {
 		this.xCompPath = compilerPath;
 	}
-
 	
 	public void parseCMakeCompileCommands() throws FileNotFoundException, JSONException  {
 		foreignSources.clear();
@@ -173,13 +184,6 @@ public class CompileCmdsHandler {
 		}
 		
 	
-//		// Pattern sysrootRegexp = Pattern.compile("\\-\\-sysroot[\\s=]([\\\"']?)(.*)\\1");
-//		Pattern sysrootRegexp = Pattern.compile("\\-\\-sysroot[=\\s]([\\\"'])(.*)\\1");
-//		Matcher sysrootMatcher = sysrootRegexp.matcher(cmd);
-//	    // check all occurance
-//	    if(sysrootMatcher.find()) {
-//	    	flags += " " + sysrootMatcher.group(2); 
-//	    }
 	    if(!sysrootPath.isEmpty()) {
 	    	flags += "--sysroot " + sysrootPath;
 	    }
@@ -193,84 +197,6 @@ public class CompileCmdsHandler {
 	    xCompFlags = flags;
 	}
 
-//	/**
-//	 * @return
-//	 */
-//	public boolean isCachedInSettings() {
-//		CMakeSettings cms = Activator.getDefault().getSettings();
-//		CXCompInfo xci =  cms.getXCompInfo( project.getName(), cfgdesc.getName() );
-//		
-//		if( xci == null) {
-//			return false;
-//		}
-//		else {
-//			return true;
-//		}
-//	}
-//	
-//	private void setCompilerTool( String compilerCommand ) {
-//		String compPrefix = "";
-//		try {
-//			java.nio.file.Path compCmd = Paths.get(compilerCommand);
-//			String compDir = compCmd.getParent().toString();
-//			String compFn = compCmd.getFileName().toString();
-//			
-//			Pattern pattern = Pattern.compile("(.*?)g\\+\\+");
-//			Matcher matcher = pattern.matcher(compFn);
-//			if (matcher.find())
-//			{
-//			    compPrefix = matcher.group(1);
-//			}
-//			
-//	        IResourceInfo resourceInfos[] = ManagedBuildManager.getConfigurationForDescription(cfgdesc).getResourceInfos();
-//	        IResourceInfo resourceInfo = resourceInfos[0];
-//	
-//	        ITool cppCompTool = getCppCompilerTool();
-//	//      String cmd = cCompTool.getToolCommand();
-//	//      cCompTool.setToolCommand( compilerCommand );
-//	
-//	        IConfiguration cfg = ManagedBuildManager.getConfigurationForDescription(cfgdesc);
-//	        IToolChain tc = cfg.getToolChain();
-//	
-////			IOption option = tc.getOptionById("cdt.managedbuild.option.gnu.cross.prefix"); //$NON-NLS-1$
-//			
-//			
-//	        IOption prefixOptionTmpl = cppCompTool.getOptionBySuperClassId( "org.eclipse.cdt.cmake.c++.prefix" );
-//	        IOption prefixOption = cppCompTool.getOptionToSet(prefixOptionTmpl, false);
-//			prefixOption.setValue(compPrefix);
-//	        ManagedBuildManager.setOption(resourceInfo, cppCompTool, prefixOption, compPrefix);
-//	//
-//	//		IOption builyTypeOptionTmpl = cmakeTool.getOptionById(CMAKE_OPTION_BUILDTYPE);
-//	//		IOption builyTypeOption = cmakeTool.getOptionToSet(builyTypeOptionTmpl, false);
-//	//		builyTypeOption.setValue(m_buildType);
-//	//        ManagedBuildManager.setOption(resourceInfo, cmakeTool, toolchainfileOption, m_toolchainFile);
-//	
-//	        
-//	        // ------ Save this business to disk.
-//	        ManagedBuildManager.saveBuildInfo(cfgdesc.getProjectDescription().getProject(), true);
-//		} catch (BuildException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//	}
-//
-//	private ITool getCCompilerTool() {
-//		return getToolByID(CompileCmdsHandler.CROSS_GCC_TOOL_ID);
-//	}
-//
-//	private ITool getCppCompilerTool() {
-//		return getToolByID(CompileCmdsHandler.CROSS_GPP_TOOL_ID);
-//	}
-//
-//	private ITool getToolByID(String id) {
-//		IConfiguration cfg = ManagedBuildManager.getConfigurationForDescription(cfgdesc);
-//		ITool[] tools = cfg.getToolsBySuperClassId(id);
-//		ITool tool = null;
-//		if(tools.length > 0) {
-//			tool = tools[0];
-//		}
-//		return tool;
-//	}
 	
 	/**
 	 * @return
@@ -293,8 +219,7 @@ public class CompileCmdsHandler {
 		String key = this.filename;
 		Long value = prefs.getLong(key, 0);
 		
-		File f = new File(this.filename);
-		Long current_ts = f.lastModified();
+		Long current_ts = getFileModTime();
 		
 		if(resetModifiedTimestamp) {
 			prefs.putLong(key, current_ts);

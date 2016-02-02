@@ -30,6 +30,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -38,6 +39,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
 
 
@@ -88,8 +90,20 @@ public class CMakeLangSetProvider extends LanguageSettingsBaseProvider
 			CompileCmdsHandler cmdHdl = cms.getCompileCmds(proj, cfgDescription.getName());
 			if(cmdHdl != null) {
 				try {
-					if(cmdHdl.hasChanged(false)) {
+					ProjectScope ps = new ProjectScope(proj);
+					IEclipsePreferences prefs = ps.getNode( Activator.getId() );
+					
+					String key = "LangSetProv/" + cmdHdl.getFilename();
+					Long value = prefs.getLong(key, 0);
+
+					Long current_ts = cmdHdl.getFileModTime();
+
+					
+					if( value.longValue() != current_ts.longValue() ) {
 						parseCompileComands(proj, cfgDescription, cmdHdl );
+
+						prefs.putLong(key, current_ts);
+						prefs.flush();
 					}
 				} catch (org.osgi.service.prefs.BackingStoreException e) {
 					// TODO Auto-generated catch block

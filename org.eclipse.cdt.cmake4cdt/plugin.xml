@@ -342,6 +342,10 @@
                   value="org.eclipse.core.resources.IResource">
             </instanceof>
          </enabledWhen>
+         <filter
+               name="projectNature"
+               value="org.eclipse.cdt.cmake.cmakeNature">
+         </filter>
       </page>
    </extension>
    <extension

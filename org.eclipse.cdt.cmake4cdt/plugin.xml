@@ -164,9 +164,11 @@
             </option>
          </tool>
          <builder
+               arguments="DESTDIR=${CMake_DESTDIR}"
                buildfileGenerator="org.eclipse.cdt.cmake.CMakeMakefileGenerator"
                commandLauncher="org.eclipse.cdt.cmake.CommandLauncherRC"
                id="org.eclipse.cdt.cmake.builder"
+               incrementalBuildTarget="install"
                isAbstract="false"
                isVariableCaseSensitive="false"
                name="%builder.name">

@@ -138,20 +138,20 @@ public class CPropertyTab extends AbstractCPropertyTab {
 			}
 		});
 
-		Label additionalCMakeArgsLabel = new Label(usercomp, SWT.NONE);
-		additionalCMakeArgsLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
-		additionalCMakeArgsLabel.setText("Additional CMake arguments:");
-		
-		additionalCMakeArgsLabelTextField = new Text(usercomp, SWT.BORDER);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalSpan = 2;
-		additionalCMakeArgsLabelTextField.setLayoutData(gd);
-		additionalCMakeArgsLabelTextField.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				m_addArgs = additionalCMakeArgsLabelTextField.getText();
-			}
-		});
+//		Label additionalCMakeArgsLabel = new Label(usercomp, SWT.NONE);
+//		additionalCMakeArgsLabel.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
+//		additionalCMakeArgsLabel.setText("Additional CMake arguments:");
+//		
+//		additionalCMakeArgsLabelTextField = new Text(usercomp, SWT.BORDER);
+//		gd = new GridData(GridData.FILL_HORIZONTAL);
+//		gd.horizontalSpan = 2;
+//		additionalCMakeArgsLabelTextField.setLayoutData(gd);
+//		additionalCMakeArgsLabelTextField.addModifyListener(new ModifyListener() {
+//			@Override
+//			public void modifyText(ModifyEvent e) {
+//				m_addArgs = additionalCMakeArgsLabelTextField.getText();
+//			}
+//		});
 
 
 		Label cmakeTraceLabel = new Label(usercomp, SWT.NONE);

@@ -98,13 +98,21 @@ public class CMakeProjectGenerator {
 	public void setupProject(IProgressMonitor monitor) throws CoreException {
 		// Add CMake nature
 		IProjectDescription projDesc = project.getDescription();
+		boolean cmakeNatureAlreadyThere = false;
 		String[] oldIds = projDesc.getNatureIds();
-		String[] newIds = new String[oldIds.length + 1];
-		System.arraycopy(oldIds, 0, newIds, 0, oldIds.length);
-		newIds[newIds.length - 1] = CMakeProjectNature.CMAKE_NATURE_ID;
-		projDesc.setNatureIds(newIds);
-		project.setDescription(projDesc, monitor);
-		
+
+		for(int i=0; i < oldIds.length; i++) {
+			if(oldIds[i].equals(CMakeProjectNature.CMAKE_NATURE_ID)) {
+				cmakeNatureAlreadyThere = true;
+			}
+		}
+		if(!cmakeNatureAlreadyThere) {
+			String[] newIds = new String[oldIds.length + 1];
+			System.arraycopy(oldIds, 0, newIds, 0, oldIds.length);
+			newIds[newIds.length - 1] = CMakeProjectNature.CMAKE_NATURE_ID;
+			projDesc.setNatureIds(newIds);
+			project.setDescription(projDesc, monitor);
+		}
 
 		// create the CDT natures and build setup
 		CCorePlugin.getDefault().createCDTProject(projDesc, project, monitor);
@@ -120,23 +128,44 @@ public class CMakeProjectGenerator {
 		// Add CMake builder
 		projDesc = project.getDescription();
 		ICommand[] oldBuilders = projDesc.getBuildSpec();
-		ICommand[] newBuilders = new ICommand[oldBuilders.length + 2];
-		ICommand cmakeBuilder = projDesc.newCommand();
+
+		boolean genMakeBilderAlreadyThere = false;
+		boolean cmakeBuilderAlreadyThere = false;
+		int additionalBuilders = 2;
+		for(int i=0; i < oldBuilders.length; i++) {
+			if(oldBuilders[i].getBuilderName().equals(CMAKE_BUILDER_ID)) {
+				cmakeBuilderAlreadyThere = true;
+				additionalBuilders--;
+			}
+			if(oldBuilders[i].getBuilderName().equals(GEN_MAKE_BUILDER_ID)) {
+				genMakeBilderAlreadyThere = true;
+				additionalBuilders--;
+			}
+		}
+		if(additionalBuilders < 0) {
+			additionalBuilders = 0;
+		}
+
+		ICommand[] newBuilders = new ICommand[oldBuilders.length + additionalBuilders];
 		
-		cmakeBuilder.setBuilderName(CMAKE_BUILDER_ID);
-		cmakeBuilder.setBuilding(IncrementalProjectBuilder.FULL_BUILD, true);
-		cmakeBuilder.setBuilding(IncrementalProjectBuilder.INCREMENTAL_BUILD, true);
-		cmakeBuilder.setBuilding(IncrementalProjectBuilder.CLEAN_BUILD, true);
-		newBuilders[0] = cmakeBuilder;
+		if(!cmakeBuilderAlreadyThere) {
+			ICommand cmakeBuilder = projDesc.newCommand();
+			cmakeBuilder.setBuilderName(CMAKE_BUILDER_ID);
+			cmakeBuilder.setBuilding(IncrementalProjectBuilder.FULL_BUILD, true);
+			cmakeBuilder.setBuilding(IncrementalProjectBuilder.INCREMENTAL_BUILD, true);
+			cmakeBuilder.setBuilding(IncrementalProjectBuilder.CLEAN_BUILD, true);
+			newBuilders[0] = cmakeBuilder;
+		}
 		
-		ICommand makeBuilder = projDesc.newCommand();
-		makeBuilder.setBuilderName(GEN_MAKE_BUILDER_ID);
-		makeBuilder.setBuilding(IncrementalProjectBuilder.FULL_BUILD, true);
-		makeBuilder.setBuilding(IncrementalProjectBuilder.INCREMENTAL_BUILD, true);
-		makeBuilder.setBuilding(IncrementalProjectBuilder.CLEAN_BUILD, true);
-		newBuilders[1] = makeBuilder;
-		
-		System.arraycopy(oldBuilders, 0, newBuilders, 2, oldBuilders.length);
+		if(!genMakeBilderAlreadyThere) {
+			ICommand makeBuilder = projDesc.newCommand();
+			makeBuilder.setBuilderName(GEN_MAKE_BUILDER_ID);
+			makeBuilder.setBuilding(IncrementalProjectBuilder.FULL_BUILD, true);
+			makeBuilder.setBuilding(IncrementalProjectBuilder.INCREMENTAL_BUILD, true);
+			makeBuilder.setBuilding(IncrementalProjectBuilder.CLEAN_BUILD, true);
+			newBuilders[1] = makeBuilder;
+		}		
+		System.arraycopy(oldBuilders, 0, newBuilders, additionalBuilders, oldBuilders.length);
 		
 		projDesc.setBuildSpec(newBuilders);
 		project.setDescription(projDesc, monitor);		

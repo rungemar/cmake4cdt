@@ -221,7 +221,7 @@ public class ImportCMakeWizardPage extends WizardPage implements IWizardPage {
 			else {
 				IProject project = root.getProject(name);
 				if (project.exists()) {
-					msg = "project exists";
+					msg = "A project named '" + name + "' already exists in this workspace";
 
 				}
 	        }
@@ -242,7 +242,11 @@ public class ImportCMakeWizardPage extends WizardPage implements IWizardPage {
 						// Ensure we can create files in the directory.
 						if (!projDir.canWrite()) {
 							msg = "no write permissions to the the project";
-						}	
+						}
+						File dotproject = new File(projDir, ".project");
+						if(dotproject.exists()) {
+							msg = "Selected location already contains an eclipse project (.project file). Import it using 'File->Import...->General->Existing Projects into Workspace' instead.";
+						}
 						if(!projectNameSetByUser) {
 							// Set the project name to the directory name but not if the user has supplied a name
 							// (bugzilla 368987). Use a job to ensure proper sequence of activity, as setting the Text

@@ -157,12 +157,28 @@ public class CompileCmdsHandler {
 
 		String cmd = cui.getCmdLine();
 		String[] parts = cmd.split(" ");
+		
+		boolean compilerFound = false;
+		
 		for(String part: parts) {
-			
-			if(part.endsWith("gcc") || part.endsWith("g++") || part.endsWith("c++") || part.endsWith("cc") ) {
-				// this is the compiler part
-				compilerCommand = part ;
-				continue;
+		
+			if(compilerFound == false) {
+				if(!part.startsWith("-")) {
+					if(part.endsWith("gcc") || part.endsWith("g++") || part.endsWith("c++") || part.endsWith("cc") ) {
+						// this is the compiler part
+						compilerCommand = part ;
+						xCompCmd = compilerCommand;
+
+						java.nio.file.Path compCmd = Paths.get(compilerCommand);
+					    java.nio.file.Path ppath = compCmd.getParent();
+					    if(ppath != null) {
+					    	xCompPath = ppath.toString();
+					    }
+					    xCompExe = compCmd.getFileName().toString();
+					    compilerFound = true;
+						continue;
+					}
+				}
 			}
 			if(part.startsWith("--sysroot")) {
 				if(part.startsWith("--sysroot=")) {
@@ -188,11 +204,6 @@ public class CompileCmdsHandler {
 	    	flags += "--sysroot " + sysrootPath;
 	    }
 
-	    xCompCmd = compilerCommand;
-	    
-	    java.nio.file.Path compCmd = Paths.get(compilerCommand);
-		xCompPath = compCmd.getParent().toString();
-		xCompExe = compCmd.getFileName().toString();
 
 	    xCompFlags = flags;
 	}
